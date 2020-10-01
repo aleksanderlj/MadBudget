@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.activity_create_recipes.*
 
-class CreateRecipesActivity : AppCompatActivity(){
+class CreateRecipe : AppCompatActivity(){
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

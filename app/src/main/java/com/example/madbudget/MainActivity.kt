@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(recipesActivity);
         }
         createRecipes.setOnClickListener{
-            val createRecipesActivity = Intent(this, CreateRecipesActivity::class.java)
+            val createRecipesActivity = Intent(this, CreateRecipe::class.java)
             startActivity(createRecipesActivity)
         }
     }
