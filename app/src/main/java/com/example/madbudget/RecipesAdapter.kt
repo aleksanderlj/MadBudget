@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
 import kotlinx.android.synthetic.main.recipe_item.view.*
 
-class RecipesAdapter(private val myDataset: ArrayList<Recipe>) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
+class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         var itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
@@ -18,7 +18,12 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
-        holder.textView.text = currentItem.recipeName
+        holder.name.text = currentItem.recipeName
+        holder.rating.text = "Rating: " +  currentItem.recipeRating.toString() + "/5"
+        holder.timeToMake.text = "Time: " + currentItem.recipeTimeToMake
+        holder.itemView.setOnClickListener{
+            cellClickListener.onCellClickListener()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -26,7 +31,8 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>) : RecyclerView.Ad
     }
 
     class RecipesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var textView: TextView = itemView.recipe_name
-        var imageView: ImageView = itemView.recipe_image
+        var name: TextView = itemView.recipe_name
+        var rating: TextView = itemView.recipe_rating
+        var timeToMake: TextView = itemView.recipe_time_to_make
     }
 }
