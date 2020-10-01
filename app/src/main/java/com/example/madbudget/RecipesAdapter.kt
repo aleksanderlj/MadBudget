@@ -3,6 +3,7 @@ package com.example.madbudget
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
@@ -26,5 +27,6 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>) : RecyclerView.Ad
 
     class RecipesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textView: TextView = itemView.recipe_name
+        var imageView: ImageView = itemView.recipe_image
     }
 }

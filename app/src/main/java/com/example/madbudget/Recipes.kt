@@ -16,9 +16,21 @@ class Recipes : AppCompatActivity() {
         val ingredientList: ArrayList<Ingredient> = ArrayList()
         ingredientList.add( Ingredient("Rice", 2.7, 5, "Fisk"))
         recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("jdsakflksdaflksa", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Fisk", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
+        recipeList.add(Recipe("Hej", "42069", 10, "2h", ingredientList))
 
         recipe_list.adapter = RecipesAdapter(recipeList)
         recipe_list.layoutManager = LinearLayoutManager(this)
+        recipe_list.setHasFixedSize(true)
 
     }
 }
