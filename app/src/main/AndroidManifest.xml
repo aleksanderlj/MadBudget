@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateRecipeActivity"></activity>
+        <activity android:name=".CreateIngredientActivity"></activity>
+        <activity android:name=".CreateRecipeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Recipes"/>
-        <activity android:name=".CreateRecipe"/>
+        <activity android:name=".Recipes" />
+        <activity android:name=".CreateRecipeActivity" />
     </application>
 
 </manifest>
