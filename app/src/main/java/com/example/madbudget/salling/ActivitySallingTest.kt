@@ -13,11 +13,11 @@ class ActivitySallingTest : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sallingtest)
 
-        var tb = TokenBuilder()
-        tb.getJWT("")
+        TokenBuilder.getJWT("")
 
         getButton.setOnClickListener {
             getText.text = "000"
+            VolleyGetter.send(this, "https://api.sallinggroup.com/v1/food-waste/?zip=8000")
         }
 
     }
