@@ -3,6 +3,7 @@ package com.example.madbudget
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.madbudget.salling.ActivitySallingTest
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
         createRecipes.setOnClickListener{
             val createRecipesActivity = Intent(this, CreateRecipeActivity::class.java)
             startActivity(createRecipesActivity)
+        }
+        testyBoi.setOnClickListener{
+            var i = Intent(this, ActivitySallingTest::class.java)
+            startActivity(i)
         }
     }
 }
