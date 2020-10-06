@@ -12,7 +12,7 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ingrediens"
+            android:text=""
             app:layout_constraintBottom_toTopOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="@+id/guideline8" />
@@ -69,7 +69,8 @@
             android:text=""
             app:layout_constraintBottom_toTopOf="@+id/guideline10"
             app:layout_constraintStart_toEndOf="@+id/ingredient_name"
-            app:layout_constraintTop_toTopOf="@+id/guideline7" />
+            app:layout_constraintTop_toTopOf="@+id/guideline7"
+            android:autofillHints="Indtast mængde" />
 
         <TextView
             android:id="@+id/ingredient_category"
@@ -81,7 +82,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button"
@@ -89,15 +90,6 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
             app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
-        <!--<Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Button"
-            app:layout_constraintBottom_toTopOf="@+id/guideline10"
-            app:layout_constraintEnd_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toTopOf="@+id/guideline7" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

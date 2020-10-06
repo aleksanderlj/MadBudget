@@ -1,45 +1,94 @@
 package com.example.madbudget
 
-import android.content.Intent
-import android.net.Uri
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.activity_create_recipes.*
-import org.jetbrains.anko.startActivityForResult
+import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
 
-class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeClickListener{
+class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeClickListener {
 
-    val ingredientList: ArrayList<Ingredient> = ArrayList()
+
+    private val ingredientList: ArrayList<Ingredient> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipes)
 
         val ingredient1 = Ingredient()
-
         ingredientList.add(ingredient1)
 
-        ingredient_list.adapter = IngredientAdapter(ingredientList,this,this)
+        ingredient_list.adapter = IngredientAdapter(ingredientList, this, this)
         ingredient_list.layoutManager = LinearLayoutManager(this)
         ingredient_list.setHasFixedSize(true)
 
     }
 
     override fun onRecipeClick(position: Int) {
-        val createIngredientActivity = Intent(this, CreateIngredientActivity::class.java)
-        startActivityForResult(createIngredientActivity,1)
+
+        if (!ingredientList[position].hasBeenClicked) {
+
+            val mDialogView =
+                LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
+
+            //init spinner
+            createSpinner(mDialogView)
+
+            //show alertDialog
+            createAlertDialog(mDialogView)
+        }else{
+            ingredientList.removeAt(position)
+            ingredient_list.adapter?.notifyDataSetChanged()
+        }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (data != null){
-            if (resultCode == RESULT_OK){
-                ingredientList.add(0,data.getSerializableExtra("ingredient_object") as Ingredient)
-                ingredient_list.adapter?.notifyDataSetChanged()
+    private fun createAlertDialog(mDialogView: View){
+
+        val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
+
+        val mBuilder = AlertDialog.Builder(this)
+            .setView(mDialogView)
+            .setTitle("Tilføj Ingrediens...") //TODO string resource
+            .setPositiveButton("OK",null)
+            .setNegativeButton("Cancel"){
+                    _,_ -> Toast.makeText(this, "Cancel",Toast.LENGTH_SHORT).show()
             }
+
+        val mAlertDialog = mBuilder.show()
+
+        val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        okButton.setOnClickListener(View.OnClickListener {
+            if (spinner.selectedItem != null ){
+                val ingredient = Ingredient()
+                ingredient.ingredientName = spinner.selectedItem.toString()
+                ingredient.amount = spinner_ingredient_amount?.text.toString()
+                ingredient.hasBeenClicked = true
+                ingredientList.add(0,ingredient)
+                ingredient_list.adapter?.notifyDataSetChanged()
+                mAlertDialog.dismiss()
+            }else
+               Toast.makeText(this,"Vælg ingrediens", Toast.LENGTH_LONG).show()
+        })
+    }
+
+    private fun createSpinner(mDialogView: View){
+        val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.ingredient_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
         }
     }
 }
+

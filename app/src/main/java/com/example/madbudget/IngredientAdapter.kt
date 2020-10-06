@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Ingredient
@@ -26,11 +27,16 @@ class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, val mOnRec
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        var currentItem = myDataset[position]
+        val currentItem = myDataset[position]
         holder.ingredientName.text = currentItem.ingredientName
-        holder.ingredientAmount.text = currentItem.amount.toString()
+        holder.ingredientAmount.text = currentItem.amount
         holder.ingredientCategory.text = currentItem.ingredientType
 
+        //TODO fix
+        if (currentItem.hasBeenClicked){
+            holder.deleteButton.setText("Slet")
+        }else
+            holder.deleteButton.setText("Tilføj ny")
     }
 
     override fun getItemCount(): Int {
@@ -42,9 +48,10 @@ class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, val mOnRec
         var ingredientName: TextView = itemView.ingredient_name
         var ingredientAmount: TextView = itemView.ingredient_amount
         var ingredientCategory: TextView = itemView.ingredient_category
+        var deleteButton: Button = itemView.delete_button
 
         init {
-            itemView.setOnClickListener {
+           deleteButton.setOnClickListener {
                 mOnRecipeClickListener.onRecipeClick(adapterPosition)
             }
         }
@@ -54,7 +61,4 @@ class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, val mOnRec
         fun onRecipeClick(position: Int)
     }
 
-    interface updateRecyclerView{
-        fun update(modelList:ArrayList<Ingredient>)
-    }
 }
