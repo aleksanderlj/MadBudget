@@ -8,8 +8,8 @@ import android.location.Location
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 
 class SallingCommunicator {
 
@@ -28,7 +28,20 @@ class SallingCommunicator {
                 VolleyGetter.send(context, "/v2/stores/?geo=${location?.latitude},${location?.longitude}&radius=$radius")
             }
 
-            // TODO fusedLocationClient.requestLocationUpdates()
+            fusedLocationClient.requestLocationUpdates()
+        }
+
+        fun createLocationRequest(context: Context) {
+            val locationRequest = LocationRequest.create().apply {
+                interval = 10000
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+
+            val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+            val client: SettingsClient = LocationServices.getSettingsClient(context)
+            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+
         }
 
 
