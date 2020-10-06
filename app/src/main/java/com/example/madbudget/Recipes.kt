@@ -2,6 +2,7 @@ package com.example.madbudget
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +35,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
         recipe_list.setHasFixedSize(true)
     }
 
-    override fun onCellClickListener() {
+    override fun onCellClickListener(clickedRecipe: Recipe) {
         val recipeActivity = Intent(this, RecipeActivity::class.java)
         startActivity(recipeActivity)
     }

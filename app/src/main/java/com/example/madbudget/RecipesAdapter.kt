@@ -22,7 +22,7 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cell
         holder.rating.text = "Rating: " +  currentItem.recipeRating.toString() + "/5"
         holder.timeToMake.text = "Time: " + currentItem.recipeTimeToMake
         holder.itemView.setOnClickListener{
-            cellClickListener.onCellClickListener()
+            cellClickListener.onCellClickListener(currentItem)
         }
     }
 
