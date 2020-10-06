@@ -5,60 +5,70 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.ingredient_item_in_recipe.view.*
-import org.w3c.dom.Text
 
 
-class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, val mOnRecipeClickListener: OnRecipeClickListener, var context: Context) : RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>() {
+class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, val mOnRecipeAddClickListener: OnRecipeAddClickListener,
+    val mOnRecipeEditClickListener: OnRecipeEditClickListener, var context: Context) : RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         var itemView = LayoutInflater.from(parent.context).inflate(R.layout.ingredient_item_in_recipe,parent,false)
-        return IngredientViewHolder(itemView, mOnRecipeClickListener)
-    }
-
-     fun update(modelList:ArrayList<Ingredient>){
-        myDataset = modelList
-        notifyDataSetChanged()
+        return IngredientViewHolder(itemView, mOnRecipeAddClickListener, mOnRecipeEditClickListener)
     }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.ingredientName.text = currentItem.ingredientName
-        holder.ingredientAmount.text = currentItem.amount
+        // holder.ingredientAmount.text = currentItem.amount
         holder.ingredientCategory.text = currentItem.ingredientType
 
-        //TODO fix
+        if (currentItem == myDataset[myDataset.size - 1 ])
+            holder.editButton.visibility = View.GONE
+        else
+            holder.editButton.visibility = View.VISIBLE
+
+        //TODO add icons instead of text
         if (currentItem.hasBeenClicked){
-            holder.deleteButton.setText("Slet")
+            holder.deleteButton.text = "Slet"
         }else
-            holder.deleteButton.setText("Tilføj ny")
+            holder.deleteButton.text = "Tilføj ny"
     }
 
     override fun getItemCount(): Int {
         return myDataset.size
     }
 
-    class IngredientViewHolder(itemView: View, mOnRecipeClickListener: OnRecipeClickListener) : RecyclerView.ViewHolder(itemView) {
+    class IngredientViewHolder(itemView: View, mOnRecipeAddClickListener: OnRecipeAddClickListener,
+        mOnRecipeEditClickListener: OnRecipeEditClickListener) : RecyclerView.ViewHolder(itemView) {
 
         var ingredientName: TextView = itemView.ingredient_name
-        var ingredientAmount: TextView = itemView.ingredient_amount
+       // var ingredientAmount: TextView = itemView.ingredient_amount
         var ingredientCategory: TextView = itemView.ingredient_category
         var deleteButton: Button = itemView.delete_button
+        var editButton: Button = itemView.edit_button
 
         init {
            deleteButton.setOnClickListener {
-                mOnRecipeClickListener.onRecipeClick(adapterPosition)
+                mOnRecipeAddClickListener.onRecipeAddClick(adapterPosition)
+            }
+        }
+        init {
+            editButton.setOnClickListener {
+                mOnRecipeEditClickListener.onRecipeEditClick(adapterPosition)
             }
         }
     }
 
-    interface OnRecipeClickListener{
-        fun onRecipeClick(position: Int)
+    interface OnRecipeAddClickListener{
+        fun onRecipeAddClick(position: Int)
+    }
+
+    interface OnRecipeEditClickListener{
+        fun onRecipeEditClick(position: Int)
     }
 
 }

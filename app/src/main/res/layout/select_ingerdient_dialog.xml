@@ -18,17 +18,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/spinner_ingredient_amount"
+        android:id="@+id/spinner_ingredient_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="Indtast mængde"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@+id/select_ingredient_spinner"
-        app:layout_constraintStart_toStartOf="@+id/select_ingredient_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_ingredient_spinner">
 
     </EditText>
+
+    <EditText
+        android:id="@+id/spinner_ingredient_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Indtast antal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_ingredient_weight" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
