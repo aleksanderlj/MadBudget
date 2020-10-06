@@ -13,11 +13,10 @@ class VolleyGetter() {
     companion object {
         fun send(context: Context, url: String) {
             var requestQueue = Volley.newRequestQueue(context)
-            //var url = "https://api.sallinggroup.com/v1/food-waste/?zip=8000"
 
             var stringRequest = object : StringRequest(
                 Request.Method.GET,
-                url,
+                "https://api.sallinggroup.com$url",
                 Response.Listener<String> { response ->
                     Log.i("VolleySuccess", response.toString())
                 },
@@ -27,7 +26,7 @@ class VolleyGetter() {
                 }) {
                 override fun getHeaders(): MutableMap<String, String> {
                     val headers = HashMap<String, String>()
-                    headers["Authorization"] = "JWT " + TokenBuilder.getJWT(url.substring(28))
+                    headers["Authorization"] = "JWT " + TokenBuilder.getJWT(url)
                     return headers
                 }
             }
