@@ -16,13 +16,21 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeClic
 
 
     private val ingredientList: ArrayList<Ingredient> = ArrayList()
+    private val myDataSetTest: ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipes)
 
         val ingredient1 = Ingredient()
+
+        val ingredient2 = ("Mountain Dew")
+        val ingredient3 = ("Doritos")
         ingredientList.add(ingredient1)
+
+        myDataSetTest.add(ingredient2)
+        myDataSetTest.add(ingredient3)
+
 
         ingredient_list.adapter = IngredientAdapter(ingredientList, this, this)
         ingredient_list.layoutManager = LinearLayoutManager(this)
@@ -79,10 +87,10 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeClic
 
     private fun createSpinner(mDialogView: View){
         val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
-        ArrayAdapter.createFromResource(
+        ArrayAdapter(
             this,
-            R.array.ingredient_array,
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_item,
+            myDataSetTest
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

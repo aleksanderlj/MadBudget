@@ -2,9 +2,4 @@
     <string name="app_name">MadBudget</string>
     <string name="recipe_button">Recipes</string>
     <string name="create_recipe_button">Create Recipes</string>
-    <string-array name="ingredient_array">
-        <item>Bacon</item>
-        <item>Mountain Dew</item>
-        <item>Doritos</item>
-    </string-array>
 </resources>
