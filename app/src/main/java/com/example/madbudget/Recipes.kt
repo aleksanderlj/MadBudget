@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_recipes.*
 
 class Recipes : AppCompatActivity(), CellClickListener {
@@ -37,6 +38,9 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
     override fun onCellClickListener(clickedRecipe: Recipe) {
         val recipeActivity = Intent(this, RecipeActivity::class.java)
+        val gson = Gson()
+        val stringRecipe = gson.toJson(clickedRecipe)
+        recipeActivity.putExtra("ClickedRecipe", stringRecipe)
         startActivity(recipeActivity)
     }
 }
