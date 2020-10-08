@@ -22,10 +22,22 @@ class ActivitySallingTest : AppCompatActivity() {
 
         getButton.setOnClickListener {
             getText.text = "Check logcat"
-            SallingCommunicator.getAllNearbyStores(this, 20) { response ->
-                Log.i("VolleySuccess", response.toString())
-
+            SallingCommunicator.getNearbyStores(this, 20) { response ->
+                Log.i("Stores", response.toString())
             }
+
+            SallingCommunicator.getProductSuggestions(this, "kylling") { response ->
+                Log.i("Suggestions", response.toString())
+            }
+
+            SallingCommunicator.getSimilarProducts(this, "31802") { response ->
+                Log.i("Similar", response.toString())
+            }
+
+            SallingCommunicator.getNearbyDiscounts(this, 20) { response ->
+                Log.i("Discounts", response.toString())
+            }
+
         }
 
     }
