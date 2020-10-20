@@ -8,7 +8,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Ingredient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_create_recipes.*
+import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_list
+import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
 import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
 
 class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddClickListener, IngredientAdapter.OnRecipeEditClickListener {
@@ -21,16 +24,8 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipes_wip)
 
-        // test stuff
-        val ingredient1 = Ingredient()
-        val ingredient2 = Ingredient()
-        val ingredient3 = Ingredient()
-        ingredient1.ingredientName = "Hakkede tomatertomatertomater"
         val ingredient21 = ("Mountain Dew")
         val ingredient31 = ("Doritos")
-        ingredientList.add(ingredient1)
-        ingredientList.add(ingredient2)
-        ingredientList.add(ingredient3)
 
         myDataSetTest.add(ingredient21)
         myDataSetTest.add(ingredient31)
@@ -38,6 +33,11 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
         ingredient_list.adapter = IngredientAdapter(ingredientList, this, this, this)
         ingredient_list.layoutManager = LinearLayoutManager(this)
         ingredient_list.setHasFixedSize(true)
+
+        val button: FloatingActionButton = add_ingredient_button
+        button.setOnClickListener(View.OnClickListener {
+            onRecipeAddClick(ingredientList.lastIndex)
+        })
 
     }
 
@@ -61,27 +61,21 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
 
     override fun onRecipeAddClick(position: Int) {
 
-        if (!ingredientList[position].hasBeenClicked) {
+        val mDialogView =
+            LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
 
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
+        //init spinner
+        createSpinner(mDialogView)
 
-            //init spinner
-            createSpinner(mDialogView)
+        //show alertDialog
+        val mAlertDialog: AlertDialog = createAlertDialog(mDialogView)
 
-            //show alertDialog
-            val mAlertDialog: AlertDialog = createAlertDialog(mDialogView)
+        //override OK button functionality
+        val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        okButton.setOnClickListener(View.OnClickListener {
+            addIngredient(mDialogView, mAlertDialog)
 
-            //override OK button functionality
-            val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            okButton.setOnClickListener(View.OnClickListener {
-                addIngredient(mDialogView, mAlertDialog)
-
-            })
-        } else {
-            ingredientList.removeAt(position)
-            ingredient_list.adapter?.notifyDataSetChanged()
-        }
-
+        })
     }
 
     private fun createAlertDialog(mDialogView: View): AlertDialog {
@@ -120,14 +114,13 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             ingredient.ingredientName = spinner.selectedItem.toString()
             ingredient.amount = spinner_ingredient_weight?.text.toString()
             ingredient.hasBeenClicked = true
-            ingredientList.add(ingredientList.size-1,ingredient)
+            ingredientList.add(ingredient)
             ingredient_list.adapter?.notifyDataSetChanged()
             mAlertDialog.dismiss()
 
         }else
             Toast.makeText(this,"Vælg ingrediens", Toast.LENGTH_LONG).show()
     }
-
 
     private fun editIngredient(mDialogView: View, mAlertDialog: AlertDialog, position: Int) {
 
