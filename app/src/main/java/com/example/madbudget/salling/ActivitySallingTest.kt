@@ -33,7 +33,7 @@ class ActivitySallingTest : AppCompatActivity() {
                 Log.i("JSONTEST", json!![0].title)
             }
 
-            SallingCommunicator.getNearbyDiscounts(this, 20) { response ->
+            SallingCommunicator.getNearbyDiscounts(this, 10) { response ->
                 Log.i("Discounts", response.toString())
                 Utility.bigLog("Discounts", response.toString())
             }

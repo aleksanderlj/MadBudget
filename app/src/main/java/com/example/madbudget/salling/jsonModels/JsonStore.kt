@@ -9,3 +9,11 @@ class JsonStore(
     val id: String,
     val type: String
 )
+
+class JsonStoreAddress(
+    val city: String,
+    val country: String,
+    val extra: String? = null,
+    val street: String,
+    val zip: String
+)
