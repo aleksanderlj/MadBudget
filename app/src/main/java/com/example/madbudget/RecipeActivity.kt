@@ -14,9 +14,11 @@ class RecipeActivity : AppCompatActivity() {
         val stringRecipe = intent.getStringExtra("ClickedRecipe")
         val gson = Gson()
         val recipe = gson.fromJson(stringRecipe, Recipe::class.java)
-
+        
         recipe_name.text = recipe.recipeName
         recipe_rating.text = "Rating: " + recipe.recipeRating + "/5"
         recipe_time.text = "Time: " + recipe.recipeTimeToMake
+
+
     }
 }
