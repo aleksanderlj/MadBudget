@@ -7,8 +7,9 @@ class Ingredient(
     var amount:String?,
     var ingredientId: Int?,
     var ingredientType: String?,
-    var hasBeenClicked: Boolean = false
+    var hasBeenClicked: Boolean = false,
+    var ingredientPrice: String?
 ): Serializable {
-    constructor() : this("","",null,"")
+    constructor() : this("","",null,"",false,"")
 
 }

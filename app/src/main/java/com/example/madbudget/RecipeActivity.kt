@@ -16,7 +16,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
 
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
-        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
+        //ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("spaghetti bolognese", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Fisk", 42069, 5, "2h", ingredientList))

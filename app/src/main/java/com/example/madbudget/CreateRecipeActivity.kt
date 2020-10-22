@@ -1,6 +1,5 @@
 package com.example.madbudget
 
-
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidbuts.multispinnerfilter.KeyPairBoolData
+import com.androidbuts.multispinnerfilter.MultiSpinnerListener
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
 import com.example.madbudget.models.Ingredient
 import com.example.madbudget.salling.ActivitySallingTest
@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
 
 
 class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddClickListener, IngredientAdapter.OnRecipeEditClickListener {
-
 
     private val ingredientList: ArrayList<Ingredient> = ArrayList()
     private val myDataSetTest: ArrayList<Ingredient> = ArrayList()
@@ -48,19 +47,19 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
         ingredient_list.layoutManager = LinearLayoutManager(this)
         ingredient_list.setHasFixedSize(true)
 
-        createSpinner( LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
-
-
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener(View.OnClickListener {
-            /*onRecipeAddClick(ingredientList.lastIndex)*/
+            /*onRecipeAddClick(ingredientList.lastIndex)*//*
             val i = Intent(this, AddIngredientActivity::class.java)
-            startActivity(i)
+            startActivity(i)*/
+            createAlertDialog(LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
         })
 
     }
 
     override fun onRecipeEditClick(position: Int) {
+
+
 
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
 
@@ -99,6 +98,8 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
 
     private fun createAlertDialog(mDialogView: View): AlertDialog {
 
+        createSpinner(mDialogView)
+
         return AlertDialog.Builder(this)
             .setView(mDialogView)
             .setTitle("Tilføj Ingrediens...") //TODO string resource
@@ -116,29 +117,29 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
 
         val list = resources.getStringArray(R.array.sports_array)
         val listArray1: MutableList<KeyPairBoolData> = ArrayList()
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             val h = KeyPairBoolData()
             h.id = i + 1.toLong()
-            h.name = list.get(i)
-            h.isSelected = i < 5
+            h.name = list[i]
+            h.price = "10"
             listArray1.add(h)
         }
 
         val multiSelectSpinnerWithSearch: MultiSpinnerSearch = mDialogView.findViewById(R.id.multiItemSelectionSpinner)
         multiSelectSpinnerWithSearch.isSearchEnabled = true
         multiSelectSpinnerWithSearch.setClearText("Close & Clear");
+        multiSelectSpinnerWithSearch.hintText = "Vælg Ingrediens"
 
-
-        multiSelectSpinnerWithSearch.setItems(
-            listArray1
-        ) { items ->
-            for (i in items.indices) {
-                if (items[i].isSelected) {
-                    Log.i(
-                        "HEJ", i.toString() + " : " + items[i].name + " : " + items[i].isSelected
-                    )
-                }
+        multiSelectSpinnerWithSearch.setItems(listArray1, MultiSpinnerListener {
+            for(i in it.indices){
+                it[i].isSelected = true
+                val ingredient: Ingredient = Ingredient()
+                ingredient.ingredientName = it[i].name
+                ingredient.ingredientPrice = it[i].price
+                ingredientList.add(ingredient)
             }
+            ingredient_list.adapter?.notifyDataSetChanged()
+        })
         }
     }
 
@@ -175,5 +176,5 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             mAlertDialog.dismiss()
         }else
             Toast.makeText(this, "Vælg ingrediens", Toast.LENGTH_LONG).show()*/
-    }
+
 }
