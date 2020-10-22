@@ -1,18 +1,13 @@
 package com.example.madbudget.salling
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import com.beust.klaxon.Klaxon
 import com.example.madbudget.R
-import com.google.android.gms.location.LocationServices
+import com.example.madbudget.Utility
+import com.example.madbudget.salling.jsonModels.JsonSimilar
+import com.example.madbudget.salling.jsonModels.JsonStore
 import kotlinx.android.synthetic.main.activity_sallingtest.*
 
 class ActivitySallingTest : AppCompatActivity() {
@@ -24,6 +19,8 @@ class ActivitySallingTest : AppCompatActivity() {
             getText.text = "Check logcat"
             SallingCommunicator.getNearbyStores(this, 20) { response ->
                 Log.i("Stores", response.toString())
+                val json = Klaxon().parseArray<JsonStore>(response.toString())
+                Log.i("JSONTEST", json!![0].address.city)
             }
 
             SallingCommunicator.getProductSuggestions(this, "kylling") { response ->
@@ -32,10 +29,13 @@ class ActivitySallingTest : AppCompatActivity() {
 
             SallingCommunicator.getSimilarProducts(this, "31802") { response ->
                 Log.i("Similar", response.toString())
+                val json = Klaxon().parseArray<JsonSimilar>(response.toString())
+                Log.i("JSONTEST", json!![0].title)
             }
 
             SallingCommunicator.getNearbyDiscounts(this, 20) { response ->
                 Log.i("Discounts", response.toString())
+                Utility.bigLog("Discounts", response.toString())
             }
 
         }
