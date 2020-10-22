@@ -40,6 +40,7 @@ class SallingCommunicator {
             }
         }
 
+        //TODO Husk at stoppe dem igen, ellers bruger det virkelig meget strøm
         fun startLocationUpdates(context: Context): FusedLocationProviderClient? {
             var fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             var locationCallback = LocationCallback()
