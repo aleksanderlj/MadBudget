@@ -15,8 +15,8 @@ color white
 dimen font_size
 dimen margin_basic_25
 drawable default_border
-id AlertPriceTextView
 id alertCheckbox
+id alertPriceTextView
 id alertSearchEditText
 id alertSearchListView
 id alertTextView

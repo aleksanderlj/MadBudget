@@ -358,7 +358,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 				holder = new ViewHolder();
 				convertView = inflater.inflate(R.layout.new_item_listview_multiple, parent, false);
 				holder.textView = convertView.findViewById(R.id.alertTextView);
-				holder.priceTextView = convertView.findViewById(R.id.AlertPriceTextView);
+				holder.priceTextView = convertView.findViewById(R.id.alertPriceTextView);
 				holder.checkBox = convertView.findViewById(R.id.checkBox);
 
 				convertView.setTag(holder);

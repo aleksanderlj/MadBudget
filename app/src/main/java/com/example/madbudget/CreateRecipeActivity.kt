@@ -1,9 +1,7 @@
 package com.example.madbudget
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -11,88 +9,43 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidbuts.multispinnerfilter.KeyPairBoolData
-import com.androidbuts.multispinnerfilter.MultiSpinnerListener
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
 import com.example.madbudget.models.Ingredient
-import com.example.madbudget.salling.ActivitySallingTest
+import com.example.madbudget.models.IngredientSelection
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_list
+import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_selection_list
 import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
+import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
+import kotlinx.android.synthetic.main.show_ingredient_dialog.*
 
 
-class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddClickListener, IngredientAdapter.OnRecipeEditClickListener {
+class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnIngredientSelectionClickListener{
 
     private val ingredientList: ArrayList<Ingredient> = ArrayList()
-    private val myDataSetTest: ArrayList<Ingredient> = ArrayList()
+    private val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipes_wip)
 
-        val ingredient1: Ingredient = Ingredient()
-        val ingredient2: Ingredient = Ingredient()
-        val ingredient3: Ingredient = Ingredient()
-        val ingredient4: Ingredient = Ingredient()
-        ingredient1.ingredientName = "bund"
-        ingredient2.ingredientName = "igen"
-        ingredient3.ingredientName = "he"
-        ingredient4.ingredientName = "bawd"
-        myDataSetTest.add(ingredient1)
-        myDataSetTest.add(ingredient2)
-        myDataSetTest.add(ingredient3)
-        myDataSetTest.add(ingredient4)
-
-
-        ingredient_list.adapter = IngredientAdapter(ingredientList, this, this, this)
-        ingredient_list.layoutManager = LinearLayoutManager(this)
-        ingredient_list.setHasFixedSize(true)
+        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,this, this )
+        ingredient_selection_list.layoutManager = LinearLayoutManager(this)
+        ingredient_selection_list.setHasFixedSize(true)
 
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener(View.OnClickListener {
-            /*onRecipeAddClick(ingredientList.lastIndex)*//*
-            val i = Intent(this, AddIngredientActivity::class.java)
-            startActivity(i)*/
-            createAlertDialog(LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
-        })
+            val mAlertDialog = createAlertDialog(
+                LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
+            )
+            val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            okButton.setOnClickListener(View.OnClickListener {
+                val ingredientSelection = IngredientSelection(mAlertDialog.spinner_ingredient_selection_name.text.toString(),ingredientList)
+                ingredientSelectionList.add(ingredientSelection)
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
+                mAlertDialog.dismiss()
 
-    }
-
-    override fun onRecipeEditClick(position: Int) {
-
-
-
-        val mDialogView = LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
-
-        //init spinner
-        createSpinner(mDialogView)
-
-        //show alertDialog
-        val mAlertDialog: AlertDialog = createAlertDialog(mDialogView)
-
-        //override OK button functionality
-        val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        okButton.setOnClickListener(View.OnClickListener {
-            editIngredient(mDialogView, mAlertDialog, position)
-            mAlertDialog.dismiss()
-        })
-    }
-
-    override fun onRecipeAddClick(position: Int) {
-
-        val mDialogView =
-            LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
-
-        //init spinner
-        createSpinner(mDialogView)
-
-        //show alertDialog
-        val mAlertDialog: AlertDialog = createAlertDialog(mDialogView)
-
-        //override OK button functionality
-        val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        okButton.setOnClickListener(View.OnClickListener {
-            addIngredient(mDialogView, mAlertDialog)
-
+            })
         })
     }
 
@@ -104,16 +57,17 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             .setView(mDialogView)
             .setTitle("Tilføj Ingrediens...") //TODO string resource
             .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { _, _ -> Toast.makeText(
-                this,
-                "Cancel",
-                Toast.LENGTH_SHORT
-            ).show()
+            .setNegativeButton("Cancel") { _, _ ->
+                Toast.makeText(
+                    this,
+                    "Cancel",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .show()
     }
 
-    private fun createSpinner(mDialogView: View){
+    private fun createSpinner(mDialogView: View) {
 
         val list = resources.getStringArray(R.array.sports_array)
         val listArray1: MutableList<KeyPairBoolData> = ArrayList()
@@ -125,56 +79,48 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             listArray1.add(h)
         }
 
-        val multiSelectSpinnerWithSearch: MultiSpinnerSearch = mDialogView.findViewById(R.id.multiItemSelectionSpinner)
+        val multiSelectSpinnerWithSearch: MultiSpinnerSearch =
+            mDialogView.findViewById(R.id.multiItemSelectionSpinner)
         multiSelectSpinnerWithSearch.isSearchEnabled = true
         multiSelectSpinnerWithSearch.setClearText("Close & Clear");
         multiSelectSpinnerWithSearch.hintText = "Vælg Ingrediens"
 
-        multiSelectSpinnerWithSearch.setItems(listArray1, MultiSpinnerListener {
-            for(i in it.indices){
-                it[i].isSelected = true
-                val ingredient: Ingredient = Ingredient()
-                ingredient.ingredientName = it[i].name
-                ingredient.ingredientPrice = it[i].price
-                ingredientList.add(ingredient)
+        multiSelectSpinnerWithSearch.setItems(listArray1) {
+            for (i in it.indices) {
+                if (it[i].isSelected) {
+                    val ingredient = Ingredient()
+                    ingredient.ingredientName = it[i].name
+                    ingredient.ingredientPrice = it[i].price
+                    ingredientList.add(ingredient)
+                }
             }
-            ingredient_list.adapter?.notifyDataSetChanged()
-        })
         }
     }
 
-    private fun addIngredient(mDialogView: View, mAlertDialog: AlertDialog){
+    override fun onIngredientClick(position: Int) {
 
-       /* val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
+        val mAlertDialog = AlertDialog.Builder(this)
+            .setView(LayoutInflater.from(this).inflate(R.layout.show_ingredient_dialog, null))
+            .setTitle("Ingredienser")
+            .setPositiveButton("OK", null)
+            .setNegativeButton("Cancel") { _, _ ->
+                Toast.makeText(
+                    this,
+                    "Cancel",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .show()
 
-        //TODO Fix how information is retrieved
-        if (spinner.selectedItem != null ){
-            val ingredient = Ingredient()
-            ingredient.ingredientName = spinner.selectedItem.toString()
-            ingredient.amount = spinner_ingredient_weight?.text.toString()
-            ingredient.isSelected = true
-            ingredientList.add(ingredient)
-            ingredient_list.adapter?.notifyDataSetChanged()
-            mAlertDialog.dismiss()
 
-        }else
-            Toast.makeText(this, "Vælg ingrediens", Toast.LENGTH_LONG).show()*/
+        val ingredient = Ingredient()
+        ingredient.ingredientName = "bund"
+        ingredient.ingredientPrice = "12"
+        ingredientSelectionList[0].ingredientList.add(ingredient)
+        mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[0].ingredientList,this)
+        mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(this)
+        mAlertDialog.ingredient_list.setHasFixedSize(true)
     }
 
-    private fun editIngredient(mDialogView: View, mAlertDialog: AlertDialog, position: Int) {
-
-       /* val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
-
-        //TODO Fix how information is retrieved
-        if (spinner.selectedItem != null ){
-            val ingredient = ingredientList[position]
-            ingredient.ingredientName = spinner.selectedItem.toString()
-            ingredient.amount = spinner_ingredient_weight?.text.toString()
-            ingredient.isSelected = true
-            ingredientList[position] = ingredient
-            ingredient_list.adapter?.notifyDataSetChanged()
-            mAlertDialog.dismiss()
-        }else
-            Toast.makeText(this, "Vælg ingrediens", Toast.LENGTH_LONG).show()*/
-
 }
+

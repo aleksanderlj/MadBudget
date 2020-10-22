@@ -1925,7 +1925,6 @@ int drawable notify_panel_notification_icon_bg 0x0
 int drawable test_custom_background 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
-int id AlertPriceTextView 0x0
 int id BOTTOM_END 0x0
 int id BOTTOM_START 0x0
 int id NO_DEBUG 0x0
@@ -1991,6 +1990,7 @@ int id activity_chooser_view_content 0x0
 int id add 0x0
 int id afterRelease 0x0
 int id alertCheckbox 0x0
+int id alertPriceTextView 0x0
 int id alertSearchEditText 0x0
 int id alertSearchListView 0x0
 int id alertTextView 0x0

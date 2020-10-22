@@ -1926,7 +1926,6 @@ drawable notify_panel_notification_icon_bg
 drawable test_custom_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
-id AlertPriceTextView
 id BOTTOM_END
 id BOTTOM_START
 id NO_DEBUG
@@ -1992,6 +1991,7 @@ id activity_chooser_view_content
 id add
 id afterRelease
 id alertCheckbox
+id alertPriceTextView
 id alertSearchEditText
 id alertSearchListView
 id alertTextView

@@ -17,7 +17,7 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/AlertPriceTextView"
+        android:id="@+id/alertPriceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
