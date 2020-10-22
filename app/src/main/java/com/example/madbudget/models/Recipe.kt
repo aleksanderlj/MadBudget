@@ -5,7 +5,7 @@ class Recipe(
     var recipeId: Int,
     var recipeRating: Int,
     var recipeTimeToMake: String,
-    var ingredientList: List<Ingredient>
+    var ingredientList: ArrayList<Ingredient>
 ) {
 
 }
