@@ -2,12 +2,20 @@ package com.example.madbudget.salling.jsonModels
 
 class JsonDiscount(
     val clearances: List<JsonDiscountClearance>,
-    val store: JsonDiscountStore,
+    val store: JsonStore,
 )
-
+/*
 class JsonDiscountStore(
-    val address
+    val address: JsonStoreAddress,
+    val brand: String,
+    val coordinates: List<Double>,
+    val hours,
+    val name: String,
+    val id: String,
+    val distance_km: Double,
+    val type: String
 )
+ */
 
 class JsonDiscountClearance(
     val offer: JsonDiscountOffer,
@@ -31,5 +39,5 @@ class JsonDiscountOffer(
 class JsonDiscountProduct(
     val description: String,
     val ean: String,
-    val image: String
+    val image: String? = null
 )

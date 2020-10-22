@@ -5,9 +5,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
 import com.example.madbudget.R
-import com.example.madbudget.Utility
-import com.example.madbudget.salling.jsonModels.JsonSimilar
+import com.example.madbudget.salling.jsonModels.JsonDiscount
+import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonStore
+import com.example.madbudget.salling.jsonModels.JsonSuggestions
 import kotlinx.android.synthetic.main.activity_sallingtest.*
 
 class ActivitySallingTest : AppCompatActivity() {
@@ -23,19 +24,22 @@ class ActivitySallingTest : AppCompatActivity() {
                 Log.i("JSONTEST", json!![0].address.city)
             }
 
-            SallingCommunicator.getProductSuggestions(this, "kylling") { response ->
+            SallingCommunicator.getProductSuggestions(this, "laks") { response ->
                 Log.i("Suggestions", response.toString())
+                val json = Klaxon().parse<JsonSuggestions>(response.toString())
+                Log.i("JSONTEST", json!!.suggestions[0].title)
             }
 
             SallingCommunicator.getSimilarProducts(this, "31802") { response ->
                 Log.i("Similar", response.toString())
-                val json = Klaxon().parseArray<JsonSimilar>(response.toString())
+                val json = Klaxon().parseArray<JsonProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].title)
             }
 
             SallingCommunicator.getNearbyDiscounts(this, 10) { response ->
                 Log.i("Discounts", response.toString())
-                Utility.bigLog("Discounts", response.toString())
+                val json = Klaxon().parseArray<JsonDiscount>(response.toString())
+                Log.i("JSONTEST", json!![0].clearances!![0].offer.discount.toString())
             }
 
         }

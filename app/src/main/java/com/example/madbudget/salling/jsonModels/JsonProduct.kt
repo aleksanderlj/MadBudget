@@ -1,6 +1,6 @@
 package com.example.madbudget.salling.jsonModels
 
-class JsonSimilar(
+class JsonProduct(
     val title: String,
     val id: String,
     val prod_id: String,
