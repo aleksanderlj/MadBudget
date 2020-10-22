@@ -19,15 +19,21 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_recipes)
+        setContentView(R.layout.activity_create_recipes_wip)
 
         // test stuff
         val ingredient1 = Ingredient()
-        val ingredient2 = ("Mountain Dew")
-        val ingredient3 = ("Doritos")
+        val ingredient2 = Ingredient()
+        val ingredient3 = Ingredient()
+        ingredient1.ingredientName = "Hakkede tomatertomatertomater"
+        val ingredient21 = ("Mountain Dew")
+        val ingredient31 = ("Doritos")
         ingredientList.add(ingredient1)
-        myDataSetTest.add(ingredient2)
-        myDataSetTest.add(ingredient3)
+        ingredientList.add(ingredient2)
+        ingredientList.add(ingredient3)
+
+        myDataSetTest.add(ingredient21)
+        myDataSetTest.add(ingredient31)
 
         ingredient_list.adapter = IngredientAdapter(ingredientList, this, this, this)
         ingredient_list.layoutManager = LinearLayoutManager(this)
@@ -63,13 +69,13 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             createSpinner(mDialogView)
 
             //show alertDialog
-            val mBuilder: AlertDialog = createAlertDialog(mDialogView)
+            val mAlertDialog: AlertDialog = createAlertDialog(mDialogView)
 
             //override OK button functionality
-            val okButton: Button = mBuilder.getButton(AlertDialog.BUTTON_POSITIVE)
+            val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             okButton.setOnClickListener(View.OnClickListener {
-                addIngredient(mDialogView)
-                mBuilder.dismiss()
+                addIngredient(mDialogView, mAlertDialog)
+
             })
         } else {
             ingredientList.removeAt(position)
@@ -104,7 +110,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
         }
     }
 
-    private fun addIngredient(mDialogView: View){
+    private fun addIngredient(mDialogView: View, mAlertDialog: AlertDialog){
 
         val spinner: Spinner = mDialogView.findViewById(R.id.select_ingredient_spinner)
 
@@ -116,6 +122,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientAdapter.OnRecipeAddC
             ingredient.hasBeenClicked = true
             ingredientList.add(ingredientList.size-1,ingredient)
             ingredient_list.adapter?.notifyDataSetChanged()
+            mAlertDialog.dismiss()
 
         }else
             Toast.makeText(this,"Vælg ingrediens", Toast.LENGTH_LONG).show()

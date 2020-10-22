@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content"
+     android:layout_width="match_parent">
+    <item
+        android:id="@+id/page_1"
+        android:enabled="true"
+        android:icon="@drawable/shopping_cart_24px_outlined"
+        android:title="Indkøb"/>
+    <item
+        android:id="@+id/page_2"
+        android:enabled="true"
+        android:icon="@drawable/shopping_cart_24px_outlined"
+        android:title="Favoritter"/>
+</menu>
