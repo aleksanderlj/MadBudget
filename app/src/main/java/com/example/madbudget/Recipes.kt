@@ -15,8 +15,39 @@ class Recipes : AppCompatActivity(), CellClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
 
+        searchOnClick()
+        val recipeList = iniDummyRecipes()
+        recipe_list.adapter = RecipesAdapter(recipeList, this)
+        recipe_list.layoutManager = LinearLayoutManager(this)
+        recipe_list.setHasFixedSize(true)
+    }
+
+    override fun onCellClickListener(clickedRecipe: Recipe) {
+        val recipeActivity = Intent(this, RecipeActivity::class.java)
+        val gson = Gson()
+        val stringRecipe = gson.toJson(clickedRecipe)
+        recipeActivity.putExtra("ClickedRecipe", stringRecipe)
+        startActivity(recipeActivity)
+    }
+
+    private fun searchOnClick(){
+        search_button.setOnClickListener{
+            val searchedText = search_text.text.toString()
+            if (searchedText.isNotEmpty()){
+
+            }
+
+
+
+
+        }
+    }
+
+    private fun iniDummyRecipes() : ArrayList<Recipe>{
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
+        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
+        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("spaghetti bolognese", 42069, 5, "2h", ingredientList))
@@ -30,17 +61,6 @@ class Recipes : AppCompatActivity(), CellClickListener {
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-
-        recipe_list.adapter = RecipesAdapter(recipeList, this)
-        recipe_list.layoutManager = LinearLayoutManager(this)
-        recipe_list.setHasFixedSize(true)
-    }
-
-    override fun onCellClickListener(clickedRecipe: Recipe) {
-        val recipeActivity = Intent(this, RecipeActivity::class.java)
-        val gson = Gson()
-        val stringRecipe = gson.toJson(clickedRecipe)
-        recipeActivity.putExtra("ClickedRecipe", stringRecipe)
-        startActivity(recipeActivity)
+        return recipeList
     }
 }
