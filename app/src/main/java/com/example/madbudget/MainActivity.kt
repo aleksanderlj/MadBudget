@@ -23,5 +23,11 @@ class MainActivity : AppCompatActivity() {
             var i = Intent(this, ActivitySallingTest::class.java)
             startActivity(i)
         }
+
+        map_button.setOnClickListener {
+            val mapsActivity = Intent(this,MapsActivity::class.java)
+            startActivity(mapsActivity)
+        }
+
     }
 }
