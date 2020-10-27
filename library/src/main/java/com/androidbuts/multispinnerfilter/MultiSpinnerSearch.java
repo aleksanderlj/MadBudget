@@ -376,7 +376,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 			final KeyPairBoolData data = arrayList.get(position);
 
 			holder.textView.setText(data.getName());
-			holder.priceTextView.setText(data.getPrice());
+			holder.priceTextView.setText(data.getPrice().toString());
 			holder.checkBox.setChecked(data.isSelected());
 
 			convertView.setOnClickListener(v -> {

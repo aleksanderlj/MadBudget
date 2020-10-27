@@ -18,7 +18,7 @@ class ActivitySallingTest : AppCompatActivity() {
 
         getButton.setOnClickListener {
             getText.text = "Check logcat"
-            SallingCommunicator.getNearbyStores(this, 20) { response ->
+            SallingCommunicator.getNearbyStores(this, 20.0) { response ->
                 Log.i("Stores", response.toString())
                 val json = Klaxon().parseArray<JsonStore>(response.toString())
                 Log.i("JSONTEST", json!![0].address.city)

@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidbuts.multispinnerfilter.KeyPairBoolData
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
+import com.beust.klaxon.Klaxon
 import com.example.madbudget.models.Ingredient
 import com.example.madbudget.models.IngredientSelection
+import com.example.madbudget.salling.SallingCommunicator
+import com.example.madbudget.salling.jsonModels.JsonSuggestions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_selection_list
 import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
@@ -21,9 +24,11 @@ import kotlinx.android.synthetic.main.show_ingredient_dialog.*
 
 class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnIngredientSelectionClickListener{
 
-    private val ingredientList: ArrayList<Ingredient> = ArrayList()
-    private val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
 
+    private val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
+    private var ingredientList: ArrayList<Ingredient> = ArrayList()
+    private lateinit var multiSelectSpinnerWithSearch: MultiSpinnerSearch
+    private lateinit var mAlertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,28 +40,21 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
 
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener(View.OnClickListener {
-            val mAlertDialog = createAlertDialog(
-                LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null)
-            )
-            val okButton: Button = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            okButton.setOnClickListener(View.OnClickListener {
-                val ingredientSelection = IngredientSelection(mAlertDialog.spinner_ingredient_selection_name.text.toString(),ingredientList)
-                ingredientSelectionList.add(ingredientSelection)
-                ingredient_selection_list.adapter?.notifyDataSetChanged()
-                mAlertDialog.dismiss()
-
-            })
+            mAlertDialog = createAlertDialog()
+            multiSelectSpinnerWithSearch = mAlertDialog.multiItemSelectionSpinner
         })
     }
 
-    private fun createAlertDialog(mDialogView: View): AlertDialog {
-
-        createSpinner(mDialogView)
-
-        return AlertDialog.Builder(this)
-            .setView(mDialogView)
-            .setTitle("Tilføj Ingrediens...") //TODO string resource
-            .setPositiveButton("OK", null)
+    private fun createAlertDialog(): AlertDialog {
+        mAlertDialog = AlertDialog.Builder(this)
+            .setView(LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
+            .setTitle("Tilføj Ingrediens...")
+            .setPositiveButton("OK") {_,_ ->
+                val ingredientSelection = IngredientSelection(mAlertDialog.spinner_ingredient_selection_name.text.toString(), mAlertDialog.spinner_ingredient_amount.text.toString(), ingredientList)
+                ingredientSelectionList.add(ingredientSelection)
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
+                mAlertDialog.dismiss()
+            }
             .setNegativeButton("Cancel") { _, _ ->
                 Toast.makeText(
                     this,
@@ -65,36 +63,60 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                 ).show()
             }
             .show()
+
+        mAlertDialog.multiItemSelectionSpinner.isEnabled = false
+        mAlertDialog.save_spinner_ingredient_selection_button.setOnClickListener {
+
+            if (mAlertDialog.spinner_ingredient_selection_name.text.toString().isNotEmpty()){
+                mAlertDialog.multiItemSelectionSpinner.isEnabled = true
+                createSpinner(mAlertDialog.spinner_ingredient_selection_name.text.toString())
+            }else{
+                Toast.makeText(this,"Indtast navn",Toast.LENGTH_SHORT).show()
+
+            }
+        }
+        return mAlertDialog
     }
 
-    private fun createSpinner(mDialogView: View) {
+    private fun createSpinner(searchInput: String){
 
-        val list = resources.getStringArray(R.array.sports_array)
-        val listArray1: MutableList<KeyPairBoolData> = ArrayList()
-        for (i in list.indices) {
-            val h = KeyPairBoolData()
-            h.id = i + 1.toLong()
-            h.name = list[i]
-            h.price = "10"
-            listArray1.add(h)
-        }
-
-        val multiSelectSpinnerWithSearch: MultiSpinnerSearch =
-            mDialogView.findViewById(R.id.multiItemSelectionSpinner)
         multiSelectSpinnerWithSearch.isSearchEnabled = true
-        multiSelectSpinnerWithSearch.setClearText("Close & Clear");
+        multiSelectSpinnerWithSearch.setClearText("Luk og Ryd")
         multiSelectSpinnerWithSearch.hintText = "Vælg Ingrediens"
 
-        multiSelectSpinnerWithSearch.setItems(listArray1) {
+        val tempIngredientList: ArrayList<Ingredient> = ArrayList()
+
+        multiSelectSpinnerWithSearch.setItems(searchForIngredients(searchInput)) {
             for (i in it.indices) {
                 if (it[i].isSelected) {
                     val ingredient = Ingredient()
                     ingredient.ingredientName = it[i].name
                     ingredient.ingredientPrice = it[i].price
-                    ingredientList.add(ingredient)
+                    tempIngredientList.add(ingredient)
                 }
             }
         }
+
+        ingredientList = tempIngredientList
+
+    }
+
+
+    private fun searchForIngredients(searchInput: String) :MutableList<KeyPairBoolData> {
+
+        val listArray1: MutableList<KeyPairBoolData> = ArrayList()
+
+        SallingCommunicator.getProductSuggestions(this,searchInput) { response ->
+            val json = Klaxon().parse<JsonSuggestions>(response.toString())!!
+            for ((counter, i) in json.suggestions.withIndex()) {
+                val h = KeyPairBoolData()
+                h.id = counter + 1.toLong()
+                h.name = i.title
+                h.price = i.price
+                listArray1.add(h)
+            }
+        }
+        return listArray1
     }
 
     override fun onIngredientClick(position: Int) {
@@ -103,24 +125,14 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             .setView(LayoutInflater.from(this).inflate(R.layout.show_ingredient_dialog, null))
             .setTitle("Ingredienser")
             .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { _, _ ->
-                Toast.makeText(
-                    this,
-                    "Cancel",
-                    Toast.LENGTH_SHORT
-                ).show()
+            .setNegativeButton("Fortryd") { _, _ ->
             }
             .show()
 
-
-        val ingredient = Ingredient()
-        ingredient.ingredientName = "bund"
-        ingredient.ingredientPrice = "12"
-        ingredientSelectionList[0].ingredientList.add(ingredient)
-        mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[0].ingredientList,this)
+        mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[position].ingredientList,this)
         mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(this)
         mAlertDialog.ingredient_list.setHasFixedSize(true)
-    }
 
+    }
 }
 

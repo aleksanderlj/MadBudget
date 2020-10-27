@@ -39,7 +39,7 @@
             android:text="5 dåser"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/ingredient_store_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.551" />
 
@@ -56,7 +56,7 @@
             app:layout_constraintVertical_bias="0.551" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ingredient_store_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="10dp"

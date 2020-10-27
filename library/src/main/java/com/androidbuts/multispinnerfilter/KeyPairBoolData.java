@@ -5,7 +5,7 @@ public class KeyPairBoolData {
 	private String name;
 	private boolean isSelected;
 	private Object object;
-	private String price;
+	private Double price;
 
 	public Object getObject() {
 		return object;
@@ -15,11 +15,11 @@ public class KeyPairBoolData {
 		this.object = object;
 	}
 
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
