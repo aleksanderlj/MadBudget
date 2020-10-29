@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
 import kotlinx.android.synthetic.main.recipe_item.view.*
 
-class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
+class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
@@ -27,6 +27,10 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cell
 
     override fun getItemCount(): Int {
         return myDataset.size
+    }
+
+    fun updateResource(newDataset: ArrayList<Recipe>){
+        myDataset = newDataset
     }
 
     class RecipesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -2,7 +2,8 @@ package com.example.madbudget
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +16,17 @@ class Recipes : AppCompatActivity(), CellClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
 
-        searchOnClick()
+        //TODO - Call database here get recipes and their ingredients!!!
         val recipeList = iniDummyRecipes()
+        searchOnChange(recipeList)
         recipe_list.adapter = RecipesAdapter(recipeList, this)
         recipe_list.layoutManager = LinearLayoutManager(this)
         recipe_list.setHasFixedSize(true)
+    }
+
+    //TODO - Fix when you can you dingus!
+    fun calculatePrices(){
+
     }
 
     override fun onCellClickListener(clickedRecipe: Recipe) {
@@ -30,17 +37,39 @@ class Recipes : AppCompatActivity(), CellClickListener {
         startActivity(recipeActivity)
     }
 
-    private fun searchOnClick(){
-        search_button.setOnClickListener{
-            val searchedText = search_text.text.toString()
-            if (searchedText.isNotEmpty()){
-
+    private fun searchOnChange(recipeList: ArrayList<Recipe>){
+        search_text.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
             }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchedText = search_text.text.toString()
+                val searchedRecipeList: ArrayList<Recipe> = ArrayList()
+                var sameString = false
+                val updatedAdapter: RecipesAdapter = recipe_list.adapter as RecipesAdapter
 
-
-        }
+                if (search_text.text.isEmpty()){
+                    updatedAdapter.updateResource(recipeList)
+                    recipe_list.adapter = updatedAdapter
+                }
+                else {
+                    for (i in 0..recipeList.size - 1){
+                        for (j in 0..searchedText.length - 1)
+                            if (recipeList[i].recipeName.length < searchedText.length)
+                                sameString = false
+                            else
+                                sameString = searchedText[j].toLowerCase() == recipeList[i].recipeName[j].toLowerCase()
+                        if (sameString)
+                            searchedRecipeList.add(recipeList[i])
+                    }
+                    updatedAdapter.updateResource(searchedRecipeList)
+                    recipe_list.adapter = updatedAdapter
+                }
+            }
+        })
     }
 
     private fun iniDummyRecipes() : ArrayList<Recipe>{
@@ -54,13 +83,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
         recipeList.add(Recipe("Fisk", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
+        recipeList.add(Recipe("Heje", 42069, 5, "2h", ingredientList))
         return recipeList
     }
 }
