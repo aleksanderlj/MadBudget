@@ -5,14 +5,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.android.volley.Response
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
-import org.json.JSONObject
 
 class SallingCommunicator {
 
@@ -28,7 +26,7 @@ class SallingCommunicator {
             if (fusedLocationClient != null) {
                 try {
                     fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        VolleyGetter.send(
+                        SallingVolleyGetter.send(
                             context,
                             "/v2/stores/?geo=${location?.latitude},${location?.longitude}&radius=$radius&$filters",
                             callback
@@ -85,7 +83,7 @@ class SallingCommunicator {
             product: String,
             callback: Response.Listener<String>
         ) {
-            VolleyGetter.send(
+            SallingVolleyGetter.send(
                 context,
                 "/v1-beta/product-suggestions/relevant-products?query=$product",
                 callback
@@ -97,7 +95,7 @@ class SallingCommunicator {
             productId: String,
             callback: Response.Listener<String>
         ) {
-            VolleyGetter.send(
+            SallingVolleyGetter.send(
                 context,
                 "/v1-beta/product-suggestions/similar-products?productId=$productId",
                 callback
@@ -110,7 +108,7 @@ class SallingCommunicator {
             if (fusedLocationClient != null) {
                 try {
                     fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        VolleyGetter.send(
+                        SallingVolleyGetter.send(
                             context,
                             "/v1/food-waste/?geo=${location?.latitude},${location?.longitude}&radius=$radius",
                             callback
