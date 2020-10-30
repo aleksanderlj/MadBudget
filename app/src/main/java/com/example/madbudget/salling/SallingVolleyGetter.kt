@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 
 
-class VolleyGetter {
+class SallingVolleyGetter {
     companion object {
         fun send(context: Context, url: String, callback: Response.Listener<String>) {
             var requestQueue = Volley.newRequestQueue(context)
