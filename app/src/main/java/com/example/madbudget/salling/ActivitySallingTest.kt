@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
 import com.example.madbudget.R
+import com.example.madbudget.coop.CoopCommunicator
+import com.example.madbudget.coop.model.CoopProduct
+import com.example.madbudget.coop.model.CoopStoreList
 import com.example.madbudget.salling.jsonModels.JsonDiscount
 import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonStore
@@ -18,6 +21,26 @@ class ActivitySallingTest : AppCompatActivity() {
 
         getButton.setOnClickListener {
             getText.text = "Check logcat"
+
+            CoopCommunicator.getNearbyStoresMapOptimized(this, 10000, 1, 2) {response ->
+                Log.i("Stores", response.toString())
+                val json = Klaxon().parse<CoopStoreList>(response.toString())
+                Log.i("JSONTEST", json!!.stores[0].manager)
+            }
+
+            CoopCommunicator.getProducts(this, "1290") {response ->
+                Log.i("Products", response.toString())
+                val json = Klaxon().parseArray<CoopProduct>(response.toString())
+                Log.i("JSONTEST", json!![0].name1)
+            }
+
+            CoopCommunicator.getAssortment(this, "1290") {response ->
+                Log.i("Assortment", response.toString())
+                val json = Klaxon().parseArray<CoopProduct>(response.toString())
+                Log.i("JSONTEST", json!![0].name1)
+            }
+
+            /*
             SallingCommunicator.getNearbyStores(this, 20) { response ->
                 Log.i("Stores", response.toString())
                 val json = Klaxon().parseArray<JsonStore>(response.toString())
@@ -41,6 +64,8 @@ class ActivitySallingTest : AppCompatActivity() {
                 val json = Klaxon().parseArray<JsonDiscount>(response.toString())
                 Log.i("JSONTEST", json!![0].clearances!![0].offer.discount.toString())
             }
+
+             */
 
         }
 

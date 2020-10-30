@@ -58,45 +58,19 @@ class CoopCommunicator {
         }
 
         fun getAssortment(context: Context, storeId: String, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/assortmentapi/v1/product/$storeId", callback)
+            CoopVolleyGetter.send(context, "/assortmentapi/v1/product/$storeId", callback)
         }
 
         fun getProducts(context: Context, storeId: String, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/productapi/v1/product/$storeId", callback)
-        }
-
-        fun getStore(context: Context, storeId: String, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/storeapi/v1/stores/$storeId", callback)
+            CoopVolleyGetter.send(context, "/productapi/v1/product/$storeId", callback)
         }
 
         fun getStoreMapOptimized(context: Context, storeId: String, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/$storeId", callback)
-        }
-
-        fun getStoreByBrand(context: Context, brand: String, page: Int, pageSize: Int, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/storeapi/v1/stores/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
+            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/$storeId", callback)
         }
 
         fun getStoreByBrandMapOptimized(context: Context, brand: String, page: Int, pageSize: Int, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
-        }
-
-        fun getNearbyStores(context: Context, radius: Int, page: Int, pageSize: Int,  callback: Response.Listener<String>){
-            var fusedLocationClient = CoopCommunicator.startLocationUpdates(context)
-
-            if (fusedLocationClient != null) {
-                try {
-                    fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        CoopVolleyGetter.send(
-                            context,
-                            "/storeapi/v1/stores/find/radius/$radius?latitude=${location?.latitude}&longitude=${location?.longitude}&page=$page&size=$pageSize",
-                            callback
-                        )
-                    }
-                } catch (e: SecurityException) {
-                    e.printStackTrace()
-                }
-            }
+            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
         }
 
         fun getNearbyStoresMapOptimized(context: Context, radius: Int, page: Int, pageSize: Int,  callback: Response.Listener<String>){
@@ -117,9 +91,36 @@ class CoopCommunicator {
             }
         }
 
-        fun getAllStores(context: Context, storeId: String, callback: Response.Listener<String>) {
-            SallingVolleyGetter.send(context, "/productapi/v1/product/$storeId", callback)
+        /*
+        fun getStore(context: Context, storeId: String, callback: Response.Listener<String>) {
+            SallingVolleyGetter.send(context, "/storeapi/v1/stores/$storeId", callback)
         }
+         */
+        /*
+        fun getNearbyStores(context: Context, radius: Int, page: Int, pageSize: Int,  callback: Response.Listener<String>){
+            var fusedLocationClient = CoopCommunicator.startLocationUpdates(context)
+
+            if (fusedLocationClient != null) {
+                try {
+                    fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                        CoopVolleyGetter.send(
+                            context,
+                            "/storeapi/v1/stores/find/radius/$radius?latitude=${location?.latitude}&longitude=${location?.longitude}&page=$page&size=$pageSize",
+                            callback
+                        )
+                    }
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+         */
+        /*
+        fun getStoreByBrand(context: Context, brand: String, page: Int, pageSize: Int, callback: Response.Listener<String>) {
+            SallingVolleyGetter.send(context, "/storeapi/v1/stores/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
+        }
+         */
 
     }
 }
+
