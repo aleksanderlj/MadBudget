@@ -21,8 +21,11 @@ class RecipeActivity : AppCompatActivity() {
         recipe_rating.text = "Rating: " + recipe.recipeRating + "/5"
         recipe_time.text = "Time: " + recipe.recipeTimeToMake
 
+        /*
         recipe_ingredient_list.adapter = RecipeIngredientsAdapter(recipe.ingredientList)
         recipe_ingredient_list.layoutManager = LinearLayoutManager(this)
         recipe_ingredient_list.setHasFixedSize(true)
+
+         */
     }
 }

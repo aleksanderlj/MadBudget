@@ -75,6 +75,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
     private fun iniDummyRecipes() : ArrayList<Recipe>{
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
+        /*
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
@@ -84,6 +85,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList))
         recipeList.add(Recipe("Heje", 42069, 5, "2h", ingredientList))
+
+         */
         return recipeList
     }
 }
