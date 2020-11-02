@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_recipes.*
-import java.sql.Time
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class Recipes : AppCompatActivity(), CellClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
     override fun onCellClickListener(clickedRecipe: Recipe) {
         val recipeActivity = Intent(this, RecipeActivity::class.java)
-        val gson = Gson()
-        val stringRecipe = gson.toJson(clickedRecipe)
-        recipeActivity.putExtra("ClickedRecipe", stringRecipe)
+        recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipeId)
         startActivity(recipeActivity)
     }
 
@@ -90,6 +88,11 @@ class Recipes : AppCompatActivity(), CellClickListener {
         ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
         ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
         ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
+        val db = DatabaseBuilder.get(this)
+        GlobalScope.launch {
+            db.recipeDao().insertAll(recipeList)
+            db.ingredientDao().insertAll(ingredientList)
+        }
         return recipeList
     }
 }

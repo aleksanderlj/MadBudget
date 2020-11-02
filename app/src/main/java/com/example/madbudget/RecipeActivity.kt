@@ -5,27 +5,29 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
+import com.example.madbudget.models.RecipeWithIngredients
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_recipe.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RecipeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
         val intent = getIntent()
-        val stringRecipe = intent.getStringExtra("ClickedRecipe")
-        val gson = Gson()
-        val recipe = gson.fromJson(stringRecipe, Recipe::class.java)
-        
-        recipe_name.text = recipe.recipeName
-        recipe_rating.text = "Rating: " + recipe.recipeRating + "/5"
-        recipe_time.text = "Time: " + recipe.recipeTimeToMake
-
-        /*
-        recipe_ingredient_list.adapter = RecipeIngredientsAdapter(recipe.ingredientList)
-        recipe_ingredient_list.layoutManager = LinearLayoutManager(this)
-        recipe_ingredient_list.setHasFixedSize(true)
-
-         */
+        val recipeId = intent.getIntExtra("ClickedRecipe", 0)
+        val db = DatabaseBuilder.get(this)
+        GlobalScope.launch {
+            val recipe: RecipeWithIngredients? = db.recipeDao().getById(recipeId)
+            if (recipe != null) {
+                recipe_name.text = recipe.recipe.recipeName
+                recipe_rating.text = "Rating: " + recipe.recipe.recipeRating + "/5"
+                recipe_time.text = "Time: " + recipe.recipe.recipeTimeToMake
+                /*recipe_ingredient_list.adapter = RecipeIngredientsAdapter(recipe.ingredients.)
+                recipe_ingredient_list.layoutManager = LinearLayoutManager(this)
+                recipe_ingredient_list.setHasFixedSize(true)*/
+            }
+        }
     }
 }
