@@ -28,7 +28,7 @@
         app:layout_constraintGuide_begin="370dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredient_list"
+        android:id="@+id/ingredient_selection_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingBottom="10dp"

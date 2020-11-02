@@ -19,7 +19,7 @@ class SallingCommunicator {
         //filter: zip, city, country ("dk", "se", "de", "pl"), street, brand ("netto", "bilka", "foetex", "salling", "carlsjr", "br")
         //fields: address, brand, coordinates, created, distance_km, hours, modified, name, phoneNumber, sapSiteId, type, vikingStoreId, attributes, id
 
-        fun getNearbyStores(context: Context, radius: Int, callback: Response.Listener<String>) {
+        fun getNearbyStores(context: Context, radius: Double, callback: Response.Listener<String>) {
 
             var fusedLocationClient = startLocationUpdates(context)
 

@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recipes.setOnClickListener{
-            val recipesActivity = Intent(this, Recipes::class.java)
+            val recipesActivity = Intent(this, RecipeActivity::class.java)
             startActivity(recipesActivity);
         }
         createRecipes.setOnClickListener{
@@ -23,5 +23,11 @@ class MainActivity : AppCompatActivity() {
             var i = Intent(this, ActivitySallingTest::class.java)
             startActivity(i)
         }
+
+        map_button.setOnClickListener {
+            val mapsActivity = Intent(this,MapsActivity::class.java)
+            startActivity(mapsActivity)
+        }
+
     }
 }

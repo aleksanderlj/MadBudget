@@ -20,7 +20,7 @@
         </CheckBox>
 
         <TextView
-            android:id="@+id/ingredient_name"
+            android:id="@+id/ingredient_namead"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -39,24 +39,24 @@
             android:text="5 dåser"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/ingredient_store_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.551" />
 
         <TextView
-            android:id="@+id/ingredient_price"
+            android:id="@+id/ingredient_pricead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="240 kr"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ingredient_amount"
-            app:layout_constraintStart_toEndOf="@+id/ingredient_name"
+            app:layout_constraintStart_toEndOf="@+id/ingredient_namead"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.551" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ingredient_store_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="10dp"
@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/ghetto" />
 
         <View
             android:id="@+id/divider2"

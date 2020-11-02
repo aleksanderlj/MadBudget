@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiSpinnerSearch">
+        <attr format="string" name="hintText"/>
+        <attr format="boolean" name="highlightSelected"/>
+        <attr format="color" name="highlightColor"/>
+        <attr format="color" name="textColor"/>
+        <attr format="string" name="clearText"/>
+    </declare-styleable>
+</resources>

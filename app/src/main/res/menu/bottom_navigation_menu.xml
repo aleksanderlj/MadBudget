@@ -10,4 +10,10 @@
         android:enabled="true"
         android:icon="@drawable/shopping_cart_24px_outlined"
         android:title="Favoritter"/>
+
+    <item
+        android:id="@+id/page_3"
+        android:enabled="true"
+        android:icon="@drawable/shopping_cart_24px_outlined"
+        android:title="Kort"/>
 </menu>
