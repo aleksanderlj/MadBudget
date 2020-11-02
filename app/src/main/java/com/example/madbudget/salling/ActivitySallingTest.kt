@@ -14,6 +14,8 @@ import com.example.madbudget.salling.jsonModels.JsonDiscount
 import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonStore
 import com.example.madbudget.salling.jsonModels.JsonSuggestions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sallingtest.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,10 +30,13 @@ class ActivitySallingTest : AppCompatActivity() {
             getText.text = "Check logcat"
             val db = DatabaseBuilder.get(this)
 
+            /*
             GlobalScope.launch {
                 db.ingredientDao().insert(Ingredient(0, "name", "amount", "type", false, 0))
                 getText.text = db.ingredientDao().getAll()[0].ingredientName
             }
+             */
+
 
 
             /*

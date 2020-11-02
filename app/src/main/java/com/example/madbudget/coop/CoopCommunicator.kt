@@ -91,6 +91,10 @@ class CoopCommunicator {
             }
         }
 
+        fun getAllStoresMapOptimized(context: Context, page: Int, pageSize: Int, callback: Response.Listener<String>){
+            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap?page=$page&size=$pageSize", callback)
+        }
+
         /*
         fun getStore(context: Context, storeId: String, callback: Response.Listener<String>) {
             SallingVolleyGetter.send(context, "/storeapi/v1/stores/$storeId", callback)
