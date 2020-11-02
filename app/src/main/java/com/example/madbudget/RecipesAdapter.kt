@@ -20,7 +20,7 @@ class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cell
         val currentItem = myDataset[position]
         holder.name.text = currentItem.recipeName
         holder.price.text = currentItem.price.toString() + " kr,-"
-        holder.timeToMake.text = currentItem.recipeTimeToMake.hours.toString() + "h " + currentItem.recipeTimeToMake.minutes.toString() + "m"
+        holder.timeToMake.text = currentItem.recipeTimeToMake
         holder.showedDistance.text = currentItem.showedDistance.toString() + " km"
         holder.walkingDude.setImageResource(R.drawable.walking_dude)
         holder.itemView.setOnClickListener{
