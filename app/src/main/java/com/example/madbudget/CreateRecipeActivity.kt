@@ -2,18 +2,17 @@ package com.example.madbudget
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidbuts.multispinnerfilter.KeyPairBoolData
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
-import com.beust.klaxon.Klaxon
 import com.example.madbudget.models.Ingredient
 import com.example.madbudget.models.IngredientSelection
-import com.example.madbudget.salling.SallingCommunicator
+import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonSuggestions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_selection_list
@@ -22,10 +21,10 @@ import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
 import kotlinx.android.synthetic.main.show_ingredient_dialog.*
 
 
-class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnIngredientSelectionClickListener{
+class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnIngredientSelectionClickListener, IngredientSelectionAdapter.OnIngredientCheckBoxClickListener{
 
 
-    private val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
+    private var ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
     private var ingredientList: ArrayList<Ingredient> = ArrayList()
     private lateinit var multiSelectSpinnerWithSearch: MultiSpinnerSearch
     private lateinit var mAlertDialog: AlertDialog
@@ -34,9 +33,10 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipes_wip)
 
-        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,this, this )
+        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,this, this,this)
         ingredient_selection_list.layoutManager = LinearLayoutManager(this)
         ingredient_selection_list.setHasFixedSize(true)
+
 
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener(View.OnClickListener {
@@ -51,6 +51,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             .setTitle("Tilføj Ingrediens...")
             .setPositiveButton("OK") {_,_ ->
                 val ingredientSelection = IngredientSelection(mAlertDialog.spinner_ingredient_selection_name.text.toString(), mAlertDialog.spinner_ingredient_amount.text.toString(), ingredientList)
+                ingredientSelection.isSelected = true
                 ingredientSelectionList.add(ingredientSelection)
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
                 mAlertDialog.dismiss()
@@ -65,20 +66,17 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             .show()
 
         mAlertDialog.multiItemSelectionSpinner.isEnabled = false
-        mAlertDialog.save_spinner_ingredient_selection_button.setOnClickListener {
-
-            if (mAlertDialog.spinner_ingredient_selection_name.text.toString().isNotEmpty()){
+        mAlertDialog.spinner_ingredient_selection_name.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && mAlertDialog.spinner_ingredient_selection_name.text.toString().isNotEmpty()) {
                 mAlertDialog.multiItemSelectionSpinner.isEnabled = true
-                createSpinner(mAlertDialog.spinner_ingredient_selection_name.text.toString())
-            }else{
-                Toast.makeText(this,"Indtast navn",Toast.LENGTH_SHORT).show()
-
+                initSpinner(mAlertDialog.spinner_ingredient_selection_name.text.toString())
             }
+
         }
         return mAlertDialog
     }
 
-    private fun createSpinner(searchInput: String){
+    private fun initSpinner(searchInput: String){
 
         multiSelectSpinnerWithSearch.isSearchEnabled = true
         multiSelectSpinnerWithSearch.setClearText("Luk og Ryd")
@@ -106,7 +104,21 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
 
         val listArray1: MutableList<KeyPairBoolData> = ArrayList()
 
-        SallingCommunicator.getProductSuggestions(this,searchInput) { response ->
+        val dummyJsonBoolData: ArrayList<JsonProduct> = ArrayList()
+        val dummyData: JsonSuggestions = JsonSuggestions(dummyJsonBoolData)
+
+        dummyJsonBoolData.add(JsonProduct("bund","","","","","",20.5))
+
+
+        for ((counter, i) in dummyData.suggestions.withIndex()) {
+            val h = KeyPairBoolData()
+            h.id = counter + 1.toLong()
+            h.name = i.title
+            h.price = i.price
+            listArray1.add(h)
+        }
+
+       /* SallingCommunicator.getProductSuggestions(this,searchInput) { response ->
             val json = Klaxon().parse<JsonSuggestions>(response.toString())!!
             for ((counter, i) in json.suggestions.withIndex()) {
                 val h = KeyPairBoolData()
@@ -115,7 +127,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                 h.price = i.price
                 listArray1.add(h)
             }
-        }
+        }*/
         return listArray1
     }
 
@@ -132,6 +144,17 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[position].ingredientList,this)
         mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(this)
         mAlertDialog.ingredient_list.setHasFixedSize(true)
+
+
+    }
+
+    override fun onCheckBoxClick(position: Int) {
+
+        Log.i("hej",position.toString())
+
+        for (i in ingredientSelectionList) {
+            Log.i("bund", i.toString())
+        }
 
     }
 }
