@@ -33,6 +33,9 @@ class Coop2Firebase {
                 }
 
 
+                // Place all stores in firebase and the assortment of two chosen stores. Have a static variable with their id's
+
+
 
             }
 
