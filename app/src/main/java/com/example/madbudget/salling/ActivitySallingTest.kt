@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
+import com.example.madbudget.DatabaseBuilder
 import com.example.madbudget.R
 import com.example.madbudget.coop.CoopCommunicator
 import com.example.madbudget.coop.model.CoopProduct
 import com.example.madbudget.coop.model.CoopStoreList
+import com.example.madbudget.models.Ingredient
 import com.example.madbudget.salling.jsonModels.JsonDiscount
 import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonStore
 import com.example.madbudget.salling.jsonModels.JsonSuggestions
 import kotlinx.android.synthetic.main.activity_sallingtest.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 class ActivitySallingTest : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +26,15 @@ class ActivitySallingTest : AppCompatActivity() {
 
         getButton.setOnClickListener {
             getText.text = "Check logcat"
+            val db = DatabaseBuilder.get(this)
 
+            GlobalScope.launch {
+                db.ingredientDao().insert(Ingredient(0, "name", "amount", "type", false, 0))
+                getText.text = db.ingredientDao().getAll()[0].ingredientName
+            }
+
+
+            /*
             CoopCommunicator.getNearbyStoresMapOptimized(this, 10000, 1, 2) {response ->
                 Log.i("Stores", response.toString())
                 val json = Klaxon().parse<CoopStoreList>(response.toString())
@@ -39,6 +52,8 @@ class ActivitySallingTest : AppCompatActivity() {
                 val json = Klaxon().parseArray<CoopProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].name1)
             }
+
+             */
 
             /*
             SallingCommunicator.getNearbyStores(this, 20) { response ->
