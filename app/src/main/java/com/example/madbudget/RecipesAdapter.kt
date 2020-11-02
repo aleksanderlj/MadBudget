@@ -9,18 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
 import kotlinx.android.synthetic.main.recipe_item.view.*
 
-class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
+class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
-        var itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
         return RecipesViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.name.text = currentItem.recipeName
-        holder.rating.text = "Rating: " +  currentItem.recipeRating.toString() + "/5"
-        holder.timeToMake.text = "Time: " + currentItem.recipeTimeToMake
+        holder.price.text = currentItem.price.toString() + " kr,-"
+        holder.timeToMake.text = currentItem.recipeTimeToMake
+        holder.showedDistance.text = currentItem.showedDistance.toString() + " km"
+        holder.walkingDude.setImageResource(R.drawable.walking_dude)
         holder.itemView.setOnClickListener{
             cellClickListener.onCellClickListener(currentItem)
         }
@@ -30,9 +32,15 @@ class RecipesAdapter(private val myDataset: ArrayList<Recipe>,  private val cell
         return myDataset.size
     }
 
+    fun updateResource(newDataset: ArrayList<Recipe>){
+        myDataset = newDataset
+    }
+
     class RecipesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView = itemView.recipe_name
-        var rating: TextView = itemView.recipe_rating
-        var timeToMake: TextView = itemView.recipe_time_to_make
+        val name: TextView = itemView.recipe_name
+        val price: TextView = itemView.recipe_price
+        val timeToMake: TextView = itemView.recipe_time_to_make
+        val showedDistance: TextView = itemView.recipe_showed_distance
+        val walkingDude: ImageView = itemView.recipe_walking_dude
     }
 }
