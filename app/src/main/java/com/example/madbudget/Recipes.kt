@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_recipes.*
+import java.sql.Time
 
 class Recipes : AppCompatActivity(), CellClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
         //TODO - Call database here get recipes and their ingredients!!!
         val recipeList = iniDummyRecipes()
+        calculatePrices(recipeList)
         searchOnChange(recipeList)
         recipe_list.adapter = RecipesAdapter(recipeList, this)
         recipe_list.layoutManager = LinearLayoutManager(this)
@@ -25,8 +27,12 @@ class Recipes : AppCompatActivity(), CellClickListener {
     }
 
     //TODO - Fix when you can you dingus!
-    fun calculatePrices(){
-
+    fun calculatePrices(recipeList: ArrayList<Recipe>){
+        for (i in 0..recipeList.size - 1){
+            if (recipeList[i].price != null) {
+                //TODO - Calculate that shit!
+            }
+        }
     }
 
     override fun onCellClickListener(clickedRecipe: Recipe) {
@@ -78,12 +84,12 @@ class Recipes : AppCompatActivity(), CellClickListener {
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
         ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList, 60))
-        recipeList.add(Recipe("spaghetti bolognese", 42069, 5, "2h", ingredientList, 60))
-        recipeList.add(Recipe("Fisk", 42069, 5, "2h", ingredientList, 60))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList, 60))
-        recipeList.add(Recipe("Hej", 42069, 5, "2h", ingredientList, 200))
-        recipeList.add(Recipe("Heje", 42069, 5, "2h", ingredientList, 60))
+        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 60, 2.0))
+        recipeList.add(Recipe("Spaghetti Bolognese", 42069, 5, Time(1,30, 0), ingredientList, 60, 1.2))
+        recipeList.add(Recipe("Fisk", 42069, 5, Time(1,30, 0), ingredientList, 60, 0.3))
+        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 60, 4.5))
+        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 200, 3.2))
+        recipeList.add(Recipe("Heje", 42069, 5, Time(1,30, 0), ingredientList, 60, 5.1))
         return recipeList
     }
 }
