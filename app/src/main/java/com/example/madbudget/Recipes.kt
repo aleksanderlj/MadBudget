@@ -81,15 +81,15 @@ class Recipes : AppCompatActivity(), CellClickListener {
     private fun iniDummyRecipes() : ArrayList<Recipe>{
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
-        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
-        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
-        ingredientList.add(Ingredient("Rice", "2.7", 5, "Fisk"))
-        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 60, 2.0))
-        recipeList.add(Recipe("Spaghetti Bolognese", 42069, 5, Time(1,30, 0), ingredientList, 60, 1.2))
-        recipeList.add(Recipe("Fisk", 42069, 5, Time(1,30, 0), ingredientList, 60, 0.3))
-        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 60, 4.5))
-        recipeList.add(Recipe("Hej", 42069, 5, Time(1,30, 0), ingredientList, 200, 3.2))
-        recipeList.add(Recipe("Heje", 42069, 5, Time(1,30, 0), ingredientList, 60, 5.1))
+        recipeList.add(Recipe(0, "Hej", 5, Time(1,30, 0), 60, 2.0))
+        recipeList.add(Recipe(0, "Spaghetti Bolognese", 5, Time(1,30, 0), 60, 1.2))
+        recipeList.add(Recipe(0, "Fisk", 5, Time(1,30, 0), 60, 0.3))
+        recipeList.add(Recipe(0, "Hej", 5, Time(1,30, 0), 60, 4.5))
+        recipeList.add(Recipe(0, "Hej", 5, Time(1,30, 0), 200, 3.2))
+        recipeList.add(Recipe(0, "Heje", 5, Time(1,30, 0), 60, 5.1))
+        ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
+        ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
+        ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, recipeList[0].recipeId))
         return recipeList
     }
 }
