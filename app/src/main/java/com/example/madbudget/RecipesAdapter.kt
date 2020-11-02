@@ -3,6 +3,7 @@ package com.example.madbudget
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
@@ -18,8 +19,10 @@ class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cell
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.name.text = currentItem.recipeName
-        holder.rating.text = currentItem.recipeRating.toString()
-        holder.timeToMake.text = currentItem.recipeTimeToMake
+        holder.price.text = currentItem.price.toString() + " kr,-"
+        holder.timeToMake.text = currentItem.recipeTimeToMake.hours.toString() + "h " + currentItem.recipeTimeToMake.minutes.toString() + "m"
+        holder.showedDistance.text = currentItem.showedDistance.toString() + " km"
+        holder.walkingDude.setImageResource(R.drawable.walking_dude)
         holder.itemView.setOnClickListener{
             cellClickListener.onCellClickListener(currentItem)
         }
@@ -35,7 +38,9 @@ class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cell
 
     class RecipesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.recipe_name
-        val rating: TextView = itemView.recipe_rating
+        val price: TextView = itemView.recipe_price
         val timeToMake: TextView = itemView.recipe_time_to_make
+        val showedDistance: TextView = itemView.recipe_showed_distance
+        val walkingDude: ImageView = itemView.recipe_walking_dude
     }
 }
