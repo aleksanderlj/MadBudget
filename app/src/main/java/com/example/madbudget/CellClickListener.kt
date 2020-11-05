@@ -1,7 +1,7 @@
 package com.example.madbudget
 
-import com.example.madbudget.models.Recipe
+import com.example.madbudget.models.RecipeWithIngredients
 
 interface CellClickListener {
-    fun onCellClickListener(clickedRecipe : Recipe)
+    fun onCellClickListener(clickedRecipe : RecipeWithIngredients)
 }

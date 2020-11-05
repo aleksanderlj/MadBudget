@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
+import com.example.madbudget.models.RecipeWithIngredients
 import kotlinx.android.synthetic.main.recipe_item.view.*
 
-class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
+class RecipesAdapter(private var myDataset: List<RecipeWithIngredients>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
@@ -18,10 +19,10 @@ class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cell
 
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
-        holder.name.text = currentItem.recipeName
-        holder.price.text = currentItem.price.toString() + " kr,-"
-        holder.timeToMake.text = currentItem.recipeTimeToMake
-        holder.showedDistance.text = currentItem.showedDistance.toString() + " km"
+        holder.name.text = currentItem.recipe.recipeName
+        holder.price.text = currentItem.recipe.price.toString() + " kr,-"
+        holder.timeToMake.text = currentItem.recipe.recipeTimeToMake
+        holder.showedDistance.text = currentItem.recipe.showedDistance.toString() + " km"
         holder.walkingDude.setImageResource(R.drawable.walking_dude)
         holder.itemView.setOnClickListener{
             cellClickListener.onCellClickListener(currentItem)
@@ -32,7 +33,7 @@ class RecipesAdapter(private var myDataset: ArrayList<Recipe>,  private val cell
         return myDataset.size
     }
 
-    fun updateResource(newDataset: ArrayList<Recipe>){
+    fun updateResource(newDataset: List<RecipeWithIngredients>){
         myDataset = newDataset
     }
 

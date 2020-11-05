@@ -16,6 +16,7 @@ class RecipeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
         val intent = getIntent()
+        val recipeId2 = intent.getStringExtra("ClickedRecipe")
         val recipeId = intent.getIntExtra("ClickedRecipe", 0)
         val db = DatabaseBuilder.get(this)
         GlobalScope.launch {
@@ -24,9 +25,9 @@ class RecipeActivity : AppCompatActivity() {
                 recipe_name.text = recipe.recipe.recipeName
                 recipe_rating.text = "Rating: " + recipe.recipe.recipeRating + "/5"
                 recipe_time.text = "Time: " + recipe.recipe.recipeTimeToMake
-                /*recipe_ingredient_list.adapter = RecipeIngredientsAdapter(recipe.ingredients.)
-                recipe_ingredient_list.layoutManager = LinearLayoutManager(this)
-                recipe_ingredient_list.setHasFixedSize(true)*/
+                recipe_ingredient_list.adapter = RecipeIngredientsAdapter(recipe.ingredients)
+                recipe_ingredient_list.layoutManager = LinearLayoutManager(baseContext)
+                recipe_ingredient_list.setHasFixedSize(true)
             }
         }
     }
