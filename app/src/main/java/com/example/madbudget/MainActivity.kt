@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recipes.setOnClickListener{
-            val recipesActivity = Intent(this, RecipeActivity::class.java)
+            val recipesActivity = Intent(this, Recipes::class.java)
             startActivity(recipesActivity);
         }
         createRecipes.setOnClickListener{

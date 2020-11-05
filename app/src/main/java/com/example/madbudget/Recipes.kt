@@ -41,7 +41,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
     }
 
     override fun onCellClickListener(clickedRecipe: RecipeWithIngredients) {
-        val recipeActivity = Intent(this, RecipeActivity::class.java)
+        val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
         recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipe.recipeId)
         startActivity(recipeActivity)
     }
