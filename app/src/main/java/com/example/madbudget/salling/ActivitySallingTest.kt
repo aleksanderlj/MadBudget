@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
 import com.example.madbudget.DatabaseBuilder
 import com.example.madbudget.R
+import com.example.madbudget.Utility
 import com.example.madbudget.coop.CoopCommunicator
 import com.example.madbudget.coop.model.CoopProduct
 import com.example.madbudget.coop.model.CoopStoreList
@@ -38,23 +39,21 @@ class ActivitySallingTest : AppCompatActivity() {
              */
 
 
-
-
             CoopCommunicator.getNearbyStoresMapOptimized(this, 1, 1, 2) {response ->
                 Log.i("Stores", response.toString())
-                val json = Klaxon().parse<CoopStoreList>(response.toString())
+                val json = Utility.parse<CoopStoreList>(response.toString())
                 Log.i("JSONTEST", json!!.stores[0].manager)
             }
 
             CoopCommunicator.getProducts(this, "1290") {response ->
                 Log.i("Products", response.toString())
-                val json = Klaxon().parseArray<CoopProduct>(response.toString())
+                val json = Utility.parseArray<CoopProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].name1)
             }
 
             CoopCommunicator.getAssortment(this, "1290") {response ->
                 Log.i("Assortment", response.toString())
-                val json = Klaxon().parseArray<CoopProduct>(response.toString())
+                val json = Utility.parseArray<CoopProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].name1)
             }
 
