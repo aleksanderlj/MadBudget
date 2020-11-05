@@ -3,5 +3,5 @@
     <string name="recipe_button">Recipes</string>
     <string name="create_recipe_button">Create Recipes</string>
     <string name="search_button">Search</string>
-    <string name="search_text">Search here</string>
+    <string name="search_text">Search..</string>
 </resources>
