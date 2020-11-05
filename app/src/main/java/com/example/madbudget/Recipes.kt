@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
-import com.example.madbudget.models.RecipeWithIngredients
+import com.example.madbudget.models.RecipeWithIngredientSelections
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
     }
 
     //TODO - Fix when you can you dingus!
-    fun calculatePrices(recipeList: List<RecipeWithIngredients>){
+    fun calculatePrices(recipeList: List<RecipeWithIngredientSelections>){
         for (i in 0..recipeList.size - 1){
             if (recipeList[i].recipe.price != null) {
                 //TODO - Calculate that shit!
@@ -40,13 +40,13 @@ class Recipes : AppCompatActivity(), CellClickListener {
         }
     }
 
-    override fun onCellClickListener(clickedRecipe: RecipeWithIngredients) {
+    override fun onCellClickListener(clickedRecipe: RecipeWithIngredientSelections) {
         val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
         recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipe.recipeId)
         startActivity(recipeActivity)
     }
 
-    private fun searchOnChange(recipeList: List<RecipeWithIngredients>){
+    private fun searchOnChange(recipeList: List<RecipeWithIngredientSelections>){
         search_text.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
             }
@@ -56,7 +56,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchedText = search_text.text.toString()
-                val searchedRecipeList: ArrayList<RecipeWithIngredients> = ArrayList()
+                val searchedRecipeList: ArrayList<RecipeWithIngredientSelections> = ArrayList()
                 var sameString = false
                 val updatedAdapter: RecipesAdapter = recipe_list.adapter as RecipesAdapter
 

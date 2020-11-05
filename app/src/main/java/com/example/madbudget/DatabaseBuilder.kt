@@ -13,7 +13,8 @@ class DatabaseBuilder {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "MadBudgetDatabase"
-                ).build()
+                ).fallbackToDestructiveMigration().
+                build()
             }
             return db as AppDatabase
         }

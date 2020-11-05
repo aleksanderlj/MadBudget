@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Recipe
-import com.example.madbudget.models.RecipeWithIngredients
+import com.example.madbudget.models.RecipeWithIngredientSelections
 import kotlinx.android.synthetic.main.recipe_item.view.*
 
-class RecipesAdapter(private var myDataset: List<RecipeWithIngredients>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
+class RecipesAdapter(private var myDataset: List<RecipeWithIngredientSelections>,  private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
@@ -33,7 +33,7 @@ class RecipesAdapter(private var myDataset: List<RecipeWithIngredients>,  privat
         return myDataset.size
     }
 
-    fun updateResource(newDataset: List<RecipeWithIngredients>){
+    fun updateResource(newDataset: List<RecipeWithIngredientSelections>){
         myDataset = newDataset
     }
 

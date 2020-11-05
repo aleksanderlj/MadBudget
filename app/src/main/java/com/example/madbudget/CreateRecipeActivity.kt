@@ -50,8 +50,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             .setView(LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
             .setTitle("Tilføj Ingrediens...")
             .setPositiveButton("OK") {_,_ ->
-                val ingredientSelection = IngredientSelection(mAlertDialog.spinner_ingredient_selection_name.text.toString(), mAlertDialog.spinner_ingredient_amount.text.toString(), ingredientList)
-                ingredientSelection.isSelected = true
+                val ingredientSelection = IngredientSelection(0, mAlertDialog.spinner_ingredient_selection_name.text.toString(), mAlertDialog.spinner_ingredient_amount.text.toString(), true,0)
                 ingredientSelectionList.add(ingredientSelection)
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
                 mAlertDialog.dismiss()
@@ -141,7 +140,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             }
             .show()
 
-        mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[position].ingredientList,this)
+        //mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientSelectionList[position].,this)
         mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(this)
         mAlertDialog.ingredient_list.setHasFixedSize(true)
 
