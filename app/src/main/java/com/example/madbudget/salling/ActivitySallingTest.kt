@@ -39,8 +39,8 @@ class ActivitySallingTest : AppCompatActivity() {
 
 
 
-            /*
-            CoopCommunicator.getNearbyStoresMapOptimized(this, 10000, 1, 2) {response ->
+
+            CoopCommunicator.getNearbyStoresMapOptimized(this, 1, 1, 2) {response ->
                 Log.i("Stores", response.toString())
                 val json = Klaxon().parse<CoopStoreList>(response.toString())
                 Log.i("JSONTEST", json!!.stores[0].manager)
@@ -57,8 +57,6 @@ class ActivitySallingTest : AppCompatActivity() {
                 val json = Klaxon().parseArray<CoopProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].name1)
             }
-
-             */
 
             /*
             SallingCommunicator.getNearbyStores(this, 20) { response ->

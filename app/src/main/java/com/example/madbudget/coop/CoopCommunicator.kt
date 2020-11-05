@@ -12,6 +12,7 @@ import com.example.madbudget.salling.SallingCommunicator
 import com.example.madbudget.salling.SallingVolleyGetter
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import java.lang.Exception
 
 class CoopCommunicator {
 
@@ -58,19 +59,19 @@ class CoopCommunicator {
         }
 
         fun getAssortment(context: Context, storeId: String, callback: Response.Listener<String>) {
-            CoopVolleyGetter.send(context, "/assortmentapi/v1/product/$storeId", callback)
+            send(context, "/assortmentapi/v1/product/$storeId", callback)
         }
 
         fun getProducts(context: Context, storeId: String, callback: Response.Listener<String>) {
-            CoopVolleyGetter.send(context, "/productapi/v1/product/$storeId", callback)
+            send(context, "/productapi/v1/product/$storeId", callback)
         }
 
         fun getStoreMapOptimized(context: Context, storeId: String, callback: Response.Listener<String>) {
-            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/$storeId", callback)
+            send(context, "/storeapi/v1/stores/shopformap/$storeId", callback)
         }
 
         fun getStoreByBrandMapOptimized(context: Context, brand: String, page: Int, pageSize: Int, callback: Response.Listener<String>) {
-            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
+            send(context, "/storeapi/v1/stores/shopformap/shopsByRetailGroup/$brand?page=$page&size=$pageSize", callback)
         }
 
         fun getNearbyStoresMapOptimized(context: Context, radius: Int, page: Int, pageSize: Int,  callback: Response.Listener<String>){
@@ -79,7 +80,7 @@ class CoopCommunicator {
             if (fusedLocationClient != null) {
                 try {
                     fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                        CoopVolleyGetter.send(
+                        send(
                             context,
                             "/storeapi/v1/stores/shopformap/find/radius/$radius?latitude=${location?.latitude}&longitude=${location?.longitude}&page=$page&size=$pageSize",
                             callback
@@ -92,11 +93,15 @@ class CoopCommunicator {
         }
 
         fun getAllStoresMapOptimized(context: Context, page: Int, pageSize: Int, callback: Response.Listener<String>){
-            CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap?page=$page&size=$pageSize", callback)
+            send(context, "/storeapi/v1/stores/shopformap?page=$page&size=$pageSize", callback)
         }
 
-        private fun send(context: Context){
-            CoopVolleyGetter.send()
+        private fun send(context: Context, msg: String, callback: Response.Listener<String>){
+            try {
+                CoopVolleyGetter.send(context, msg, callback)
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
         }
 
         /*
