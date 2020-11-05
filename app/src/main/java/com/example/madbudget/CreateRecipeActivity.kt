@@ -12,6 +12,7 @@ import com.androidbuts.multispinnerfilter.KeyPairBoolData
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
 import com.example.madbudget.models.Ingredient
 import com.example.madbudget.models.IngredientSelection
+import com.example.madbudget.models.Recipe
 import com.example.madbudget.salling.jsonModels.JsonProduct
 import com.example.madbudget.salling.jsonModels.JsonSuggestions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -28,6 +29,8 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
     private var ingredientList: ArrayList<Ingredient> = ArrayList()
     private lateinit var multiSelectSpinnerWithSearch: MultiSpinnerSearch
     private lateinit var mAlertDialog: AlertDialog
+    private lateinit var recipe: Recipe
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,14 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         ingredient_selection_list.layoutManager = LinearLayoutManager(this)
         ingredient_selection_list.setHasFixedSize(true)
 
+        database = DatabaseBuilder.get(this)
+
+        val recipeId: Int = intent.getIntExtra("ClickedRecipe",-1)
+
+        recipe = if (recipeId != -1)
+            database.recipeDao().getById(recipeId)!!.recipe
+        else
+            Recipe(0,recipe_list_name.text.toString(),4,"30min",null,null)
 
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener(View.OnClickListener {
@@ -55,6 +66,9 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                 ingredientSelectionList.add(ingredientSelection)
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
                 mAlertDialog.dismiss()
+
+                database.recipeDao().insert(recipe)
+
             }
             .setNegativeButton("Cancel") { _, _ ->
                 Toast.makeText(
@@ -90,13 +104,14 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                     val ingredient = Ingredient()
                     ingredient.ingredientName = it[i].name
                     // ingredient.ingredientPrice = it[i].price
+                    ingredient.recipeParentId = recipe.recipeId
+                    ingredient.ingredientType = null
                     tempIngredientList.add(ingredient)
                 }
             }
         }
-
         ingredientList = tempIngredientList
-
+        database.ingredientDao().insertAll(ingredientList)
     }
 
 
