@@ -95,6 +95,10 @@ class CoopCommunicator {
             CoopVolleyGetter.send(context, "/storeapi/v1/stores/shopformap?page=$page&size=$pageSize", callback)
         }
 
+        private fun send(context: Context){
+            CoopVolleyGetter.send()
+        }
+
         /*
         fun getStore(context: Context, storeId: String, callback: Response.Listener<String>) {
             SallingVolleyGetter.send(context, "/storeapi/v1/stores/$storeId", callback)
