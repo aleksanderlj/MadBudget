@@ -89,7 +89,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                 if (it[i].isSelected) {
                     val ingredient = Ingredient()
                     ingredient.ingredientName = it[i].name
-                    ingredient.ingredientPrice = it[i].price
+                    // ingredient.ingredientPrice = it[i].price
                     tempIngredientList.add(ingredient)
                 }
             }

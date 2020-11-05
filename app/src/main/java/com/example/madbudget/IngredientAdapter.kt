@@ -22,7 +22,7 @@ class IngredientAdapter(private var myDataset: ArrayList<Ingredient>, var contex
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.ingredientName.text = currentItem.ingredientName
-        holder.ingredientPrice.text = currentItem.ingredientPrice.toString()
+        //holder.ingredientPrice.text = currentItem.ingredientPrice.toString()
 
     }
 
