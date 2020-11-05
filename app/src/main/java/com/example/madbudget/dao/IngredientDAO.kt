@@ -11,8 +11,8 @@ interface IngredientDAO {
     @Query("SELECT * FROM Ingredient WHERE ingredientId IN (:ingredientIds)")
     fun getAllByIds(ingredientIds: IntArray): List<Ingredient>
 
-    @Query("SELECT * FROM Ingredient WHERE recipe_parent_id = :recipeId")
-    fun getAllByRecipeId(recipeId: Int): List<Ingredient>
+    @Query("SELECT * FROM Ingredient WHERE ingredient_selection_parent_id = :recipeId")
+    fun getAllByIngredientSelectionId(recipeId: Int): List<Ingredient>
 
     @Query("SELECT * FROM Ingredient WHERE ingredientId = :ingredientId")
     fun getById(ingredientId: Int): Ingredient?

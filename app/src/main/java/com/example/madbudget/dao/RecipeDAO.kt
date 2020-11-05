@@ -3,18 +3,18 @@ package com.example.madbudget.dao
 import androidx.room.*
 import com.example.madbudget.models.Ingredient
 import com.example.madbudget.models.Recipe
-import com.example.madbudget.models.RecipeWithIngredients
+import com.example.madbudget.models.RecipeWithIngredientSelections
 
 @Dao
 interface RecipeDAO {
     @Query("SELECT * FROM Recipe")
-    fun getAll(): List<RecipeWithIngredients>
+    fun getAll(): List<RecipeWithIngredientSelections>
 
     @Query("SELECT * FROM Recipe WHERE recipeId IN (:recipeIds)")
-    fun getAllByIds(recipeIds: IntArray): List<RecipeWithIngredients>
+    fun getAllByIds(recipeIds: IntArray): List<RecipeWithIngredientSelections>
 
     @Query("SELECT * FROM Recipe WHERE recipeId = :recipeId")
-    fun getById(recipeId: Int): RecipeWithIngredients?
+    fun getById(recipeId: Int): RecipeWithIngredientSelections?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recipe: Recipe)
