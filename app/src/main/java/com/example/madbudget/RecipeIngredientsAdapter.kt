@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.ingredient_item.view.*
 
-class RecipeIngredientsAdapter(private val myDataset: ArrayList<Ingredient>) : RecyclerView.Adapter<RecipeIngredientsAdapter.RecipeIngredientsViewHolder>() {
+class RecipeIngredientsAdapter(private val myDataset: List<Ingredient>) : RecyclerView.Adapter<RecipeIngredientsAdapter.RecipeIngredientsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeIngredientsViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.ingredient_item, parent, false)
