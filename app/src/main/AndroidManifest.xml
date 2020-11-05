@@ -41,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeActivity" />
         <activity android:name=".Recipes" />
         <activity android:name=".CreateRecipeActivity" />
         <activity android:name=".salling.ActivitySallingTest" />
