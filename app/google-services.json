@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "922479559282",
+    "firebase_url": "https://mad-budget.firebaseio.com",
+    "project_id": "mad-budget",
+    "storage_bucket": "mad-budget.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922479559282:android:72b0dd1014f71de2fef8eb",
+        "android_client_info": {
+          "package_name": "com.example.madbudget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "922479559282-v24iveh1npiiphgcopvu0dt9ojonfo8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhN6n3t_5bWPtTcAY1LmkmU3loS13dzgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "922479559282-v24iveh1npiiphgcopvu0dt9ojonfo8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
