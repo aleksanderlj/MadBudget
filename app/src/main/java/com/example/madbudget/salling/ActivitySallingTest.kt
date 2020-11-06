@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
 import com.example.madbudget.DatabaseBuilder
 import com.example.madbudget.R
+import com.example.madbudget.RegexFilter
 import com.example.madbudget.Utility
 import com.example.madbudget.coop.CoopCommunicator
 import com.example.madbudget.coop.model.CoopProduct
@@ -37,7 +38,9 @@ class ActivitySallingTest : AppCompatActivity() {
                 assortments!!
                 Log.i("JSONTEST", assortments[0].name1)
 
+                val ing = RegexFilter.convertCoopIngredient(assortments[0])
 
+                Log.i("RegexTest", "Name=${ing.ingredientName}, Amount=${ing.amount}, Unit=${ing.unit}, Pieces=${ing.pieces}, Price=${ing.ingredientPrice},")
 
             }
 

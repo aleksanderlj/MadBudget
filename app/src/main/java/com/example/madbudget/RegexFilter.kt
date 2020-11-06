@@ -1,5 +1,6 @@
 package com.example.madbudget
 
+import android.util.Log
 import com.example.madbudget.coop.model.CoopProduct
 import com.example.madbudget.models.Ingredient
 
@@ -11,6 +12,7 @@ class RegexFilter {
         val caMaxMinRegex = Regex("(MIN|CA|MAX)[ .]+([0-9]+) ?(KG|GRAM|G|CL|ML|LITER|L)")
         val halfRegex = Regex("(1/2) ?(LITER|L|KG)")
 
+        // TODO lav dette til en constructor i ingredient
         fun convertCoopIngredient(coopIng: CoopProduct): Ingredient{
             var ingAmount = parseIngredientFields(coopIng.name1, coopIng.name2)
 
