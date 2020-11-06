@@ -1,11 +1,11 @@
 package com.example.madbudget
 
-class RegexFilter2 {
+class RegexFilter {
     companion object {
-        val amountRegex = Regex("((?<digit1>[0-9]+)([,.])?(?<digit2>[0-9]+)?(-))?(?<digit3>[0-9]+)([,.])?(?<digit4>[0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
-        val stkXRegex = Regex("(?<number>[0-9]+) ?(?<mod>X|STK)")
+        val amountRegex = Regex("(([0-9]+)([,.])?([0-9]+)?(-))?([0-9]+)([,.])?([0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
+        val stkXRegex = Regex("([0-9]+) ?(X|STK)")
         val caMaxMinRegex = Regex("(MIN|CA|MAX)[ .]+([0-9]+) ?(KG|GRAM|G|CL|ML|LITER|L)")
-        val halfRegex = Regex("(?<half>1/2) ?(?<unit>LITER|L|KG)")
+        val halfRegex = Regex("(1/2) ?(LITER|L|KG)")
 
         fun parseIngredientField(field: String): IngredientAmount {
             //TODO husk to upper case
