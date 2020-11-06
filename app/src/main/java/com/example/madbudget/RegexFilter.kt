@@ -1,7 +1,5 @@
 package com.example.madbudget
 
-import android.util.Log
-
 class RegexFilter2 {
     companion object {
         val amountRegex = Regex("((?<digit1>[0-9]+)([,.])?(?<digit2>[0-9]+)?(-))?(?<digit3>[0-9]+)([,.])?(?<digit4>[0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
@@ -50,23 +48,23 @@ class RegexFilter2 {
 
             ingredientAmount = convertUnits(ingredientAmount)
 
-            println("Amount=${ingredientAmount.amount}, Unit=${ingredientAmount.unit}, Pieces=${ingredientAmount.pieces}")
+            println("Amount=${ingredientAmount.totalAmount}, Unit=${ingredientAmount.unit}, Pieces=${ingredientAmount.pieces}")
 
             return ingredientAmount
         }
 
         fun convertUnits(ingredientAmount: IngredientAmount): IngredientAmount{
             var newObject = ingredientAmount
-            if(ingredientAmount.unit != null && ingredientAmount.amount != null){
+            if(ingredientAmount.unit != null && ingredientAmount.totalAmount != null){
                 when(ingredientAmount.unit){
                     "KG" -> {
-                        newObject = IngredientAmount(ingredientAmount.amount*1000, "G", ingredientAmount.pieces)
+                        newObject = IngredientAmount(ingredientAmount.totalAmount*1000, "G", ingredientAmount.pieces)
                     }
                     "CL" -> {
-                        newObject = IngredientAmount(ingredientAmount.amount*10, "ML", ingredientAmount.pieces)
+                        newObject = IngredientAmount(ingredientAmount.totalAmount*10, "ML", ingredientAmount.pieces)
                     }
                     "LITER", "L" -> {
-                        newObject = IngredientAmount(ingredientAmount.amount*1000, "ML", ingredientAmount.pieces)
+                        newObject = IngredientAmount(ingredientAmount.totalAmount*1000, "ML", ingredientAmount.pieces)
                     }
                 }
             }
@@ -96,9 +94,9 @@ class RegexFilter2 {
             val match = stkXRegex.find(input)
             val pieces = match!!.groups[1]!!.value.toInt()
 
-            var newAmount = ingredientAmount.amount
+            var newAmount = ingredientAmount.totalAmount
             if(match.groups[2]!!.value == "X"){
-                newAmount = pieces * ingredientAmount.amount!!
+                newAmount = pieces * ingredientAmount.totalAmount!!
             }
 
             return IngredientAmount(newAmount, ingredientAmount.unit, pieces)
@@ -136,7 +134,7 @@ class RegexFilter2 {
     }
 
     data class IngredientAmount(
-        val amount: Double?,
+        val totalAmount: Double?,
         val unit: String?,
         val pieces: Int?
     )
