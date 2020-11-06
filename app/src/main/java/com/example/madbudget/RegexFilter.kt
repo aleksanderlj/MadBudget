@@ -1,15 +1,33 @@
 package com.example.madbudget
 
 class RegexFilter {
+    //TODO Lav IngredientAmount felter til var og brug setters ya dang ol dumbo
     companion object {
         val amountRegex = Regex("(([0-9]+)([,.])?([0-9]+)?(-))?([0-9]+)([,.])?([0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
         val stkXRegex = Regex("([0-9]+) ?(X|STK)")
         val caMaxMinRegex = Regex("(MIN|CA|MAX)[ .]+([0-9]+) ?(KG|GRAM|G|CL|ML|LITER|L)")
         val halfRegex = Regex("(1/2) ?(LITER|L|KG)")
 
+        fun parseIngredientFields(field1: String, field2: String): IngredientAmount {
+            val ing1 = parseIngredientField(field1)
+            var ing2 = parseIngredientField(field1)
+
+            if(ing2.totalAmount == null && ing1.totalAmount != null){
+                ing2 = IngredientAmount(ing1.totalAmount, ing2.unit, ing2.pieces)
+            }
+            if(ing2.unit == null && ing1.unit != null){
+                ing2 = IngredientAmount(ing2.totalAmount, ing1.unit, ing2.pieces)
+            }
+            if(ing2.pieces == null && ing1.pieces != null){
+                ing2 = IngredientAmount(ing2.totalAmount, ing2.unit, ing1.pieces)
+            }
+
+            return ing2
+        }
+
         fun parseIngredientField(field: String): IngredientAmount {
             //TODO husk to upper case
-            //val input = field.toUpperCase()
+            val input = field.toUpperCase()
             //val input = "FLÆSKESTEG 1,2-2,4 KG".toUpperCase()
             //val input = "800-1600G"
             //val input = "8-12% 450G"
@@ -21,7 +39,7 @@ class RegexFilter {
             //val input = "CA. 685 G MIN. 582-788 G"
             //val input = "MIN 830 G 45+ / 27 %"
             //val input = "5X28 G"
-            val input = "550 G 10 STK"
+            //val input = "550 G 10 STK"
             //val input = "5 X 250 ML"
             //val input = "15 STK S/M"
             //val input = "2 STK./100 G"
