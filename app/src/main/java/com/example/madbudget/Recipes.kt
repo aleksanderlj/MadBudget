@@ -20,14 +20,16 @@ class Recipes : AppCompatActivity(), CellClickListener {
         val db = DatabaseBuilder.get(this)
         val context = this
         //TODO - Call database here get recipes and their ingredients!!!
-        //iniDummyRecipes()
+        iniDummyRecipes()
         GlobalScope.launch {
             val recipeList = db.recipeDao().getAll()
-            calculatePrices(recipeList)
-            searchOnChange(recipeList)
-            recipe_list.adapter = RecipesAdapter(recipeList, context)
-            recipe_list.layoutManager = LinearLayoutManager(context)
-            recipe_list.setHasFixedSize(true)
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList, context)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
         }
     }
 
