@@ -31,6 +31,16 @@ class ActivitySallingTest : AppCompatActivity() {
             getText.text = "Check logcat"
             val db = DatabaseBuilder.get(this)
 
+            CoopCommunicator.getAssortment(this, "1290") {response ->
+                Log.i("Assortment", response.toString())
+                val assortments = Utility.parseArray<CoopProduct>(response.toString())
+                assortments!!
+                Log.i("JSONTEST", assortments[0].name1)
+
+
+
+            }
+
             /*
             GlobalScope.launch {
                 db.ingredientDao().insert(Ingredient(0, "name", "amount", "type", false, 0,0.0))
@@ -39,6 +49,7 @@ class ActivitySallingTest : AppCompatActivity() {
              */
 
 
+            /*
             CoopCommunicator.getNearbyStoresMapOptimized(this, 1, 1, 2) {response ->
                 Log.i("Stores", response.toString())
                 val json = Utility.parse<CoopStoreList>(response.toString())
@@ -56,6 +67,8 @@ class ActivitySallingTest : AppCompatActivity() {
                 val json = Utility.parseArray<CoopProduct>(response.toString())
                 Log.i("JSONTEST", json!![0].name1)
             }
+
+             */
 
             /*
             SallingCommunicator.getNearbyStores(this, 20) { response ->
