@@ -29,7 +29,7 @@ class ActivitySallingTest : AppCompatActivity() {
             val db = DatabaseBuilder.get(this)
 
             GlobalScope.launch {
-                db.ingredientDao().insert(Ingredient(0, "name", "amount", "type", false, 0))
+                db.ingredientDao().insert(Ingredient(0, "name", "amount", "type", false, 0,0.0))
                 getText.text = db.ingredientDao().getAll()[0].ingredientName
             }
 

@@ -1,5 +1,6 @@
 package com.example.madbudget
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -14,21 +15,37 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class Recipes : AppCompatActivity(), CellClickListener {
+
+    private lateinit var db: AppDatabase
+    private lateinit var recipeList: List<RecipeWithIngredientSelections>
+    private lateinit var context: Context
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
-        val db = DatabaseBuilder.get(this)
-        val context = this
+
+        db = DatabaseBuilder.get(this)
+        context = this
+
         //TODO - Call database here get recipes and their ingredients!!!
         //iniDummyRecipes()
+
         GlobalScope.launch {
-            val recipeList = db.recipeDao().getAll()
-            calculatePrices(recipeList)
-            searchOnChange(recipeList)
-            recipe_list.adapter = RecipesAdapter(recipeList, context)
-            recipe_list.layoutManager = LinearLayoutManager(context)
-            recipe_list.setHasFixedSize(true)
+            recipeList = db.recipeDao().getAll()
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
         }
+
+        new_recipe_button.setOnClickListener {
+            val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
+            startActivity(recipeActivity)
+        }
+
     }
 
     //TODO - Fix when you can you dingus!
@@ -96,10 +113,24 @@ class Recipes : AppCompatActivity(), CellClickListener {
             db.recipeDao().insertAll(recipeList)
             val test = db.recipeDao().getAll()[0].recipe.recipeId
 
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
+            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
+            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
+            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
             db.ingredientDao().insertAll(ingredientList)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GlobalScope.launch {
+            recipeList = db.recipeDao().getAll()
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList,  context as Recipes)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
         }
     }
 }
