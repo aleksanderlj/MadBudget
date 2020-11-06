@@ -8,7 +8,7 @@ class CoopStore(
     @Json(name = "R")
     val retailGroup: String,
     @Json(name = "N")
-    val name: String,
+    val name: String,  // Useless
     @Json(name = "A")
     val address: String,
     @Json(name = "Z")
@@ -16,9 +16,9 @@ class CoopStore(
     @Json(name = "C")
     val city: String,
     @Json(name = "P")
-    val phonenumber: String,
+    val phonenumber: String, // Useless
     @Json(name = "M")
-    val manager: String,
+    val manager: String, // Useless
     @Json(name = "S")
     val storeId: Int,
     @Json(name = "L")
@@ -28,7 +28,7 @@ class CoopStore(
 )
 
 class CoopLocation (
-    val type: String,
+    val type: String, // Useless
     val coordinates: List<Int>
 )
 
@@ -38,9 +38,9 @@ class CoopOpeningHour(
     @Json(name = "Day")
     val day: String,
     @Json(name = "From")
-    val from: Double,
+    val from: Double, // Useless
     @Json(name = "To")
-    val to: Double,
+    val to: Double, // Useless
     @Json(name = "FromDate")
     val fromDate: String,
     @Json(name = "ToDate")
