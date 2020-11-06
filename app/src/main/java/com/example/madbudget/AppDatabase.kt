@@ -9,7 +9,7 @@ import com.example.madbudget.models.Ingredient
 import com.example.madbudget.models.IngredientSelection
 import com.example.madbudget.models.Recipe
 
-@Database(entities = [Ingredient::class, Recipe::class, IngredientSelection::class], version = 3)
+@Database(entities = [Ingredient::class, Recipe::class, IngredientSelection::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDAO
     abstract fun recipeDao(): RecipeDAO

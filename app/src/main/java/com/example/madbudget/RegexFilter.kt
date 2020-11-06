@@ -1,5 +1,8 @@
 package com.example.madbudget
 
+import com.example.madbudget.coop.model.CoopProduct
+import com.example.madbudget.models.Ingredient
+
 class RegexFilter {
     //TODO Lav IngredientAmount felter til var og brug setters ya dang ol dumbo
     companion object {
@@ -7,6 +10,22 @@ class RegexFilter {
         val stkXRegex = Regex("([0-9]+) ?(X|STK)")
         val caMaxMinRegex = Regex("(MIN|CA|MAX)[ .]+([0-9]+) ?(KG|GRAM|G|CL|ML|LITER|L)")
         val halfRegex = Regex("(1/2) ?(LITER|L|KG)")
+
+        fun convertCoopIngredient(coopIng: CoopProduct): Ingredient{
+            var ingAmount = parseIngredientFields(coopIng.name1, coopIng.name2)
+
+            var id = -1
+            var name = coopIng.name1 + " " + coopIng.name2
+            var amount = ingAmount.totalAmount
+            var unit = ingAmount.unit
+            var pieces = ingAmount.pieces
+            var type = null
+            var hasBeenClicked = false
+            var price = coopIng.price
+            var parentId = -1
+
+            return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId)
+        }
 
         fun parseIngredientFields(field1: String, field2: String): IngredientAmount {
             val ing1 = parseIngredientField(field1)

@@ -150,7 +150,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                     val ingredient = Ingredient()
                     ingredient.ingredientName = it[i].name
                     ingredient.hasBeenClicked = true
-                    ingredient.amount = "test"
+                    ingredient.amount = 0.0
                     ingredient.ingredientType = "test"
                     ingredient.ingredientPrice = it[i].price
 

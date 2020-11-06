@@ -113,9 +113,9 @@ class Recipes : AppCompatActivity(), CellClickListener {
             db.recipeDao().insertAll(recipeList)
             val test = db.recipeDao().getAll()[0].recipe.recipeId
 
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test,0.0))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
             db.ingredientDao().insertAll(ingredientList)
         }
     }
