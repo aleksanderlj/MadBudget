@@ -14,10 +14,7 @@ interface IngredientSelectionDAO {
     fun getAllByIds(ingredientSelectionIds: IntArray): List<IngredientSelectionWithIngredients>
 
     @Query("SELECT * FROM IngredientSelection WHERE recipe_parent_id = :recipeId")
-    fun getAllByIngredientSelectionId(recipeId: Int): List<IngredientSelectionWithIngredients>
-
-    @Query("SELECT * FROM IngredientSelection WHERE recipe_parent_id = :recipeId")
-    fun getAllByRecipeId(recipeId: Int): IngredientSelectionWithIngredients?
+    fun getAllByRecipeId(recipeId: Int): List<IngredientSelectionWithIngredients>
 
     @Query("SELECT * FROM IngredientSelection WHERE ingredientSelectionId = :ingredientSelectionId")
     fun getById(ingredientSelectionId: Int): IngredientSelectionWithIngredients?
@@ -39,4 +36,7 @@ interface IngredientSelectionDAO {
 
     @Delete
     fun deleteAll(ingredientSelection: List<IngredientSelection>)
+
+    @Query("DELETE FROM IngredientSelection WHERE recipe_parent_id = :parentId")
+    fun deleteByParentId(parentId: Int)
 }

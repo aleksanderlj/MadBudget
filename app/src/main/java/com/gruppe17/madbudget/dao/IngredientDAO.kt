@@ -34,4 +34,7 @@ interface IngredientDAO {
 
     @Delete
     fun deleteAll(ingredients: List<Ingredient>)
+
+    @Query("DELETE FROM Ingredient WHERE ingredient_selection_parent_id = :parentId")
+    fun deleteByParentId(parentId: Int)
 }

@@ -18,8 +18,8 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
+
         holder.ingredientName.text = currentItem.ingredientSelection.ingredientSelectionName
-        holder.ingredientPrice.text = currentItem.ingredients[0].ingredientPrice.toString()
         holder.ingredientAmount.text = currentItem.ingredientSelection.ingredientSelectionAmount
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
@@ -27,6 +27,10 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
                 R.drawable.ghetto
             )
         )
+
+        if (currentItem.ingredients.isNotEmpty()){
+            holder.ingredientPrice.text = currentItem.ingredients.first().ingredientPrice.toString()
+        }
 
         holder.ingredientCheckBox.isChecked = myDataset[position].ingredientSelection.isSelected
 
@@ -55,11 +59,11 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
 
 
-        init {
+       /* init {
             itemView.setOnClickListener {
                 ingredientSelectionClickListener.onIngredientClick(adapterPosition)
             }
-        }
+        }*/
 
         /*init {
             ingredientCheckBox.setOnClickListener {
