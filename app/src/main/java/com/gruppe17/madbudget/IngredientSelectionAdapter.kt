@@ -11,7 +11,9 @@ import com.gruppe17.madbudget.models.IngredientSelectionWithIngredients
 import kotlinx.android.synthetic.main.ingredient_item_in_recipe.view.*
 
 
-class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWithIngredients>, var context: Context) : RecyclerView.Adapter<IngredientSelectionAdapter.IngredientViewHolder>()
+class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWithIngredients>,
+                                 var context: Context,
+                                 var ingredientSelectionClickListener: OnIngredientSelectionClickListener) : RecyclerView.Adapter<IngredientSelectionAdapter.IngredientViewHolder>()
 {
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
@@ -37,30 +39,29 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
-        var itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.ingredient_item_in_recipe, parent, false)
-        return IngredientViewHolder(itemView)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.ingredient_item_in_recipe, parent, false)
+        return IngredientViewHolder(itemView, ingredientSelectionClickListener)
     }
 
     override fun getItemCount(): Int {
         return myDataset.size
     }
 
-    class IngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class IngredientViewHolder(itemView: View, ingredientSelectionClickListener: OnIngredientSelectionClickListener) : RecyclerView.ViewHolder(itemView) {
         var ingredientName: TextView = itemView.ingredient_namead
         var ingredientPrice: TextView = itemView.ingredient_pricead
         var ingredientAmount: TextView = itemView.ingredient_amount
         var ingredientPicture: ImageView = itemView.ingredient_store_image
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
 
-/*
+
         init {
             itemView.setOnClickListener {
-                onIngredientSelectionClickListener.onIngredientClick(adapterPosition)
+                ingredientSelectionClickListener.onIngredientClick(adapterPosition)
             }
         }
 
-        init {
+        /*init {
             ingredientCheckBox.setOnClickListener {
                 onIngredientCheckBoxClickListener.onCheckBoxClick(adapterPosition)
             }

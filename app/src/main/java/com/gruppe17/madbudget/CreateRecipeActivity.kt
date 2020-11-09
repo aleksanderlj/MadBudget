@@ -34,6 +34,7 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
     private lateinit var recipe: RecipeWithIngredientSelections
     private lateinit var database: AppDatabase
     private var newRecipeId: Long = 0
+    private var isNewRecipe: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,21 +45,24 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         ingredient_selection_list.layoutManager = LinearLayoutManager(this)
         ingredient_selection_list.setHasFixedSize(true)
 
-
         val recipeId = intent.getIntExtra("ClickedRecipe",-1)
 
         // check if coming from existing recipe
         if (recipeId != -1){
             GlobalScope.launch {
+                isNewRecipe = false
                 recipe = database.recipeDao().getById(recipeId)!!
+                newRecipeId = recipe.recipe.recipeId.toLong()
                 ingredientSelectionList = ArrayList(database.ingredientSelectionDao().getAllByIngredientSelectionId(recipeId))
-                ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,context)
+
+                ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,context, this@CreateRecipeActivity)
 
                 Log.i("bund",ArrayList(database.ingredientSelectionDao().getAllByIngredientSelectionId(recipeId)).toString())
             }
         } else {
+            isNewRecipe = true
             recipe = RecipeWithIngredientSelections(Recipe(0,"test",4,"30min",null,null), null)
-            ingredient_selection_list.adapter = IngredientSelectionAdapter( ArrayList(),context)
+            ingredient_selection_list.adapter = IngredientSelectionAdapter( ArrayList(),context, this)
         }
 
         val button: FloatingActionButton = add_ingredient_button
@@ -68,39 +72,40 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         })
     }
 
-    private fun saveIngredientSelection(){
+    private fun saveIngredientSelection() {
 
-        dbIngredientSelectionList.clear()
+        Log.i("bund",ingredientList.toString())
 
         GlobalScope.launch {
-            newRecipeId = if (database.recipeDao().getById(newRecipeId.toInt()) != null){
-                database.recipeDao().getById(newRecipeId.toInt())!!.recipe.recipeId.toLong()
-            }else{
-                database.recipeDao().insert(recipe.recipe)
-            }
+
+            if (isNewRecipe)
+                newRecipeId = database.recipeDao().insert(recipe.recipe)
 
             val ingredientSelection = IngredientSelection(0,
                 mAlertDialog.spinner_ingredient_selection_name.text.toString(),
                 mAlertDialog.spinner_ingredient_amount.text.toString(),
                 true,
-                newRecipeId.toInt())
+                newRecipeId.toInt()
+            )
 
-            dbIngredientSelectionList.add(ingredientSelection)
-            ingredientSelectionList.add(IngredientSelectionWithIngredients(ingredientSelection, ingredientList))
+            ingredientSelectionList.add(IngredientSelectionWithIngredients( ingredientSelection, ingredientList))
 
-            database.ingredientSelectionDao().insertAll(dbIngredientSelectionList)
+            database.ingredientSelectionDao().insert(ingredientSelection)
 
             val newRecipeWithIngredientSelections: RecipeWithIngredientSelections? = database.recipeDao().getById(newRecipeId.toInt())
 
-            for (i in dbIngredientList)
+            for (i in ingredientList)
                 i.ingredientSelectionParentId = newRecipeWithIngredientSelections!!.ingredientSelections!!.last().ingredientSelectionId
 
-            database.ingredientDao().insertAll(dbIngredientList)
+            Log.i("bund",ingredientList.toString())
+
+            database.ingredientDao().insertAll(ingredientList)
 
             runOnUiThread {
-                ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList,applicationContext)
-               /* ingredient_selection_list.adapter?.notifyDataSetChanged()*/
-                Log.i("bund",ingredientSelectionList.toString())}
+                ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList, applicationContext, this@CreateRecipeActivity)
+                /* ingredient_selection_list.adapter?.notifyDataSetChanged()*/
+                Log.i("bund", ingredientSelectionList.toString())
+            }
         }
     }
 
@@ -120,8 +125,6 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
-
-        ingredientList.clear()
 
         multiSelectSpinnerWithSearch = mAlertDialog.multiItemSelectionSpinner
     }
@@ -154,7 +157,6 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
                     ingredient.ingredientType = "test"
                     ingredient.ingredientPrice = it[i].price
 
-                    dbIngredientList.add(ingredient)
                     ingredientList.add(ingredient)
                 }
             }
@@ -168,7 +170,9 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
         val dummyJsonBoolData: ArrayList<JsonProduct> = ArrayList()
         val dummyData: JsonSuggestions = JsonSuggestions(dummyJsonBoolData)
 
-        dummyJsonBoolData.add(JsonProduct("test","","","","","",20.5))
+        dummyJsonBoolData.add(JsonProduct("test1","","","","","",20.5))
+        dummyJsonBoolData.add(JsonProduct("test2","","","","","",20.5))
+        dummyJsonBoolData.add(JsonProduct("test3","","","","","",20.5))
 
         for ((counter, i) in dummyData.suggestions.withIndex()) {
             val h = KeyPairBoolData()
@@ -204,7 +208,8 @@ class CreateRecipeActivity : AppCompatActivity(), IngredientSelectionAdapter.OnI
 
         GlobalScope.launch {
             val ingredientsToShow: ArrayList<Ingredient> = ArrayList(database.ingredientSelectionDao().getById(recipe.ingredientSelections!![position].ingredientSelectionId)!!.ingredients)
-            runOnUiThread { mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientsToShow, applicationContext)
+            runOnUiThread {
+                mAlertDialog.ingredient_list.adapter = IngredientAdapter(ingredientsToShow, applicationContext)
                 mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(applicationContext)
                 mAlertDialog.ingredient_list.setHasFixedSize(true) }
         }
