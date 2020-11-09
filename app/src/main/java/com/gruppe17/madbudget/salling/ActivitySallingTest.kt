@@ -23,6 +23,7 @@ class ActivitySallingTest : AppCompatActivity() {
             getText.text = "Check logcat"
             val db = DatabaseBuilder.get(this)
 
+            /*
             val ing = Ingredient()
             val ing2 = Ingredient(0, "test", 100.0, "testkg", 5, "type", true, 500.0, -5)
 
@@ -39,20 +40,21 @@ class ActivitySallingTest : AppCompatActivity() {
 
             }
 
-            /*
+             */
+
+
             CoopCommunicator.getAssortment(this, "1290") {response ->
                 Log.i("Assortment", response.toString())
                 val assortments = Utility.parseArray<CoopProduct>(response.toString())
                 assortments!!
                 Log.i("JSONTEST", assortments[0].name1)
 
-                val ing = RegexFilter.convertCoopIngredient(assortments[0])
-
-                Log.i("RegexTest", "Name=${ing.ingredientName}, Amount=${ing.amount}, Unit=${ing.unit}, Pieces=${ing.pieces}, Price=${ing.ingredientPrice},")
+                for(n in 0..100){
+                    val i = RegexFilter.convertCoopIngredient(assortments[n])
+                    Log.i("RegObject", "l.add(Ingredient(0, \"${i.ingredientName}\", ${i.amount}, \"${i.unit}\", ${i.pieces}, null, false, ${i.ingredientPrice}, 0))")
+                }
 
             }
-
-             */
 
             /*
             GlobalScope.launch {

@@ -1,5 +1,6 @@
 package com.gruppe17.madbudget
 
+import android.util.Log
 import com.gruppe17.madbudget.coop.model.CoopProduct
 import com.gruppe17.madbudget.models.Ingredient
 
@@ -23,14 +24,17 @@ class RegexFilter {
             var type = null
             var hasBeenClicked = false
             var price = coopIng.price
-            var parentId = -1
+            var parentId = 0
 
             return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId)
         }
 
         fun parseIngredientFields(field1: String, field2: String): IngredientAmount {
             val ing1 = parseIngredientField(field1)
-            var ing2 = parseIngredientField(field1)
+            var ing2 = parseIngredientField(field2)
+
+            //Log.i("BIGGO1", "$field1 | $ing1")
+            //Log.i("BIGGO2", "$field2 | $ing2")
 
             if(ing2.totalAmount == null && ing1.totalAmount != null){
                 ing2 = IngredientAmount(ing1.totalAmount, ing2.unit, ing2.pieces)
@@ -175,5 +179,10 @@ class RegexFilter {
         val totalAmount: Double?,
         val unit: String?,
         val pieces: Int?
-    )
+    ){
+        override fun toString(): String {
+            return "Amount=${this.totalAmount}, Unit=${this.unit}, Pieces=${this.pieces}"
+        }
+
+    }
 }

@@ -6,12 +6,15 @@ import com.gruppe17.madbudget.models.RecipeWithIngredientSelections
 
 @Dao
 interface RecipeDAO {
+    @Transaction
     @Query("SELECT * FROM Recipe")
     fun getAll(): List<RecipeWithIngredientSelections>
 
+    @Transaction
     @Query("SELECT * FROM Recipe WHERE recipeId IN (:recipeIds)")
     fun getAllByIds(recipeIds: IntArray): List<RecipeWithIngredientSelections>
 
+    @Transaction
     @Query("SELECT * FROM Recipe WHERE recipeId = :recipeId")
     fun getById(recipeId: Int): RecipeWithIngredientSelections?
 

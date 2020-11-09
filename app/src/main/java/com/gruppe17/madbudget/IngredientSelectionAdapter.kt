@@ -17,7 +17,7 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.ingredientName.text = currentItem.ingredientSelection.ingredientSelectionName
-        holder.ingredientPrice.text = currentItem.ingredients[0].ingredientPrice.toString()
+        //holder.ingredientPrice.text = currentItem.ingredients[0].ingredientPrice.toString()
         holder.ingredientAmount.text = currentItem.ingredientSelection.ingredientSelectionAmount
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
