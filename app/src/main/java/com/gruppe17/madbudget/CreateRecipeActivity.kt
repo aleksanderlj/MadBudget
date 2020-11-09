@@ -137,6 +137,10 @@ class CreateRecipeActivity : AppCompatActivity(),
         mAlertDialog.inglist_notselected.layoutManager = LinearLayoutManager(this)
         mAlertDialog.inglist_notselected.adapter = IngSelDialogAdapter(Utility.getTestIngredientList())
 
+        mAlertDialog.inglist_selected.setHasFixedSize(true)
+        mAlertDialog.inglist_selected.layoutManager = LinearLayoutManager(this)
+        mAlertDialog.inglist_selected.adapter = IngSelDialogAdapter(Utility.getTestIngredientList())
+
 
     }
 
