@@ -1,5 +1,6 @@
 package com.example.madbudget
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -8,31 +9,47 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madbudget.models.Recipe
-import com.example.madbudget.models.RecipeWithIngredients
+import com.example.madbudget.models.RecipeWithIngredientSelections
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class Recipes : AppCompatActivity(), CellClickListener {
+
+    private lateinit var db: AppDatabase
+    private lateinit var recipeList: List<RecipeWithIngredientSelections>
+    private lateinit var context: Context
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
-        val db = DatabaseBuilder.get(this)
-        val context = this
+
+        db = DatabaseBuilder.get(this)
+        context = this
+
         //TODO - Call database here get recipes and their ingredients!!!
         //iniDummyRecipes()
+
         GlobalScope.launch {
-            val recipeList = db.recipeDao().getAll()
-            calculatePrices(recipeList)
-            searchOnChange(recipeList)
-            recipe_list.adapter = RecipesAdapter(recipeList, context)
-            recipe_list.layoutManager = LinearLayoutManager(context)
-            recipe_list.setHasFixedSize(true)
+            recipeList = db.recipeDao().getAll()
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
         }
+
+        new_recipe_button.setOnClickListener {
+            val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
+            startActivity(recipeActivity)
+        }
+
     }
 
     //TODO - Fix when you can you dingus!
-    fun calculatePrices(recipeList: List<RecipeWithIngredients>){
+    fun calculatePrices(recipeList: List<RecipeWithIngredientSelections>){
         for (i in 0..recipeList.size - 1){
             if (recipeList[i].recipe.price != null) {
                 //TODO - Calculate that shit!
@@ -40,13 +57,13 @@ class Recipes : AppCompatActivity(), CellClickListener {
         }
     }
 
-    override fun onCellClickListener(clickedRecipe: RecipeWithIngredients) {
+    override fun onCellClickListener(clickedRecipe: RecipeWithIngredientSelections) {
         val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
         recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipe.recipeId)
         startActivity(recipeActivity)
     }
 
-    private fun searchOnChange(recipeList: List<RecipeWithIngredients>){
+    private fun searchOnChange(recipeList: List<RecipeWithIngredientSelections>){
         search_text.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
             }
@@ -56,7 +73,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchedText = search_text.text.toString()
-                val searchedRecipeList: ArrayList<RecipeWithIngredients> = ArrayList()
+                val searchedRecipeList: ArrayList<RecipeWithIngredientSelections> = ArrayList()
                 var sameString = false
                 val updatedAdapter: RecipesAdapter = recipe_list.adapter as RecipesAdapter
 
@@ -96,10 +113,24 @@ class Recipes : AppCompatActivity(), CellClickListener {
             db.recipeDao().insertAll(recipeList)
             val test = db.recipeDao().getAll()[0].recipe.recipeId
 
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
-            ingredientList.add(Ingredient(0, "Rice", "2.7", "Fisk", false, test))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
             db.ingredientDao().insertAll(ingredientList)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GlobalScope.launch {
+            recipeList = db.recipeDao().getAll()
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList,  context as Recipes)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
         }
     }
 }

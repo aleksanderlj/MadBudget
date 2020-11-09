@@ -17,7 +17,7 @@ interface RecipeDAO {
     fun getById(recipeId: Int): RecipeWithIngredientSelections?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(recipe: Recipe)
+    fun insert(recipe: Recipe) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(recipes: List<Recipe>)

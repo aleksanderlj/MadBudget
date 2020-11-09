@@ -10,22 +10,19 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madbudget.models.IngredientSelection
+import com.example.madbudget.models.IngredientSelectionWithIngredients
 import kotlinx.android.synthetic.main.ingredient_item_in_recipe.view.*
 import org.w3c.dom.Text
 
 
-class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelection>,
-                                 var context: Context,
-                                 var onIngredientSelectionClickListener: OnIngredientSelectionClickListener,
-                                 var onIngredientCheckBoxClickListener: OnIngredientCheckBoxClickListener
-) : RecyclerView.Adapter<IngredientSelectionAdapter.IngredientViewHolder>()
+class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWithIngredients>, var context: Context) : RecyclerView.Adapter<IngredientSelectionAdapter.IngredientViewHolder>()
 {
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
-        holder.ingredientName.text = currentItem.ingredientSelectionName
-        //holder.ingredientPrice.text = currentItem.ingredientList[0].ingredientPrice.toString()
-        holder.ingredientAmount.text = currentItem.ingredientSelectionAmount
+        holder.ingredientName.text = currentItem.ingredientSelection.ingredientSelectionName
+        holder.ingredientPrice.text = currentItem.ingredients[0].ingredientPrice.toString()
+        holder.ingredientAmount.text = currentItem.ingredientSelection.ingredientSelectionAmount
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -33,11 +30,11 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelection>,
             )
         )
 
-        holder.ingredientCheckBox.isChecked = myDataset[position].isSelected
+        holder.ingredientCheckBox.isChecked = myDataset[position].ingredientSelection.isSelected
 
         holder.ingredientCheckBox.setOnClickListener {
-            myDataset[position].isSelected = !myDataset[position].isSelected
-            onIngredientCheckBoxClickListener.onCheckBoxClick(position)
+            myDataset[position].ingredientSelection.isSelected = !myDataset[position].ingredientSelection.isSelected
+            // onIngredientCheckBoxClickListener.onCheckBoxClick(position)
 
         }
 
@@ -46,21 +43,21 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelection>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         var itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.ingredient_item_in_recipe, parent, false)
-        return IngredientViewHolder(itemView, onIngredientSelectionClickListener, onIngredientCheckBoxClickListener)
+        return IngredientViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
         return myDataset.size
     }
 
-    class IngredientViewHolder(itemView: View, onIngredientSelectionClickListener: OnIngredientSelectionClickListener,onIngredientCheckBoxClickListener: OnIngredientCheckBoxClickListener) : RecyclerView.ViewHolder(itemView) {
+    class IngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ingredientName: TextView = itemView.ingredient_namead
         var ingredientPrice: TextView = itemView.ingredient_pricead
         var ingredientAmount: TextView = itemView.ingredient_amount
         var ingredientPicture: ImageView = itemView.ingredient_store_image
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
 
-
+/*
         init {
             itemView.setOnClickListener {
                 onIngredientSelectionClickListener.onIngredientClick(adapterPosition)
@@ -71,7 +68,7 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelection>,
             ingredientCheckBox.setOnClickListener {
                 onIngredientCheckBoxClickListener.onCheckBoxClick(adapterPosition)
             }
-        }
+        }*/
     }
 
     interface OnIngredientSelectionClickListener{

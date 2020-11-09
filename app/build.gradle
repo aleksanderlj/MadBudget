@@ -2,13 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
+apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.madbudget"
+        applicationId "com.gruppe17.madbudget"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -68,4 +69,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version" // optional - Kotlin Extensions and Coroutines support for Room
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0"
+
+    implementation platform('com.google.firebase:firebase-bom:26.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 }
