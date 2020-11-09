@@ -9,7 +9,10 @@ import com.gruppe17.madbudget.RegexFilter
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.coop.CoopCommunicator
 import com.gruppe17.madbudget.coop.model.CoopProduct
+import com.gruppe17.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.activity_sallingtest.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ActivitySallingTest : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +23,23 @@ class ActivitySallingTest : AppCompatActivity() {
             getText.text = "Check logcat"
             val db = DatabaseBuilder.get(this)
 
+            val ing = Ingredient()
+            val ing2 = Ingredient(0, "test", 100.0, "testkg", 5, "type", true, 500.0, -5)
+
+            GlobalScope.launch {
+                //db.ingredientDao().insert(ing)
+                db.ingredientDao().insert(ing2)
+
+                val ingList = db.ingredientDao().getAll()
+
+                for (n in ingList){
+                    Log.i("ing1", ing.toString())
+                    Log.i("ing2", ing2.toString())
+                }
+
+            }
+
+            /*
             CoopCommunicator.getAssortment(this, "1290") {response ->
                 Log.i("Assortment", response.toString())
                 val assortments = Utility.parseArray<CoopProduct>(response.toString())
@@ -31,6 +51,8 @@ class ActivitySallingTest : AppCompatActivity() {
                 Log.i("RegexTest", "Name=${ing.ingredientName}, Amount=${ing.amount}, Unit=${ing.unit}, Pieces=${ing.pieces}, Price=${ing.ingredientPrice},")
 
             }
+
+             */
 
             /*
             GlobalScope.launch {

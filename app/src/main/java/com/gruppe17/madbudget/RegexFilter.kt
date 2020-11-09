@@ -15,7 +15,7 @@ class RegexFilter {
         fun convertCoopIngredient(coopIng: CoopProduct): Ingredient{
             var ingAmount = parseIngredientFields(coopIng.name1, coopIng.name2)
 
-            var id = -1
+            var id = 0
             var name = coopIng.name1 + " " + coopIng.name2
             var amount = ingAmount.totalAmount
             var unit = ingAmount.unit
