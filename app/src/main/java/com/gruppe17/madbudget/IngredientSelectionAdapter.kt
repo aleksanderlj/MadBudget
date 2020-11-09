@@ -59,11 +59,11 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
 
 
-       /* init {
+        init {
             itemView.setOnClickListener {
                 ingredientSelectionClickListener.onIngredientClick(adapterPosition)
             }
-        }*/
+        }
 
         /*init {
             ingredientCheckBox.setOnClickListener {

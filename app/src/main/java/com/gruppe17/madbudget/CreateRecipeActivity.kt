@@ -65,17 +65,15 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         val button: FloatingActionButton = add_ingredient_button
         button.setOnClickListener {
-//            initAlertDialog()
-//            initSpinner()
-            initAlertDialog2()
+            initAlertDialog()
+            initSpinner()
+            //initAlertDialog2()
 
 
         }
     }
 
     private fun saveIngredientSelection() {
-
-        Log.i("bund",ingredientList.toString())
 
         GlobalScope.launch {
 
@@ -97,10 +95,15 @@ class CreateRecipeActivity : AppCompatActivity(),
 
             val newRecipeWithIngredientSelections: RecipeWithIngredientSelections? = database.recipeDao().getById(newRecipeId.toInt())
 
+           // ingredientList = Utility.getTestIngredientList() as ArrayList<Ingredient>
             for (i in ingredientList)
                 i.ingredientSelectionParentId = newRecipeWithIngredientSelections!!.ingredientSelections!!.last().ingredientSelectionId
 
+            Log.i("bund",ingredientList.toString())
+
             database.ingredientDao().insertAll(ingredientList)
+
+            ingredientList.clear()
 
         }
     }
@@ -148,7 +151,6 @@ class CreateRecipeActivity : AppCompatActivity(),
                 else {
                     saveIngredientSelection()
                     mAlertDialog.dismiss()
-                    ingredientList.clear()
                     ingredient_selection_list.adapter?.notifyDataSetChanged()
                 }
             }
