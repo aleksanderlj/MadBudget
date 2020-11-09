@@ -2,15 +2,18 @@ package com.gruppe17.madbudget.coop
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.gruppe17.madbudget.AppDatabase
 
 class CoopVolleyGetter{
     companion object {
         fun send(context: Context, url: String, callback: Response.Listener<String>) {
-            var requestQueue = Volley.newRequestQueue(context)
+            var requestQueue = RequestQueueSingleton.get(context)
 
             var stringRequest = object : StringRequest(
                 Request.Method.GET,
@@ -30,6 +33,19 @@ class CoopVolleyGetter{
             requestQueue.add(stringRequest)
 
             // https://developer.android.com/training/volley/simple#kotlin
+        }
+    }
+}
+
+class RequestQueueSingleton{
+    companion object{
+        private var rq: RequestQueue? = null
+
+        fun get(context: Context): RequestQueue {
+            if(rq == null){
+                rq = Volley.newRequestQueue(context)
+            }
+            return rq as RequestQueue
         }
     }
 }

@@ -17,7 +17,7 @@ data class Ingredient(
     @ColumnInfo(name = "ingredient_price") var ingredientPrice: Double?,
     @ColumnInfo(name = "ingredient_selection_parent_id") var ingredientSelectionParentId: Int
 ): Serializable {
-    constructor(): this(0, "", null, null, null, null,false, null,-1)
+    constructor(): this(0, "", null, null, null, null,false, null,0)
 
     override fun toString(): String {
         return "Ingredient(ingredientId=$ingredientId, ingredientName=$ingredientName, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$ingredientType, hasBeenClicked=$hasBeenClicked, ingredientPrice=$ingredientPrice, ingredientSelectionParentId=$ingredientSelectionParentId)"
