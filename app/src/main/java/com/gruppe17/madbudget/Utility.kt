@@ -33,7 +33,7 @@ class Utility{
             }
         }
 
-        fun getTestIngredientList(): List<Ingredient>{
+        fun getTestIngredientList(): ArrayList<Ingredient>{
             val l = ArrayList<Ingredient>()
             l.add(Ingredient(0, "FLÆSKESTEG 1,2-2,4 KG MED SVÆR", 1799.9999999999998, "G", null, null, false, 49.9, 0))
             l.add(Ingredient(0, "MÖRT GRYDESTEG 800-1600G", 1200.0, "G", null, null, false, 79.9, 0))
