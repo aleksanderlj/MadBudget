@@ -8,7 +8,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,6 +26,7 @@ import com.gruppe17.madbudget.ingsel.IngSelDialogAdapter
 import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_selection_list
 import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
 import kotlinx.android.synthetic.main.dialog_ing_sel.*
+import kotlinx.android.synthetic.main.item_spinner.view.*
 import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
 import kotlinx.android.synthetic.main.show_ingredient_dialog.*
 import kotlinx.coroutines.GlobalScope
@@ -118,7 +122,7 @@ class CreateRecipeActivity : AppCompatActivity(),
     private fun initAlertDialog2() {
         mAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel, null))
-            .setTitle("Tilføj ingrediens")
+            .setTitle("Tilføj ingrediensgruppe")
             .setPositiveButton("OK") { dialog, which ->
                 if (ingredientList.isEmpty()) {
                     Toast.makeText(this, "Ingen ingredienser valgt", Toast.LENGTH_LONG).show()
@@ -163,6 +167,19 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         })
 
+        val spinnerList = ArrayList<String>()
+        spinnerList.add("G")
+        spinnerList.add("ML")
+        spinnerList.add("STK")
+        var spinnerAdapter = object : ArrayAdapter<String>(this, R.layout.item_spinner, R.id.item_spinner_text, spinnerList){
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                var view = super.getView(position, convertView, parent)
+                view.item_spinner_text.text = spinnerList[position]
+                return view
+            }
+        }
+
+        mAlertDialog.unit_spinner.adapter = spinnerAdapter
 
     }
 

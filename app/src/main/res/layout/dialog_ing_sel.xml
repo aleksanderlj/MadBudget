@@ -11,8 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/innercon"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2">
+        android:layout_height="150dp">
 
         <EditText
             android:id="@+id/ingsel_search"
@@ -27,20 +26,20 @@
 
         <Spinner
             android:id="@+id/unit_spinner"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/ingsel_amount"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ingsel_amount"
             app:layout_constraintTop_toTopOf="@+id/ingsel_amount" />
 
         <EditText
             android:id="@+id/ingsel_amount"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Antal"
             android:inputType="textPersonName"
+            app:layout_constraintEnd_toStartOf="@+id/unit_spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ingsel_name" />
 
@@ -59,8 +58,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inglist_notselected"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
+        android:layout_height="350dp" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -71,7 +69,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inglist_selected"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3" />
+        android:layout_height="200dp" />
 
 </LinearLayout>
