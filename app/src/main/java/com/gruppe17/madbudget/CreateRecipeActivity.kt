@@ -68,11 +68,6 @@ class CreateRecipeActivity : AppCompatActivity(),
 
                 runOnUiThread{ setupRecyclerView() }
             }
-        } else {
-            isNewRecipe = true
-            // TODO Doooooont manually create x-With-y classes.
-            recipe = RecipeWithIngredientSelections(Recipe(0,"test",4,"30min",null,null), null)
-            setupRecyclerView()
         }
 
         val button: FloatingActionButton = add_ingredient_button
