@@ -28,10 +28,10 @@ interface IngredientSelectionDAO {
     fun getById(ingredientSelectionId: Int): IngredientSelectionWithIngredients?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ingredientSelection: IngredientSelection)
+    fun insert(ingredientSelection: IngredientSelection): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(ingredientSelection: List<IngredientSelection>)
+    fun insertAll(ingredientSelection: List<IngredientSelection>): List<Long>
 
     @Update
     fun update(ingredientSelection: IngredientSelection)

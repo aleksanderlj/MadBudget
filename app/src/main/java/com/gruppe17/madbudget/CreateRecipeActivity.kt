@@ -70,6 +70,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
         } else {
             isNewRecipe = true
+            // TODO Doooooont manually create x-With-y classes.
             recipe = RecipeWithIngredientSelections(Recipe(0,"test",4,"30min",null,null), null)
             setupRecyclerView()
         }
@@ -100,6 +101,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 newRecipeId.toInt()
             )
 
+            // TODO Doooooont manually create x-With-y classes.
             ingredientSelectionList.add(IngredientSelectionWithIngredients( ingredientSelection, ingredientList))
 
             database.ingredientSelectionDao().insert(ingredientSelection)
@@ -124,9 +126,29 @@ class CreateRecipeActivity : AppCompatActivity(),
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel, null))
             .setTitle("Tilføj ingrediensgruppe")
             .setPositiveButton("OK") { dialog, which ->
-                if (ingredientList.isEmpty()) {
+                if (dialogIngSelected.isEmpty()) {
                     Toast.makeText(this, "Ingen ingredienser valgt", Toast.LENGTH_LONG).show()
                 } else {
+                    database = DatabaseBuilder.get(this)
+                    GlobalScope.launch {
+                        val ingSel = IngredientSelection(
+                            0,
+                            mAlertDialog.ingsel_name.text.toString(),
+                            mAlertDialog.ingsel_amount.text.toString(),
+                            true,
+                            recipe.recipe.recipeId //TODO Need to get valid id
+                        )
+                        val ingSelId = database.ingredientSelectionDao().insert(ingSel)
+                        val ingArray = ArrayList<Ingredient>(dialogIngSelected)
+                        for(i in ingArray){
+                            i.ingredientSelectionParentId = ingSelId.toInt()
+                        }
+                        database.ingredientDao().insertAll(ingArray)
+                        runOnUiThread {
+                            ingredient_selection_list.adapter?.notifyDataSetChanged()
+                        }
+                    }
+
                 }
             }
             .setNegativeButton("Annuller") { dialog, which -> }
@@ -180,7 +202,6 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
 
         mAlertDialog.unit_spinner.adapter = spinnerAdapter
-
     }
 
     private fun initAlertDialog() {
