@@ -1,11 +1,14 @@
 package com.gruppe17.madbudget
 
+import SwipeHelper
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.gruppe17.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gruppe17.madbudget.models.Recipe
@@ -17,7 +20,7 @@ import kotlinx.coroutines.launch
 class Recipes : AppCompatActivity(), CellClickListener {
 
     private lateinit var db: AppDatabase
-    private lateinit var recipeList: List<RecipeWithIngredientSelections>
+    private lateinit var recipeList: ArrayList<RecipeWithIngredientSelections>
     private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,21 +33,12 @@ class Recipes : AppCompatActivity(), CellClickListener {
         //TODO - Call database here get recipes and their ingredients!!!
         //iniDummyRecipes()
 
-        GlobalScope.launch {
-            recipeList = db.recipeDao().getAll()
-            runOnUiThread {
-                calculatePrices(recipeList)
-                searchOnChange(recipeList)
-                recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
-                recipe_list.layoutManager = LinearLayoutManager(context)
-                recipe_list.setHasFixedSize(true)
-            }
-        }
-
         new_recipe_button.setOnClickListener {
             val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
             startActivity(recipeActivity)
         }
+
+        setupRecyclerView()
 
     }
 
@@ -53,6 +47,37 @@ class Recipes : AppCompatActivity(), CellClickListener {
         for (i in 0..recipeList.size - 1){
             if (recipeList[i].recipe.price != null) {
                 //TODO - Calculate that shit!
+            }
+        }
+    }
+
+    private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+        return SwipeHelper.UnderlayButton(
+            this,
+            "Delete",
+            14.0f,
+            android.R.color.holo_red_light,
+            object : SwipeHelper.UnderlayButtonClickListener {
+                override fun onClick() { deleteRecipe(position) }
+            })
+    }
+
+    private fun deleteRecipe(position: Int){
+
+        GlobalScope.launch {
+            val recipeWithIngredientSelections =
+                db.recipeDao().getById(recipeList[position].recipe.recipeId)
+
+            for (i in recipeWithIngredientSelections?.ingredientSelections!!) {
+                db.ingredientDao().deleteByParentId(i.ingredientSelectionId)
+            }
+
+            db.ingredientSelectionDao().deleteByParentId(recipeList[position].recipe.recipeId)
+            db.recipeDao().delete(recipeList[position].recipe)
+
+            runOnUiThread {
+                recipeList.removeAt(position)
+                recipe_list.adapter?.notifyDataSetChanged()
             }
         }
     }
@@ -123,14 +148,37 @@ class Recipes : AppCompatActivity(), CellClickListener {
     override fun onResume() {
         super.onResume()
         GlobalScope.launch {
-            recipeList = db.recipeDao().getAll()
+            recipeList = ArrayList(db.recipeDao().getAll())
             runOnUiThread {
                 calculatePrices(recipeList)
                 searchOnChange(recipeList)
-                recipe_list.adapter = RecipesAdapter(recipeList,  context as Recipes)
+                recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
                 recipe_list.layoutManager = LinearLayoutManager(context)
                 recipe_list.setHasFixedSize(true)
             }
         }
+    }
+
+    private fun setupRecyclerView(){
+        GlobalScope.launch {
+            recipeList = ArrayList(db.recipeDao().getAll())
+            runOnUiThread {
+                calculatePrices(recipeList)
+                searchOnChange(recipeList)
+                recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
+                recipe_list.layoutManager = LinearLayoutManager(context)
+                recipe_list.setHasFixedSize(true)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(recipe_list){
+            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+                var buttons = listOf<UnderlayButton>()
+                val deleteButton = deleteButton(position)
+                buttons = listOf(deleteButton)
+                return buttons
+            }
+        })
+        itemTouchHelper.attachToRecyclerView(recipe_list)
     }
 }
