@@ -2,6 +2,7 @@ package com.gruppe17.madbudget
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,23 +12,21 @@ import com.gruppe17.madbudget.salling.SallingCommunicator
 import com.gruppe17.madbudget.salling.jsonModels.JsonStore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.*
 
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.slider.Slider
+import com.gruppe17.madbudget.coop.CoopCommunicator
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.util.*
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener{
 
     private lateinit var mMap: GoogleMap
     private lateinit var innerCircle: Circle
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
     private lateinit var markers: ArrayList<Marker>
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +37,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         mapFragment.getMapAsync(this)
 
         markers = ArrayList()
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this as AppCompatActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        }
 
         radius_slider_bar.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {}
@@ -60,9 +63,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 }
             }
         }
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -90,10 +91,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         mMap.isMyLocationEnabled = true
         mMap.setOnMyLocationButtonClickListener(this)
         mMap.setOnMyLocationClickListener(this)
-
         onMyLocationButtonClick()
+        
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            if (it != null){
+                lastLocation = it
+                val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0.toFloat()))
+            }
+        }
 
-        innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(0.0))
+        val initialCircleSize = 700.00
+        innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
+        radius_slider_bar.value = initialCircleSize.toFloat()
 
         SallingCommunicator.getNearbyStores(applicationContext, 4.toDouble()) { response ->
            val json = Klaxon().parseArray<JsonStore>(response.toString())!!
@@ -107,11 +117,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 marker.tag = json[i].distance_km
                 markers.add(marker)
             }
+            for (i in markers) {
+                if (i.tag.toString().toDouble() <= radius_slider_bar.value / 1000) {
+                    i.alpha = 1f
+                    i.isVisible = true
+                }
+            }
         }
     }
 
     override fun onMyLocationButtonClick(): Boolean {
-
         // Permission check
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -143,9 +158,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
 
     override fun onMyLocationClick(p0: Location) {
     }
-
-
-
-
-
 }
