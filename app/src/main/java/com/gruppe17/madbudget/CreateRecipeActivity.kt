@@ -87,6 +87,26 @@ class CreateRecipeActivity : AppCompatActivity(),
 
     private fun saveIngredientSelection() {
 
+        database = DatabaseBuilder.get(this)
+        GlobalScope.launch {
+            val ingSel = IngredientSelection(
+                0,
+                mAlertDialog.ingsel_name.text.toString(),
+                mAlertDialog.ingsel_amount.text.toString(),
+                true,
+                recipe.recipe.recipeId //TODO Need to get valid id
+            )
+            val ingSelId = database.ingredientSelectionDao().insert(ingSel)
+            val ingArray = ArrayList<Ingredient>(dialogIngSelected)
+            for(i in ingArray){
+                i.ingredientSelectionParentId = ingSelId.toInt()
+            }
+            database.ingredientDao().insertAll(ingArray)
+            runOnUiThread {
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
+            }
+        }
+
         GlobalScope.launch {
 
             if (isNewRecipe){
@@ -95,8 +115,8 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
 
             val ingredientSelection = IngredientSelection(0,
-                mAlertDialog.spinner_ingredient_selection_name.text.toString(),
-                mAlertDialog.spinner_ingredient_amount.text.toString(),
+                mAlertDialog.ingsel_amount.text.toString(),
+                mAlertDialog.ingsel_name.text.toString(),
                 true,
                 newRecipeId.toInt()
             )
@@ -112,11 +132,12 @@ class CreateRecipeActivity : AppCompatActivity(),
             for (i in ingredientList)
                 i.ingredientSelectionParentId = newRecipeWithIngredientSelections!!.ingredientSelections!!.last().ingredientSelectionId
 
-            Log.i("bund",ingredientList.toString())
 
             database.ingredientDao().insertAll(ingredientList)
 
             ingredientList.clear()
+
+            runOnUiThread {  ingredient_selection_list.adapter?.notifyDataSetChanged() }
 
         }
     }
@@ -294,6 +315,8 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onIngredientClick(position: Int) {
 
         val ingredientsToShow: ArrayList<Ingredient> = ArrayList(ingredientSelectionList[position].ingredients)
+        Log.i("bund",ingredientSelectionList[position].toString())
+        Log.i("bund",ingredientSelectionList[position].ingredients.toString())
 
         val mAlertDialog = AlertDialog.Builder(this@CreateRecipeActivity)
             .setView(LayoutInflater.from(this@CreateRecipeActivity).inflate(R.layout.show_ingredient_dialog, null))
