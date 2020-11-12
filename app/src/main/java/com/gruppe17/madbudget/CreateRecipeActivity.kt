@@ -94,8 +94,8 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
 
             val ingredientSelection = IngredientSelection(0,
-                mAlertDialog.spinner_ingredient_selection_name.text.toString(),
-                mAlertDialog.spinner_ingredient_amount.text.toString(),
+                mAlertDialog.ingsel_amount.text.toString(),
+                mAlertDialog.ingsel_name.text.toString(),
                 true,
                 newRecipeId.toInt()
             )
@@ -110,11 +110,12 @@ class CreateRecipeActivity : AppCompatActivity(),
             for (i in ingredientList)
                 i.ingredientSelectionParentId = newRecipeWithIngredientSelections!!.ingredientSelections!!.last().ingredientSelectionId
 
-            Log.i("bund",ingredientList.toString())
 
             database.ingredientDao().insertAll(ingredientList)
 
             ingredientList.clear()
+
+            runOnUiThread {  ingredient_selection_list.adapter?.notifyDataSetChanged() }
 
         }
     }
@@ -124,9 +125,11 @@ class CreateRecipeActivity : AppCompatActivity(),
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel, null))
             .setTitle("Tilføj ingrediensgruppe")
             .setPositiveButton("OK") { dialog, which ->
+                ingredientList = dialogIngSelected
                 if (ingredientList.isEmpty()) {
                     Toast.makeText(this, "Ingen ingredienser valgt", Toast.LENGTH_LONG).show()
                 } else {
+                    saveIngredientSelection()
                 }
             }
             .setNegativeButton("Annuller") { dialog, which -> }
@@ -273,6 +276,8 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onIngredientClick(position: Int) {
 
         val ingredientsToShow: ArrayList<Ingredient> = ArrayList(ingredientSelectionList[position].ingredients)
+        Log.i("bund",ingredientSelectionList[position].toString())
+        Log.i("bund",ingredientSelectionList[position].ingredients.toString())
 
         val mAlertDialog = AlertDialog.Builder(this@CreateRecipeActivity)
             .setView(LayoutInflater.from(this@CreateRecipeActivity).inflate(R.layout.show_ingredient_dialog, null))
