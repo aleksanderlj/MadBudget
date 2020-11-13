@@ -34,8 +34,22 @@ class Recipes : AppCompatActivity(), CellClickListener {
         //iniDummyRecipes()
 
         new_recipe_button.setOnClickListener {
-            val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
+            val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+            recipeActivity.putExtra("ClickedRecipe", -1)
             startActivity(recipeActivity)
+            /*
+            var newRecipeId: Int
+            db = DatabaseBuilder.get(this)
+            GlobalScope.launch {
+                newRecipeId = db.recipeDao().insert(Recipe()).toInt()
+                runOnUiThread{
+                    val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+                    recipeActivity.putExtra("ClickedRecipe", newRecipeId)
+                    startActivity(recipeActivity)
+                }
+            }
+
+             */
         }
 
         setupRecyclerView()

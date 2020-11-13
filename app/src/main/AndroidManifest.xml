@@ -47,6 +47,9 @@
         <activity android:name="com.gruppe17.madbudget.Recipes" />
         <activity android:name="com.gruppe17.madbudget.CreateRecipeActivity" />
         <activity android:name="com.gruppe17.madbudget.salling.ActivitySallingTest" />
+        <service
+            android:name=".DBDeleteService"
+            android:exported="false"/>
     </application>
 
 </manifest>
