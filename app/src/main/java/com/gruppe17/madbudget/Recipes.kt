@@ -42,6 +42,10 @@ class Recipes : AppCompatActivity(), CellClickListener {
         }
 
         new_recipe_button.setOnClickListener {
+            val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+            recipeActivity.putExtra("ClickedRecipe", -1)
+            startActivity(recipeActivity)
+            /*
             var newRecipeId: Int
             db = DatabaseBuilder.get(this)
             GlobalScope.launch {
@@ -52,6 +56,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
                     startActivity(recipeActivity)
                 }
             }
+
+             */
         }
 
     }
