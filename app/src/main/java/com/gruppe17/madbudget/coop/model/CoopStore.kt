@@ -29,7 +29,7 @@ class CoopStore(
 
 class CoopLocation (
     val type: String, // Useless
-    val coordinates: List<Int>
+    val coordinates: List<Double>
 )
 
 class CoopOpeningHour(

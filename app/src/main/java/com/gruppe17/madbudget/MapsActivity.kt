@@ -17,6 +17,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.slider.Slider
 import com.gruppe17.madbudget.coop.CoopCommunicator
+import com.gruppe17.madbudget.coop.model.CoopStoreList
 import kotlinx.android.synthetic.main.activity_maps.*
 import java.util.*
 
@@ -105,24 +106,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
         radius_slider_bar.value = initialCircleSize.toFloat()
 
-        SallingCommunicator.getNearbyStores(applicationContext, 4.toDouble()) { response ->
-           val json = Klaxon().parseArray<JsonStore>(response.toString())!!
-            for (i in json.indices) {
+        CoopCommunicator.getNearbyStoresMapOptimized(applicationContext, 4000, 1, 1000){ response ->
+            val json = Klaxon().parse<CoopStoreList>(response.toString())!!
+            for (i in json.stores) {
                 val marker = mMap.addMarker(
                     MarkerOptions()
-                        .title(json[i].brand,)
-                        .position(LatLng(json[i].coordinates[1], json[i].coordinates[0]))
-                        .alpha(0.2f)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ghetto)))
-                marker.tag = json[i].distance_km
+                        .title(i.retailGroup)
+                        .position(LatLng(i.location.coordinates[0], i.location.coordinates[1]))
+                        .alpha(0.2f))
+                //marker.tag
+                when (i.retailGroup){
+                    "fakta" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.fakta))
+                    "irma" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.irma))
+                    "superbrugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.super_brugsen))
+                    "kvickly" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.kvickly))
+                    "brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.brugsen))
+                    "Lokalbrugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.brugsen))
+                    "dagli'Brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.dagli_brugsen))
+                    "Dagli'Brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.dagli_brugsen))
+                }
+
                 markers.add(marker)
             }
-            for (i in markers) {
+            /*for (i in markers) {
                 if (i.tag.toString().toDouble() <= radius_slider_bar.value / 1000) {
                     i.alpha = 1f
                     i.isVisible = true
                 }
-            }
+            }*/
         }
     }
 

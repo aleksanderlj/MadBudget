@@ -5,8 +5,6 @@ import com.beust.klaxon.Json
 class CoopStoreList(
     @Json(name = "CurrentPage")
     val currentPage: Int,
-    @Json(name = "NextPage")
-    val nextPage: Int,
     @Json(name = "PageCount")
     val pageCount: Int,
     @Json(name = "PageSize")
