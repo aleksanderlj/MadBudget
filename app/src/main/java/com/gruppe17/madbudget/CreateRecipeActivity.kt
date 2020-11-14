@@ -165,8 +165,6 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onIngredientClick(position: Int) {
 
         val ingredientsToShow: ArrayList<Ingredient> = ArrayList(ingredientSelectionList[position].ingredients)
-        Log.i("bund",ingredientSelectionList[position].toString())
-        Log.i("bund",ingredientSelectionList[position].ingredients.toString())
 
         val mAlertDialog = AlertDialog.Builder(this@CreateRecipeActivity)
             .setView(LayoutInflater.from(this@CreateRecipeActivity).inflate(R.layout.show_ingredient_dialog, null))
@@ -181,12 +179,20 @@ class CreateRecipeActivity : AppCompatActivity(),
         mAlertDialog.ingredient_list.setHasFixedSize(true)
     }
 
-    override fun onCheckBoxClick(position: Int) {}
+    override fun onCheckBoxClick(position: Int) {
+
+        ingredientSelectionList[position].ingredientSelection.isSelected = !ingredientSelectionList[position].ingredientSelection.isSelected
+
+        GlobalScope.launch {
+            db.ingredientSelectionDao().update(ingredientSelectionList[position].ingredientSelection)
+            runOnUiThread { ingredient_selection_list.adapter?.notifyDataSetChanged() }
+        }
+    }
 
     private fun setupRecyclerView(){
         ingredient_selection_list.layoutManager = LinearLayoutManager(this)
         ingredient_selection_list.setHasFixedSize(true)
-        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList, applicationContext, this@CreateRecipeActivity)
+        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList, applicationContext, this@CreateRecipeActivity, this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(ingredient_selection_list){
             override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
