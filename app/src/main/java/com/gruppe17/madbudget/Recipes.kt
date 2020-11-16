@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,20 +65,26 @@ class Recipes : AppCompatActivity(), CellClickListener {
             var smallestPrice: Double
             var recipePrice: Double
 
-            for (i in recipeList) {
+            for (curRecipe in recipeList) {
+
+
                 recipePrice = 0.0
-                for (k in ingredientSelectionList) {
-                    if (i.recipe.recipeId == k.ingredientSelection.recipeParentId && k.ingredientSelection.isSelected) {
-                        smallestPrice = 10000000.0
-                        for (j in k.ingredients) {
-                            if (j.ingredientPrice!! < smallestPrice)
-                                smallestPrice = j.ingredientPrice!!
+                for (curIngSel in ingredientSelectionList) {
+
+
+                    if (curRecipe.recipe.recipeId == curIngSel.ingredientSelection.recipeParentId && curIngSel.ingredientSelection.isSelected) {
+                        smallestPrice = Double.MAX_VALUE
+                        for (curIng in curIngSel.ingredients) {
+
+                            val ingPrice = Ingredient.calcIngredientPrice(curIngSel.ingredientSelection, curIng)
+                            if (ingPrice < smallestPrice)
+                                smallestPrice = ingPrice
                         }
                         recipePrice += smallestPrice
                     }
-                    i.recipe.price = recipePrice
+                    curRecipe.recipe.price = recipePrice
                 }
-                db.recipeDao().update(i.recipe)
+                db.recipeDao().update(curRecipe.recipe)
             }
         }
     }
