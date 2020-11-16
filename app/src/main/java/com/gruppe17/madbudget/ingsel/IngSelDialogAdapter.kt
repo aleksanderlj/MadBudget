@@ -33,7 +33,7 @@ class IngSelDialogAdapter(
 
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
         holder.itemView.ing_name_dialog.text = dataset[position].ingredientName
-        holder.itemView.ing_price_dialog.text = dataset[position].ingredientPrice.toString() + "kr"
+        holder.itemView.ing_price_dialog.text = "%.2fkr".format(dataset[position].ingredientPrice)
     }
 
     override fun getItemCount(): Int {

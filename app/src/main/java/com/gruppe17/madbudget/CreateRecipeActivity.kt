@@ -105,7 +105,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             val ingSel = IngredientSelection(
                 0,
                 mAlertDialog.ingsel_name.text.toString(),
-                mAlertDialog.ingsel_amount.text.toString(),
+                mAlertDialog.ingsel_amount.text.toString().toDoubleOrNull(),
                 mAlertDialog.unit_spinner.selectedItem.toString(),
                 true,
                 recipeId

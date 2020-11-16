@@ -21,7 +21,7 @@ class IngredientSelectionAdapter(var myDataset: ArrayList<IngredientSelectionWit
         val currentItem = myDataset[position]
 
         holder.ingredientName.text = currentItem.ingredientSelection.ingredientSelectionName
-        holder.ingredientAmount.text = currentItem.ingredientSelection.ingredientSelectionAmount
+        holder.ingredientAmount.text = currentItem.ingredientSelection.ingredientSelectionAmount.toString()
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
