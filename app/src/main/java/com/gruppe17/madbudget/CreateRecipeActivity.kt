@@ -68,12 +68,20 @@ class CreateRecipeActivity : AppCompatActivity(),
                     recipe_title.setText(recipeBak!!.recipe.recipeName)
                     recipe_list_time.setText(recipeBak!!.recipe.recipeTimeToMake)
                     recipe_list_price.setText(recipeBak!!.recipe.price.toString())
+
+                    recipe_list_price.addTextChangedListener(ChangeWatcher())
+                    recipe_list_time.addTextChangedListener(ChangeWatcher())
+                    recipe_title.addTextChangedListener(ChangeWatcher())
                     setupRecyclerView()
                 }
             }
         } else { // FUCK IT Anders was right
             ingredientSelectionList = ArrayList()
             recipeBak = null
+
+            recipe_list_price.addTextChangedListener(ChangeWatcher())
+            recipe_list_time.addTextChangedListener(ChangeWatcher())
+            recipe_title.addTextChangedListener(ChangeWatcher())
             runOnUiThread{ setupRecyclerView() }
         }
 
@@ -83,10 +91,6 @@ class CreateRecipeActivity : AppCompatActivity(),
             hasChanged = true
             initAlertDialog2()
         }
-
-        recipe_list_price.addTextChangedListener(ChangeWatcher())
-        recipe_list_time.addTextChangedListener(ChangeWatcher())
-        recipe_title.addTextChangedListener(ChangeWatcher())
 
     }
 
