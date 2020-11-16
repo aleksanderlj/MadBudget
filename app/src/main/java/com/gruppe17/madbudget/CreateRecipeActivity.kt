@@ -45,7 +45,8 @@ class CreateRecipeActivity : AppCompatActivity(),
     private var dialogIngSelected = ArrayList<Ingredient>()
     private var recipeId = -1
     var hasChanged = false
-    lateinit var recipeBak: RecipeWithIngredientSelections
+    var recipeBak: RecipeWithIngredientSelections? = null
+    private var ingSelListBak: ArrayList<IngredientSelectionWithIngredients>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,16 +59,21 @@ class CreateRecipeActivity : AppCompatActivity(),
         // check if coming from existing recipe
         if (recipeId != -1) {
             GlobalScope.launch {
-                //recipe = db.recipeDao().getById(recipeId)!! //TODO Før vi rør denne skal vi lige tale om hvor ofte vi gemmer Recipe felterne!
                 ingredientSelectionList = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
 
-                //recipeBak TODO
-                runOnUiThread{ setupRecyclerView() }
+                ingSelListBak = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
+                recipeBak = db.recipeDao().getById(recipeId)
+
+                runOnUiThread{
+                    recipe_title.setText(recipeBak!!.recipe.recipeName)
+                    recipe_list_time.setText(recipeBak!!.recipe.recipeTimeToMake)
+                    recipe_list_price.setText(recipeBak!!.recipe.price.toString())
+                    setupRecyclerView()
+                }
             }
         } else { // FUCK IT Anders was right
             ingredientSelectionList = ArrayList()
-            //recipe = RecipeWithIngredientSelections(Recipe(), blabla) //TODO Før vi rør denne skal vi lige tale om hvor ofte vi gemmer Recipe felterne!
-            //recipeBak TODO
+            recipeBak = null
             runOnUiThread{ setupRecyclerView() }
         }
 
@@ -310,7 +316,21 @@ class CreateRecipeActivity : AppCompatActivity(),
                 }
                 .setNegativeButton("Nej") { dialog, which ->
                     //recipeBak TODO
-                    super.onBackPressed()
+                    db = DatabaseBuilder.get(this)
+                    GlobalScope.launch {
+                        if(recipeBak == null){
+                            Utility.deleteRecipe(recipeId, db)
+                        } else {
+                            Utility.deleteRecipe(recipeId, db)
+                            db.recipeDao().insert(recipeBak!!.recipe)
+                            db.ingredientSelectionDao().insertAll(recipeBak!!.ingredientSelections!!)
+                            for(n in ingSelListBak!!){
+                                db.ingredientDao().insertAll(n.ingredients)
+                            }
+                        }
+
+                        runOnUiThread { super.onBackPressed() }
+                    }
                 }
                 .setNeutralButton("Annuller") { dialog, which -> }
                 .show()

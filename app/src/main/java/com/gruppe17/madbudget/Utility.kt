@@ -38,7 +38,7 @@ object Utility {
         }
     }
 
-    fun deleteRecipe(context: Context, id: Int, db: AppDatabase){
+    fun deleteRecipe(id: Int, db: AppDatabase){
         val ingSel = db.ingredientSelectionDao().getAllByRecipeId(id)
 
         for(n in ingSel){
