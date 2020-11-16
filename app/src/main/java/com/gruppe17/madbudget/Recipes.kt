@@ -157,6 +157,7 @@ class Recipes : AppCompatActivity(), CellClickListener {
         })
     }
 
+    /*
     private fun iniDummyRecipes(){
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
@@ -188,6 +189,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
             }
         }
     }
+
+     */
 
     override fun onResume() {
         super.onResume()
