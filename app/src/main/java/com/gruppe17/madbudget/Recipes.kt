@@ -9,10 +9,8 @@ import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.gruppe17.madbudget.models.Ingredient
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gruppe17.madbudget.models.Recipe
-import com.gruppe17.madbudget.models.RecipeWithIngredientSelections
+import com.gruppe17.madbudget.models.*
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,7 +29,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
         context = this
 
         //TODO - Call database here get recipes and their ingredients!!!
-        //iniDummyRecipes()
+
+        // iniDummyRecipes()
 
         new_recipe_button.setOnClickListener {
             val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
@@ -56,14 +55,35 @@ class Recipes : AppCompatActivity(), CellClickListener {
 
     }
 
-    //TODO - Fix when you can you dingus!
-    fun calculatePrices(recipeList: List<RecipeWithIngredientSelections>){
-        for (i in 0..recipeList.size - 1){
-            if (recipeList[i].recipe.price != null) {
-                //TODO - Calculate that shit!
+    private fun calculatePrices() {
+
+        var ingredientSelectionList: ArrayList<IngredientSelectionWithIngredients> = ArrayList()
+
+        GlobalScope.launch {
+
+            ingredientSelectionList = ArrayList(db.ingredientSelectionDao().getAll())
+
+            var smallestPrice: Double
+            var recipePrice: Double
+
+            for (i in recipeList) {
+                recipePrice = 0.0
+                for (k in ingredientSelectionList) {
+                    if (i.recipe.recipeId == k.ingredientSelection.recipeParentId && k.ingredientSelection.isSelected) {
+                        smallestPrice = 10000000.0
+                        for (j in k.ingredients) {
+                            if (j.ingredientPrice!! < smallestPrice)
+                                smallestPrice = j.ingredientPrice!!
+                        }
+                        recipePrice += smallestPrice
+                    }
+                    i.recipe.price = recipePrice
+                }
+                db.recipeDao().update(i.recipe)
             }
         }
     }
+
 
     private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
@@ -140,22 +160,32 @@ class Recipes : AppCompatActivity(), CellClickListener {
     private fun iniDummyRecipes(){
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 60, 2.0))
-        recipeList.add(Recipe(0, "Spaghetti Bolognese", 5, "1h 30m", 60, 1.2))
-        recipeList.add(Recipe(0, "Fisk", 5, "1h 30m", 60, 0.3))
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 60, 4.5))
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 200, 3.2))
-        recipeList.add(Recipe(0, "Heje", 5, "1h 30m", 60, 5.1))
+        val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
 
-        val db = DatabaseBuilder.get(this)
+        recipeList.add(Recipe(0, "SpaghetBolo", 5, "30m", null, null))
+
         GlobalScope.launch {
-            db.recipeDao().insertAll(recipeList)
-            val test = db.recipeDao().getAll()[0].recipe.recipeId
+            val id = db.recipeDao().insert(recipeList[0])
 
-            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
-            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
-            ingredientList.add(Ingredient(0, "Rice", 2.7, "G", null, "Fisk", false, 1.0,-1))
-            db.ingredientDao().insertAll(ingredientList)
+            ingredientList.add(Ingredient(0, "ing1", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "ing2", 2.7, "G", null, "Fisk", false, 1.0,-1))
+            ingredientList.add(Ingredient(0, "ing3", 2.7, "G", null, "Fisk", false, 1.0,-1))
+
+
+            ingredientSelectionList.add(IngredientSelection(0,"Hakkede Tomater","2","STK",true,id.toInt()))
+            ingredientSelectionList.add(IngredientSelection(0,"Hakket oksekød","500","G",true,id.toInt()))
+            ingredientSelectionList.add(IngredientSelection(0,"Pasta","400","G",true,id.toInt()))
+
+            for ((counter, i) in ingredientSelectionList.withIndex()) {
+
+                val ingId = db.ingredientSelectionDao().insert(ingredientSelectionList[counter])
+
+                for (j in ingredientList)
+                        j.ingredientSelectionParentId = ingId.toInt()
+
+                db.ingredientDao().insertAll(ingredientList)
+
+            }
         }
     }
 
@@ -163,8 +193,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
         super.onResume()
         GlobalScope.launch {
             recipeList = ArrayList(db.recipeDao().getAll())
-            runOnUiThread {
-                calculatePrices(recipeList)
+            calculatePrices()
+            runOnUiThread{
                 searchOnChange(recipeList)
                 recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
                 recipe_list.layoutManager = LinearLayoutManager(context)
@@ -176,8 +206,8 @@ class Recipes : AppCompatActivity(), CellClickListener {
     private fun setupRecyclerView(){
         GlobalScope.launch {
             recipeList = ArrayList(db.recipeDao().getAll())
-            runOnUiThread {
-                calculatePrices(recipeList)
+            calculatePrices()
+            runOnUiThread{
                 searchOnChange(recipeList)
                 recipe_list.adapter = RecipesAdapter(recipeList, context as Recipes)
                 recipe_list.layoutManager = LinearLayoutManager(context)
