@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +21,6 @@ import com.gruppe17.madbudget.models.*
 import com.gruppe17.madbudget.salling.jsonModels.JsonProduct
 import com.gruppe17.madbudget.salling.jsonModels.JsonSuggestions
 import com.gruppe17.madbudget.ingsel.IngSelDialogAdapter
-import kotlinx.android.synthetic.main.activity_create_recipes.ingredient_selection_list
 import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
 import kotlinx.android.synthetic.main.dialog_ing_sel.*
 import kotlinx.android.synthetic.main.item_spinner.view.*
@@ -31,6 +28,7 @@ import kotlinx.android.synthetic.main.select_ingerdient_dialog.*
 import kotlinx.android.synthetic.main.show_ingredient_dialog.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 
 class CreateRecipeActivity : AppCompatActivity(),
@@ -46,6 +44,9 @@ class CreateRecipeActivity : AppCompatActivity(),
     private var dialogIngNotSelected = ArrayList<Ingredient>()
     private var dialogIngSelected = ArrayList<Ingredient>()
     private var recipeId = -1
+    var hasChanged = false
+    var recipeBak: RecipeWithIngredientSelections? = null
+    private var ingSelListBak: ArrayList<IngredientSelectionWithIngredients>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +59,35 @@ class CreateRecipeActivity : AppCompatActivity(),
         // check if coming from existing recipe
         if (recipeId != -1) {
             GlobalScope.launch {
-                //recipe = db.recipeDao().getById(recipeId)!! //TODO Før vi rør denne skal vi lige tale om hvor ofte vi gemmer Recipe felterne!
                 ingredientSelectionList = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
 
-                runOnUiThread{ setupRecyclerView() }
+                ingSelListBak = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
+                recipeBak = db.recipeDao().getById(recipeId)
+
+                runOnUiThread{
+                    recipe_title.setText(recipeBak!!.recipe.recipeName)
+                    recipe_list_time.setText(recipeBak!!.recipe.recipeTimeToMake)
+                    recipe_list_price.setText(recipeBak!!.recipe.price.toString())
+                    setupRecyclerView()
+                }
             }
         } else { // FUCK IT Anders was right
             ingredientSelectionList = ArrayList()
-            //recipe = RecipeWithIngredientSelections(Recipe(), blabla) //TODO Før vi rør denne skal vi lige tale om hvor ofte vi gemmer Recipe felterne!
+            recipeBak = null
             runOnUiThread{ setupRecyclerView() }
         }
 
+        toolbar.title = "Opskrift"
+
         add_ingredient_button.setOnClickListener {
+            hasChanged = true
             initAlertDialog2()
         }
+
+        recipe_list_price.addTextChangedListener(ChangeWatcher())
+        recipe_list_time.addTextChangedListener(ChangeWatcher())
+        recipe_title.addTextChangedListener(ChangeWatcher())
+
     }
 
     private fun saveIngredientSelection() {
@@ -160,6 +176,19 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
 
         mAlertDialog.unit_spinner.adapter = spinnerAdapter
+
+        mAlertDialog.ingsel_name.addTextChangedListener(ChangeWatcher())
+        mAlertDialog.ingsel_amount.addTextChangedListener(ChangeWatcher())
+        mAlertDialog.unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                hasChanged = true
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
     }
 
     override fun onIngredientClick(position: Int) {
@@ -236,6 +265,7 @@ class CreateRecipeActivity : AppCompatActivity(),
     }
 
     override fun onDialogIngredientSelect(pos: Int) {
+        hasChanged = true
         val item = dialogIngNotSelected.removeAt(pos)
         dialogIngSelected.add(0, item)
 
@@ -247,6 +277,7 @@ class CreateRecipeActivity : AppCompatActivity(),
     }
 
     override fun onDialogIngredientDeselect(pos: Int) {
+        hasChanged = true
         val item = dialogIngSelected.removeAt(pos)
         dialogIngNotSelected.add(0, item)
 
@@ -255,6 +286,63 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         selectedAdapter.notifyItemRemoved(item)
         notSelectedAdapter.notifyItemAdded(item)
+    }
+
+    override fun onBackPressed() {
+        if(hasChanged) {
+            mAlertDialog = AlertDialog.Builder(this)
+                .setTitle("Gem ændringer?")
+                .setPositiveButton("Ja") { dialog, which ->
+
+                    db = DatabaseBuilder.get(this)
+                    GlobalScope.launch {
+                        if(recipeId == -1){
+                            recipeId = db.recipeDao().insert(Recipe()).toInt()
+                        }
+
+                        var newRec = Recipe(
+                            recipeId,
+                            recipe_title.text.toString(),
+                            recipe_list_time.text.toString(),
+                            recipe_list_price.text.toString().toDoubleOrNull(),
+                            0.0 // TODO
+                        )
+
+                        db.recipeDao().insert(newRec)
+
+                        runOnUiThread { super.onBackPressed() }
+                    }
+
+                }
+                .setNegativeButton("Nej") { dialog, which ->
+                    //recipeBak TODO
+                    db = DatabaseBuilder.get(this)
+                    GlobalScope.launch {
+                        if(recipeBak == null){
+                            Utility.deleteRecipe(recipeId, db)
+                        } else {
+                            Utility.deleteRecipe(recipeId, db)
+                            db.recipeDao().insert(recipeBak!!.recipe)
+                            db.ingredientSelectionDao().insertAll(recipeBak!!.ingredientSelections!!)
+                            for(n in ingSelListBak!!){
+                                db.ingredientDao().insertAll(n.ingredients)
+                            }
+                        }
+
+                        runOnUiThread { super.onBackPressed() }
+                    }
+                }
+                .setNeutralButton("Annuller") { dialog, which -> }
+                .show()
+
+            val window = mAlertDialog.window
+            val attr = window!!.attributes
+
+            attr.gravity = Gravity.BOTTOM
+            window.attributes = attr
+        } else {
+            super.onBackPressed()
+        }
     }
 
     /*
@@ -357,6 +445,22 @@ class CreateRecipeActivity : AppCompatActivity(),
         return listArray1
     }
      */
+    inner class ChangeWatcher: TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            hasChanged = true
+        }
+
+        override fun afterTextChanged(p0: Editable?) {
+
+        }
+
+    }
 
 }
+
+
 
