@@ -2,6 +2,7 @@ package com.gruppe17.madbudget
 
 import SwipeHelper
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -38,7 +39,7 @@ class CreateRecipeActivity : AppCompatActivity(),
 {
 
     private var ingredientSelectionList: ArrayList<IngredientSelectionWithIngredients> = ArrayList()
-    private lateinit var mAlertDialog: AlertDialog
+    private var mAlertDialog: AlertDialog? = null
     //private lateinit var recipe: RecipeWithIngredientSelections
     private lateinit var db: AppDatabase
     private var dialogIngNotSelected = ArrayList<Ingredient>()
@@ -104,9 +105,9 @@ class CreateRecipeActivity : AppCompatActivity(),
 
             val ingSel = IngredientSelection(
                 0,
-                mAlertDialog.ingsel_name.text.toString(),
-                mAlertDialog.ingsel_amount.text.toString().toDoubleOrNull(),
-                mAlertDialog.unit_spinner.selectedItem.toString(),
+                mAlertDialog!!.ingsel_name.text.toString(),
+                mAlertDialog!!.ingsel_amount.text.toString().toDoubleOrNull(),
+                mAlertDialog!!.unit_spinner.selectedItem.toString(),
                 true,
                 recipeId
             )
@@ -125,7 +126,7 @@ class CreateRecipeActivity : AppCompatActivity(),
     }
 
     private fun initAlertDialog2() {
-        mAlertDialog = AlertDialog.Builder(this)
+        var newAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel, null))
             .setTitle("Tilføj ingrediensgruppe")
             .setPositiveButton("OK") { dialog, which ->
@@ -138,28 +139,32 @@ class CreateRecipeActivity : AppCompatActivity(),
             .setNegativeButton("Annuller") { dialog, which -> }
             .create()
 
-        mAlertDialog.show()
+        mAlertDialog = newAlertDialog
 
-        mAlertDialog.window!!.setLayout(this.resources.displayMetrics.widthPixels-10, this.resources.displayMetrics.heightPixels-10)
-        mAlertDialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        newAlertDialog.show()
+
+        newAlertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = false
+
+        newAlertDialog.window!!.setLayout(this.resources.displayMetrics.widthPixels-10, this.resources.displayMetrics.heightPixels-10)
+        newAlertDialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
 
         dialogIngNotSelected = Utility.getTestIngredientList()
         dialogIngSelected = ArrayList<Ingredient>()
 
-        mAlertDialog.inglist_notselected.setHasFixedSize(true)
-        mAlertDialog.inglist_notselected.layoutManager = LinearLayoutManager(this)
-        mAlertDialog.inglist_notselected.adapter = IngSelDialogAdapter(dialogIngNotSelected, this, true)
+        newAlertDialog.inglist_notselected.setHasFixedSize(true)
+        newAlertDialog.inglist_notselected.layoutManager = LinearLayoutManager(this)
+        newAlertDialog.inglist_notselected.adapter = IngSelDialogAdapter(dialogIngNotSelected, this, true)
 
-        mAlertDialog.inglist_selected.setHasFixedSize(true)
-        mAlertDialog.inglist_selected.layoutManager = LinearLayoutManager(this)
-        mAlertDialog.inglist_selected.adapter = IngSelDialogAdapter(dialogIngSelected, this, false)
+        newAlertDialog.inglist_selected.setHasFixedSize(true)
+        newAlertDialog.inglist_selected.layoutManager = LinearLayoutManager(this)
+        newAlertDialog.inglist_selected.adapter = IngSelDialogAdapter(dialogIngSelected, this, false)
 
 
 
-        mAlertDialog.ingsel_search.addTextChangedListener(object: TextWatcher {
+        newAlertDialog.ingsel_search.addTextChangedListener(object: TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                var adapter = mAlertDialog.inglist_notselected.adapter as IngSelDialogAdapter
+                var adapter = newAlertDialog.inglist_notselected.adapter as IngSelDialogAdapter
                 adapter.filter.filter(s.toString())
             }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -179,11 +184,11 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
         }
 
-        mAlertDialog.unit_spinner.adapter = spinnerAdapter
+        newAlertDialog.unit_spinner.adapter = spinnerAdapter
 
-        mAlertDialog.ingsel_name.addTextChangedListener(ChangeWatcher())
-        mAlertDialog.ingsel_amount.addTextChangedListener(ChangeWatcher())
-        mAlertDialog.unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        newAlertDialog.ingsel_name.addTextChangedListener(ChangeWatcher())
+        newAlertDialog.ingsel_amount.addTextChangedListener(ChangeWatcher())
+        newAlertDialog.unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 hasChanged = true
             }
@@ -193,6 +198,8 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
 
         }
+
+
     }
 
     override fun onIngredientClick(position: Int) {
@@ -273,8 +280,8 @@ class CreateRecipeActivity : AppCompatActivity(),
         val item = dialogIngNotSelected.removeAt(pos)
         dialogIngSelected.add(0, item)
 
-        val notSelectedAdapter = mAlertDialog.inglist_notselected.adapter!! as IngSelDialogAdapter
-        val selectedAdapter = mAlertDialog.inglist_selected.adapter!! as IngSelDialogAdapter
+        val notSelectedAdapter = mAlertDialog!!.inglist_notselected.adapter!! as IngSelDialogAdapter
+        val selectedAdapter = mAlertDialog!!.inglist_selected.adapter!! as IngSelDialogAdapter
 
         notSelectedAdapter.notifyItemRemoved(item)
         selectedAdapter.notifyItemAdded(item)
@@ -285,8 +292,8 @@ class CreateRecipeActivity : AppCompatActivity(),
         val item = dialogIngSelected.removeAt(pos)
         dialogIngNotSelected.add(0, item)
 
-        val selectedAdapter = mAlertDialog.inglist_selected.adapter!! as IngSelDialogAdapter
-        val notSelectedAdapter = mAlertDialog.inglist_notselected.adapter!! as IngSelDialogAdapter
+        val selectedAdapter = mAlertDialog!!.inglist_selected.adapter!! as IngSelDialogAdapter
+        val notSelectedAdapter = mAlertDialog!!.inglist_notselected.adapter!! as IngSelDialogAdapter
 
         selectedAdapter.notifyItemRemoved(item)
         notSelectedAdapter.notifyItemAdded(item)
@@ -339,7 +346,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 .setNeutralButton("Annuller") { dialog, which -> }
                 .show()
 
-            val window = mAlertDialog.window
+            val window = mAlertDialog!!.window
             val attr = window!!.attributes
 
             attr.gravity = Gravity.BOTTOM
@@ -456,6 +463,10 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             hasChanged = true
+
+            if(mAlertDialog != null){
+                mAlertDialog!!.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = !mAlertDialog!!.ingsel_amount.text.isBlank() && !mAlertDialog!!.ingsel_name.text.isBlank()
+            }
         }
 
         override fun afterTextChanged(p0: Editable?) {
