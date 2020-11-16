@@ -140,12 +140,12 @@ class Recipes : AppCompatActivity(), CellClickListener {
     private fun iniDummyRecipes(){
         val recipeList: ArrayList<Recipe> = ArrayList()
         val ingredientList: ArrayList<Ingredient> = ArrayList()
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 60, 2.0))
-        recipeList.add(Recipe(0, "Spaghetti Bolognese", 5, "1h 30m", 60, 1.2))
-        recipeList.add(Recipe(0, "Fisk", 5, "1h 30m", 60, 0.3))
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 60, 4.5))
-        recipeList.add(Recipe(0, "Hej", 5, "1h 30m", 200, 3.2))
-        recipeList.add(Recipe(0, "Heje", 5, "1h 30m", 60, 5.1))
+        recipeList.add(Recipe(0, "Hej", "1h 30m", 60.0, 2.0))
+        recipeList.add(Recipe(0, "Spaghetti Bolognese", "1h 30m", 60.0, 1.2))
+        recipeList.add(Recipe(0, "Fisk", "1h 30m", 60.0, 0.3))
+        recipeList.add(Recipe(0, "Hej", "1h 30m", 60.0, 4.5))
+        recipeList.add(Recipe(0, "Hej", "1h 30m", 200.0, 3.2))
+        recipeList.add(Recipe(0, "Heje", "1h 30m", 60.0, 5.1))
 
         val db = DatabaseBuilder.get(this)
         GlobalScope.launch {

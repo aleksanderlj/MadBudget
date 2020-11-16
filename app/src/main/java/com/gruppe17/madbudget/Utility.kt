@@ -1,5 +1,6 @@
 package com.gruppe17.madbudget
 
+import android.content.Context
 import android.util.Log
 import com.beust.klaxon.Klaxon
 import com.gruppe17.madbudget.coop.model.CoopLocation
@@ -7,6 +8,8 @@ import com.gruppe17.madbudget.coop.model.CoopOpeningHour
 import com.gruppe17.madbudget.coop.model.CoopStore
 import com.gruppe17.madbudget.coop.model.CoopStoreList
 import com.gruppe17.madbudget.models.Ingredient
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.math.min
 
@@ -33,6 +36,18 @@ object Utility {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun deleteRecipe(context: Context, id: Int, db: AppDatabase){
+        val ingSel = db.ingredientSelectionDao().getAllByRecipeId(id)
+
+        for(n in ingSel){
+            db.ingredientDao().deleteByParentId(n.ingredientSelection.ingredientSelectionId)
+            db.ingredientSelectionDao().delete(n.ingredientSelection)
+        }
+
+        db.recipeDao().deleteById(id)
+
     }
 
     fun getTestCoopStoreList(): CoopStoreList {
