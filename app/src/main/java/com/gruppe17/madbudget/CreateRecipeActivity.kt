@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.JobIntentService
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.androidbuts.multispinnerfilter.KeyPairBoolData
-import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
 import com.gruppe17.madbudget.models.*
 import com.gruppe17.madbudget.salling.jsonModels.JsonProduct
 import com.gruppe17.madbudget.salling.jsonModels.JsonSuggestions

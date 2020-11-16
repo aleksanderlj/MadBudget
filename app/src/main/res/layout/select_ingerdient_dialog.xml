@@ -19,26 +19,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.androidbuts.multispinnerfilter.MultiSpinnerSearch
-        android:id="@+id/multiItemSelectionSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_margin="0dp"
-        app:hintText="vælg ingrediens..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/space_filler" />
-
     <EditText
         android:id="@+id/spinner_ingredient_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:hint="Indtast antal"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/multiItemSelectionSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/space_filler" />
 
     <TextView
         android:id="@+id/space_filler"
