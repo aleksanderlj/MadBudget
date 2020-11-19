@@ -27,7 +27,7 @@ class CreateIngredientSelectionDialogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngSelDialogViewHolder {
         val item = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_ing_sel, parent, false) as View
+            .inflate(R.layout.item_dialog_ing_sel, parent, false) as View
         return IngSelDialogViewHolder(item, onDialogIngredientClickListener, notSelected)
     }
 

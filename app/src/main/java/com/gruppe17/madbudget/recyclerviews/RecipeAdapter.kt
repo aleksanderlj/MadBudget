@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.recipe_item.view.*
 class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>, private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipeAdapter.RecipesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_recipe,parent,false)
         return RecipesViewHolder(itemView)
     }
 

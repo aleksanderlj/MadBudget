@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_sallingtest.*
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sallingtest)
+        setContentView(R.layout.activity_testyboi)
 
         getButton.setOnClickListener {
             getText.text = "Check logcat"

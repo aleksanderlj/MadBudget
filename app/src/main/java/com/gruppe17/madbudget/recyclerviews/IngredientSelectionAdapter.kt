@@ -53,7 +53,7 @@ class IngredientSelectionAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.ingredient_item_in_recipe, parent, false)
+            .inflate(R.layout.item_ingredient_in_recipe, parent, false)
         return IngredientViewHolder(
             itemView,
             ingredientSelectionClickListener,

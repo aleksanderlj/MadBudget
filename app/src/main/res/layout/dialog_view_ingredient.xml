@@ -12,5 +12,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="229dp"
-        tools:listitem="@layout/ingredient_item_wp" />
+        tools:listitem="@layout/item_dialog_view_ingredient" />
 </androidx.constraintlayout.widget.ConstraintLayout>

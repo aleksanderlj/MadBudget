@@ -49,7 +49,7 @@ class CreateRecipeActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_recipes_wip)
+        setContentView(R.layout.activity_create_recipe)
 
         db = DatabaseBuilder.get(this)
 
@@ -175,7 +175,7 @@ class CreateRecipeActivity : AppCompatActivity(),
         spinnerList.add("ML")
         spinnerList.add("STK")
         var spinnerAdapter = object : ArrayAdapter<String>(this,
-            R.layout.item_spinner,
+            R.layout.item_unit_spinner,
             R.id.item_spinner_text, spinnerList){
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 var view = super.getView(position, convertView, parent)
@@ -207,7 +207,7 @@ class CreateRecipeActivity : AppCompatActivity(),
         val ingredientsToShow: ArrayList<Ingredient> = ArrayList(ingredientSelectionList[position].ingredients)
 
         val mAlertDialog = AlertDialog.Builder(this@CreateRecipeActivity)
-            .setView(LayoutInflater.from(this@CreateRecipeActivity).inflate(R.layout.show_ingredient_dialog, null))
+            .setView(LayoutInflater.from(this@CreateRecipeActivity).inflate(R.layout.dialog_view_ingredient, null))
             .setTitle("Ingredienser")
             .setPositiveButton("OK", null)
             .setNegativeButton("Fortryd") { _, _ ->

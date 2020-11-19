@@ -16,7 +16,7 @@ class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.ingredient_item_wp, parent, false)
+            .inflate(R.layout.item_dialog_view_ingredient, parent, false)
         return IngredientViewHolder(itemView)
     }
 
