@@ -1,8 +1,11 @@
 package com.gruppe17.madbudget.rest.coop.model
 
+import androidx.annotation.Keep
 import com.beust.klaxon.Json
+import com.squareup.moshi.JsonClass
 
-class CoopProduct (
+@JsonClass(generateAdapter = true)
+data class CoopProduct (
     @Json(name = "Ean")
     val ean: String,
     @Json(name = "Navn")

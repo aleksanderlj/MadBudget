@@ -1,9 +1,19 @@
 package com.gruppe17.madbudget.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gruppe17.madbudget.R
+import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.DatabaseBuilder
+import com.gruppe17.madbudget.rest.coop.CoopCommunicator
+import com.gruppe17.madbudget.rest.coop.RegexFilter
+import com.gruppe17.madbudget.rest.coop.model.CoopProduct
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.adapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.android.synthetic.main.activity_testyboi.*
 
 class TestActivity : AppCompatActivity() {
@@ -12,8 +22,70 @@ class TestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_testyboi)
 
         getButton.setOnClickListener {
-            getText.text = "Check logcat"
+            getText.text = "Start"
             val db = DatabaseBuilder.get(this)
+
+
+            val input = "[{" +
+                    "  \"Ean\": \"2019160000001\"," +
+                    "  \"Navn\": \"FLÆSKESTEG 1,2-2,4 KG\"," +
+                    "  \"Navn2\": \"MED SVÆR\"," +
+                    "  \"Pris\": 49.90," +
+                    "  \"VareHierakiId\": 3021" +
+                    "}, {" +
+                    "  \"Ean\": \"2036830000000\"," +
+                    "  \"Navn\": \"MÖRT GRYDESTEG\"," +
+                    "  \"Navn2\": \"800-1600G\"," +
+                    "  \"Pris\": 79.90," +
+                    "  \"VareHierakiId\": 3021" +
+                    "}]"
+            val moshi = Moshi.Builder()
+                .addLast(KotlinJsonAdapterFactory())
+                .build()
+
+            val listCoopProductType = Types.newParameterizedType(List::class.java, CoopProduct::class.java)
+            val coopProductAdapter: JsonAdapter<List<CoopProduct>> = moshi.adapter(listCoopProductType)
+
+            val assortments = coopProductAdapter.fromJson(input)
+
+            assortments!!
+            Log.i("JSONTEST", assortments[0].name1)
+            /*
+            CoopCommunicator.getAssortment(this, "1290") { response ->
+                Log.i("Assortment", response.toString())
+
+                val moshi = Moshi.Builder()
+                    .addLast(KotlinJsonAdapterFactory())
+                    .build()
+
+                val listCoopProductType = Types.newParameterizedType(List::class.java, CoopProduct::class.java)
+                val coopProductAdapter: JsonAdapter<List<CoopProduct>> = moshi.adapter(listCoopProductType)
+
+                val assortments = coopProductAdapter.fromJson(response.toString())
+
+                assortments!!
+                Log.i("JSONTEST", assortments[0].name1)
+
+            }
+
+             */
+
+
+            /*
+            CoopCommunicator.getAssortment(this, "1290") { response ->
+                Log.i("Assortment", response.toString())
+                val assortments = Utility.parseArray<CoopProduct>(response.toString())
+                assortments!!
+                Log.i("JSONTEST", assortments[0].name1)
+
+                for(n in 0..100){
+                    val i = RegexFilter.convertCoopIngredient(assortments[n])
+                    Log.i("RegObject", "l.add(Ingredient(0, \"${i.name}\", ${i.amount}, \"${i.unit}\", ${i.pieces}, null, false, ${i.price}, 0))")
+                }
+
+            }
+
+             */
 
             /*
             CoopCommunicator.getNearbyStoresMapOptimized(this, 10000, 1, 1000) {response ->
@@ -124,7 +196,6 @@ class TestActivity : AppCompatActivity() {
             }
 
              */
-
         }
 
     }
