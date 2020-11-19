@@ -22,10 +22,10 @@ import com.gruppe17.madbudget.models.*
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
-import kotlinx.android.synthetic.main.activity_create_recipes_wip.*
+import kotlinx.android.synthetic.main.activity_create_recipe.*
 import kotlinx.android.synthetic.main.dialog_ing_sel.*
-import kotlinx.android.synthetic.main.item_spinner.view.*
-import kotlinx.android.synthetic.main.show_ingredient_dialog.*
+import kotlinx.android.synthetic.main.dialog_view_ingredient.*
+import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

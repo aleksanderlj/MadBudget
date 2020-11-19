@@ -8,7 +8,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
-import kotlinx.android.synthetic.main.item_ing_sel.view.*
+import kotlinx.android.synthetic.main.item_dialog_ing_sel.view.*
 
 class CreateIngredientSelectionDialogAdapter(
     val dataset: ArrayList<Ingredient>,

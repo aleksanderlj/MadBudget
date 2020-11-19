@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
-import kotlinx.android.synthetic.main.ingredient_item_wp.view.*
+import kotlinx.android.synthetic.main.item_dialog_view_ingredient.view.*
 
 
 class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient>, var context: Context) : RecyclerView.Adapter<ViewIngredientSelectionAdapter.IngredientViewHolder>() {

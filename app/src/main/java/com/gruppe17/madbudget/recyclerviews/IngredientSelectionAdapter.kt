@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelectionWithIngredients
-import kotlinx.android.synthetic.main.ingredient_item_in_recipe.view.*
+import kotlinx.android.synthetic.main.item_ingredient_in_recipe.view.*
 
 
 class IngredientSelectionAdapter(

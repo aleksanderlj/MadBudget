@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.database.DatabaseBuilder
-import kotlinx.android.synthetic.main.activity_sallingtest.*
+import kotlinx.android.synthetic.main.activity_testyboi.*
 
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.RecipeWithIngredientSelections
-import kotlinx.android.synthetic.main.recipe_item.view.*
+import kotlinx.android.synthetic.main.item_recipe.view.*
 
 class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>, private val cellClickListener: CellClickListener) : RecyclerView.Adapter<RecipeAdapter.RecipesViewHolder>() {
 
