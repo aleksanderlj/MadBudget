@@ -1,15 +1,13 @@
 package com.gruppe17.madbudget
 
-import android.content.Context
 import android.util.Log
 import com.beust.klaxon.Klaxon
-import com.gruppe17.madbudget.coop.model.CoopLocation
-import com.gruppe17.madbudget.coop.model.CoopOpeningHour
-import com.gruppe17.madbudget.coop.model.CoopStore
-import com.gruppe17.madbudget.coop.model.CoopStoreList
+import com.gruppe17.madbudget.database.AppDatabase
+import com.gruppe17.madbudget.rest.coop.model.CoopLocation
+import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
+import com.gruppe17.madbudget.rest.coop.model.CoopStore
+import com.gruppe17.madbudget.rest.coop.model.CoopStoreList
 import com.gruppe17.madbudget.models.Ingredient
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.math.min
 
@@ -42,7 +40,7 @@ object Utility {
         val ingSel = db.ingredientSelectionDao().getAllByRecipeId(id)
 
         for(n in ingSel){
-            db.ingredientDao().deleteByParentId(n.ingredientSelection.ingredientSelectionId)
+            db.ingredientDao().deleteByParentId(n.ingredientSelection.id)
             db.ingredientSelectionDao().delete(n.ingredientSelection)
         }
 

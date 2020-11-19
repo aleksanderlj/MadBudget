@@ -7,32 +7,33 @@ import java.io.Serializable
 
 @Entity
 data class Ingredient(
-    @PrimaryKey(autoGenerate = true) val ingredientId: Int,
-    @ColumnInfo(name = "ingredient_name") var ingredientName: String?,
+    @ColumnInfo(name = "ingredient_id")
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    @ColumnInfo(name = "ingredient_name") var name: String?,
     @ColumnInfo(name = "ingredient_amount")var amount: Double?,
     @ColumnInfo(name = "ingredient_unit")var unit: String?,
     @ColumnInfo(name = "ingredient_pieces")var pieces: Int?,
-    @ColumnInfo(name = "ingredient_type") var ingredientType: String?,
+    @ColumnInfo(name = "ingredient_type") var type: String?,
     @ColumnInfo(name = "has_been_clicked") var hasBeenClicked: Boolean = false,
-    @ColumnInfo(name = "ingredient_price") var ingredientPrice: Double?,
+    @ColumnInfo(name = "ingredient_price") var price: Double?,
     @ColumnInfo(name = "ingredient_selection_parent_id") var ingredientSelectionParentId: Int
 ): Serializable {
     constructor(): this(0, "", null, null, null, null,false, null,0)
 
     override fun toString(): String {
-        return "Ingredient(ingredientId=$ingredientId, ingredientName=$ingredientName, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$ingredientType, hasBeenClicked=$hasBeenClicked, ingredientPrice=$ingredientPrice, ingredientSelectionParentId=$ingredientSelectionParentId)"
+        return "Ingredient(ingredientId=$id, ingredientName=$name, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$type, hasBeenClicked=$hasBeenClicked, ingredientPrice=$price, ingredientSelectionParentId=$ingredientSelectionParentId)"
     }
 
     companion object{
         fun calcIngredientPrice(ingSel: IngredientSelection, ing: Ingredient): Double{
-            val amount = ingSel.ingredientSelectionAmount
-            val unit = ingSel.ingredientSelectionUnit
-            var price = ing.ingredientPrice!!
+            val amount = ingSel.amount
+            val unit = ingSel.unit
+            var price = ing.price!!
 
             when(unit){
                 "STK" -> {
                     if(ing.pieces != null){
-                        val piecePrice = ing.ingredientPrice!! / ing.pieces!!
+                        val piecePrice = ing.price!! / ing.pieces!!
                         price = piecePrice * amount!!
 
                     }
@@ -40,13 +41,13 @@ data class Ingredient(
 
                 "ML", "G" -> {
                     if(ing.unit.equals(unit) && ing.amount != null){
-                        val amountPrice = ing.ingredientPrice!! / ing.amount!!
+                        val amountPrice = ing.price!! / ing.amount!!
                         price = amountPrice * amount!!
                     }
                 }
 
                 else -> {
-                    price = ing.ingredientPrice!!
+                    price = ing.price!!
                 }
             }
 

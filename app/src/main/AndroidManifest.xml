@@ -35,20 +35,20 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.gruppe17.madbudget.MapsActivity"
+            android:name="com.gruppe17.madbudget.activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name="com.gruppe17.madbudget.MainActivity">
+        <activity android:name="com.gruppe17.madbudget.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gruppe17.madbudget.Recipes" />
-        <activity android:name="com.gruppe17.madbudget.CreateRecipeActivity" />
-        <activity android:name="com.gruppe17.madbudget.salling.ActivitySallingTest" />
+        <activity android:name="com.gruppe17.madbudget.activities.RecipeActivity" />
+        <activity android:name="com.gruppe17.madbudget.activities.CreateRecipeActivity" />
+        <activity android:name="com.gruppe17.madbudget.activities.TestActivity" />
         <service
-            android:name=".DBDeleteService"
+            android:name=".database.DBDeleteService"
             android:exported="false"/>
     </application>
 
