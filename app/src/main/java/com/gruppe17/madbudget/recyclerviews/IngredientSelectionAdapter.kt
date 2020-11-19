@@ -24,8 +24,7 @@ class IngredientSelectionAdapter(
         val currentItem = myDataset[position]
 
         holder.ingredientName.text = currentItem.ingredientSelection.name
-        holder.ingredientAmount.text =
-            currentItem.ingredientSelection.amount.toString()
+        holder.ingredientAmount.text = "${currentItem.ingredientSelection.amount.toString()} ${currentItem.ingredientSelection.unit}"
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -43,7 +42,7 @@ class IngredientSelectionAdapter(
                     smallestPrice = ingPrice
             }
 
-            holder.ingredientPrice.text = "%.2f".format(smallestPrice)
+            holder.ingredientPrice.text = "%.2f kr".format(smallestPrice)
 
         }
 

@@ -66,7 +66,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 runOnUiThread{
                     recipe_title.setText(recipeBak!!.recipe.name)
                     recipe_list_time.setText(recipeBak!!.recipe.timeToMake)
-                    recipe_list_price.setText(recipeBak!!.recipe.price.toString())
+                    recipe_list_price.setText("%.2f kr".format(recipeBak!!.recipe.price))
 
                     recipe_list_price.addTextChangedListener(ChangeWatcher())
                     recipe_list_time.addTextChangedListener(ChangeWatcher())

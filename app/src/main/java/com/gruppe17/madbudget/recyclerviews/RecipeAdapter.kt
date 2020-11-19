@@ -20,7 +20,7 @@ class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>,
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.name.text = currentItem.recipe.name
-        holder.price.text = currentItem.recipe.price.toString() + " kr,-"
+        holder.price.text = "%.2f kr".format(currentItem.recipe.price)
         holder.timeToMake.text = currentItem.recipe.timeToMake
         holder.showedDistance.text = currentItem.recipe.showedDistance.toString() + " km"
         holder.walkingDude.setImageResource(R.drawable.walking_dude)
