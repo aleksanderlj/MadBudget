@@ -17,10 +17,6 @@ interface IngredientSelectionDAO {
 
     @Transaction
     @Query("SELECT * FROM IngredientSelection WHERE recipe_parent_id = :recipeId")
-    fun getAllByIngredientSelectionId(recipeId: Int): List<IngredientSelectionWithIngredients>
-
-    @Transaction
-    @Query("SELECT * FROM IngredientSelection WHERE recipe_parent_id = :recipeId")
     fun getAllByRecipeId(recipeId: Int): List<IngredientSelectionWithIngredients>
 
     @Transaction
@@ -28,10 +24,10 @@ interface IngredientSelectionDAO {
     fun getById(ingredientSelectionId: Int): IngredientSelectionWithIngredients?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ingredientSelection: IngredientSelection)
+    fun insert(ingredientSelection: IngredientSelection): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(ingredientSelection: List<IngredientSelection>)
+    fun insertAll(ingredientSelection: List<IngredientSelection>): List<Long>
 
     @Update
     fun update(ingredientSelection: IngredientSelection)

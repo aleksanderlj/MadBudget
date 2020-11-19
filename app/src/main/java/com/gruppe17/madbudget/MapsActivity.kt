@@ -6,20 +6,21 @@ import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
-import com.beust.klaxon.Klaxon
-import com.gruppe17.madbudget.salling.SallingCommunicator
-import com.gruppe17.madbudget.salling.jsonModels.JsonStore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.*
 import com.google.android.material.slider.Slider
-import com.gruppe17.madbudget.coop.CoopCommunicator
-import com.gruppe17.madbudget.coop.model.CoopStoreList
+import com.gruppe17.madbudget.dao.StoreDAO
+import com.gruppe17.madbudget.models.Store
 import kotlinx.android.synthetic.main.activity_maps.*
-import java.util.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener{
 
@@ -28,16 +29,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     private lateinit var lastLocation: Location
     private lateinit var markers: ArrayList<Marker>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var selectedStores: ArrayList<Store>
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        db = DatabaseBuilder.get(this)
+
+        GlobalScope.launch {
+            db.storeDAO().deleteAllExisting()
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         markers = ArrayList()
+        selectedStores = ArrayList()
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this as AppCompatActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
@@ -55,12 +65,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             innerCircle.radius = value.toDouble()
 
             for (i in markers){
-                if (i.tag.toString().toDouble() <= slider.value / 1000){
+                val tempStore:Store = i.tag as Store
+                if (tempStore.distance!!.toDouble() <= slider.value){
                     i.alpha = 1f
-                    i.isVisible = true
+                    tempStore.isSelected = true
+                    i.tag = tempStore
                 }
-                if (i.tag.toString().toDouble() > slider.value / 1000){
+                if (tempStore.distance!!.toDouble() > slider.value){
                     i.alpha = 0.2f
+                    tempStore.isSelected = false
+                    i.tag = tempStore
                 }
             }
         }
@@ -106,34 +120,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
         radius_slider_bar.value = initialCircleSize.toFloat()
 
-        CoopCommunicator.getNearbyStoresMapOptimized(applicationContext, 4000, 1, 1000){ response ->
-            val json = Klaxon().parse<CoopStoreList>(response.toString())!!
-            for (i in json.stores) {
-                val marker = mMap.addMarker(
-                    MarkerOptions()
-                        .title(i.retailGroup)
-                        .position(LatLng(i.location.coordinates[0], i.location.coordinates[1]))
-                        .alpha(0.2f))
-                //marker.tag
-                when (i.retailGroup){
-                    "fakta" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.fakta))
-                    "irma" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.irma))
-                    "superbrugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.super_brugsen))
-                    "kvickly" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.kvickly))
-                    "brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.brugsen))
-                    "Lokalbrugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.brugsen))
-                    "dagli'Brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.dagli_brugsen))
-                    "Dagli'Brugsen" -> marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.dagli_brugsen))
-                }
+        for( i in Utility.getTestCoopStoreList().stores){
+            val storeName: Int = setStoreIcon(i.retailGroup)
+            val marker: Marker = mMap.addMarker(
+                MarkerOptions()
+                    .title(i.retailGroup)
+                    .position(LatLng(i.location.coordinates[1],i.location.coordinates[0]))
+                    .alpha(0.2f)
+                    .icon(BitmapDescriptorFactory.fromResource(storeName))
+            )
 
-                markers.add(marker)
-            }
-            /*for (i in markers) {
-                if (i.tag.toString().toDouble() <= radius_slider_bar.value / 1000) {
-                    i.alpha = 1f
-                    i.isVisible = true
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null){
+                    lastLocation = it
+                    val results: FloatArray = FloatArray(3)
+                    Location.distanceBetween(lastLocation.latitude,lastLocation.longitude,i.location.coordinates[1],i.location.coordinates[0], results)
+                    marker.tag = Store(0,i.name,i.kardex,i.address,i.storeId,false ,results[0])
+                    markers.add(marker)
                 }
-            }*/
+            }
+
+        }
+
+        for (i in markers) {
+            val tempStore: Store = i.tag as Store
+            if (tempStore.distance!!.toDouble() <= radius_slider_bar.value) {
+                i.alpha = 1f
+                i.isVisible = true
+                tempStore.isSelected = true
+                i.tag = tempStore
+            }
+        }
+    }
+
+    private fun setStoreIcon(storeName: String): Int {
+        return when (storeName) {
+            "SuperBrugsen" -> R.drawable.brugsen
+            "Dagli'Brugsen" -> R.drawable.daglibrugsen
+            "Irma" -> R.drawable.irma
+            "Fakta" -> R.drawable.fakta
+            "Kvickly" -> R.drawable.kvickly
+            "COOP MAD" -> R.drawable.coopmad
+            else -> R.drawable.ghetto
         }
     }
 
@@ -168,5 +196,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     }
 
     override fun onMyLocationClick(p0: Location) {
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        for (i in markers) {
+            val tempStore = i.tag as Store
+            if (tempStore.isSelected)
+                selectedStores.add(tempStore)
+        }
+
+        GlobalScope.launch {
+            db.storeDAO().insertAll(selectedStores)
+            selectedStores.clear()
+        }
     }
 }

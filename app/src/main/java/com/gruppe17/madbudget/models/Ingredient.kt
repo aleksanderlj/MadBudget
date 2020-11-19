@@ -23,5 +23,36 @@ data class Ingredient(
         return "Ingredient(ingredientId=$ingredientId, ingredientName=$ingredientName, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$ingredientType, hasBeenClicked=$hasBeenClicked, ingredientPrice=$ingredientPrice, ingredientSelectionParentId=$ingredientSelectionParentId)"
     }
 
+    companion object{
+        fun calcIngredientPrice(ingSel: IngredientSelection, ing: Ingredient): Double{
+            val amount = ingSel.ingredientSelectionAmount
+            val unit = ingSel.ingredientSelectionUnit
+            var price = ing.ingredientPrice!!
+
+            when(unit){
+                "STK" -> {
+                    if(ing.pieces != null){
+                        val piecePrice = ing.ingredientPrice!! / ing.pieces!!
+                        price = piecePrice * amount!!
+
+                    }
+                }
+
+                "ML", "G" -> {
+                    if(ing.unit.equals(unit) && ing.amount != null){
+                        val amountPrice = ing.ingredientPrice!! / ing.amount!!
+                        price = amountPrice * amount!!
+                    }
+                }
+
+                else -> {
+                    price = ing.ingredientPrice!!
+                }
+            }
+
+            return price
+        }
+    }
+
 
 }

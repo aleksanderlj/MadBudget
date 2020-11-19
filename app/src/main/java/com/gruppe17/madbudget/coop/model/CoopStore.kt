@@ -15,10 +15,6 @@ class CoopStore(
     val zipcode: Int,
     @Json(name = "C")
     val city: String,
-    @Json(name = "P")
-    val phonenumber: String, // Useless
-    @Json(name = "M")
-    val manager: String, // Useless
     @Json(name = "S")
     val storeId: Int,
     @Json(name = "L")
@@ -28,7 +24,6 @@ class CoopStore(
 )
 
 class CoopLocation (
-    val type: String, // Useless
     val coordinates: List<Double>
 )
 

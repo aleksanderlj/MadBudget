@@ -8,7 +8,7 @@ import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.RegexFilter
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.coop.CoopCommunicator
-import com.gruppe17.madbudget.coop.model.CoopProduct
+import com.gruppe17.madbudget.coop.model.*
 import com.gruppe17.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.activity_sallingtest.*
 import kotlinx.coroutines.GlobalScope
@@ -22,6 +22,24 @@ class ActivitySallingTest : AppCompatActivity() {
         getButton.setOnClickListener {
             getText.text = "Check logcat"
             val db = DatabaseBuilder.get(this)
+
+            /*
+            CoopCommunicator.getNearbyStoresMapOptimized(this, 10000, 1, 1000) {response ->
+                Log.i("Stores", response.toString())
+                val json = Utility.parse<CoopStoreList>(response.toString())
+
+                //val stores = ArrayList<CoopStore>()
+                //stores.add(CoopStore(1, "", "", "", 0, "", 0, CoopLocation(listOf(0.0, 0.0)), listOf(CoopOpeningHour("", "", 0.0, 0.0, "", ""))))
+
+                for(i in json!!.stores){
+                    Log.i("Testag","stores.add(CoopStore(${i.kardex}, \"${i.retailGroup}\", \"${i.name}\", \"${i.address}\", ${i.zipcode}, \"${i.city}\", ${i.storeId}, CoopLocation(listOf(${i.location.coordinates[0]}, ${i.location.coordinates[1]})), listOf(CoopOpeningHour(\"${i.openingHours[0].text}\", \"${i.openingHours[0].day}\", ${i.openingHours[0].from}, ${i.openingHours[0].to}, \"${i.openingHours[0].fromDate}\", \"${i.openingHours[0].toDate}\"))))")
+                }
+
+                //val storeList = CoopStoreList(1, 1, 1000, 1000, stores, 1, "")
+            }
+
+             */
+
 
             /*
             val ing = Ingredient()
@@ -43,6 +61,7 @@ class ActivitySallingTest : AppCompatActivity() {
              */
 
 
+            /*
             CoopCommunicator.getAssortment(this, "1290") {response ->
                 Log.i("Assortment", response.toString())
                 val assortments = Utility.parseArray<CoopProduct>(response.toString())
@@ -55,6 +74,8 @@ class ActivitySallingTest : AppCompatActivity() {
                 }
 
             }
+
+             */
 
             /*
             GlobalScope.launch {
