@@ -7,13 +7,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class CoopProduct (
     @Json(name = "Ean")
-    val ean: String,
+    val Ean: String,
     @Json(name = "Navn")
-    val name1: String,
+    val Navn: String,
     @Json(name = "Navn2")
-    val name2: String,
+    val Navn2: String,
     @Json(name = "Pris")
-    val price: Double,
+    val Pris: Double,
     @Json(name = "VareHierakiId")
-    val productHierarchyId: Int
+    val VareHierakiId: Int
 )

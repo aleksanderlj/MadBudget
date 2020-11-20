@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gruppe17.madbudget.R
-import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.DatabaseBuilder
-import com.gruppe17.madbudget.rest.coop.CoopCommunicator
-import com.gruppe17.madbudget.rest.coop.RegexFilter
 import com.gruppe17.madbudget.rest.coop.model.CoopProduct
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.android.synthetic.main.activity_testyboi.*
 
@@ -49,7 +45,7 @@ class TestActivity : AppCompatActivity() {
             val assortments = coopProductAdapter.fromJson(input)
 
             assortments!!
-            Log.i("JSONTEST", assortments[0].name1)
+            Log.i("JSONTEST", assortments[0].Navn)
             /*
             CoopCommunicator.getAssortment(this, "1290") { response ->
                 Log.i("Assortment", response.toString())

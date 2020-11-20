@@ -13,16 +13,16 @@ class RegexFilter {
 
         // TODO lav dette til en constructor i ingredient
         fun convertCoopIngredient(coopIng: CoopProduct): Ingredient{
-            var ingAmount = parseIngredientFields(coopIng.name1, coopIng.name2)
+            var ingAmount = parseIngredientFields(coopIng.Navn, coopIng.Navn2)
 
             var id = 0
-            var name = coopIng.name1 + " " + coopIng.name2
+            var name = coopIng.Navn + " " + coopIng.Navn2
             var amount = ingAmount.totalAmount
             var unit = ingAmount.unit
             var pieces = ingAmount.pieces
             var type = null
             var hasBeenClicked = false
-            var price = coopIng.price
+            var price = coopIng.Pris
             var parentId = 0
 
             return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId)
