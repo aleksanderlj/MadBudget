@@ -125,63 +125,71 @@ class CreateIngSelActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        val backPressDialog = AlertDialog.Builder(this)
-            .setTitle("Gem ingrediensgruppe?")
-            .setPositiveButton("Gem") { dialog, which ->
-                if (!ingsel_name.text.toString().trim().isEmpty() && !ingsel_amount.text.toString().trim().isEmpty() && !dialogIngSelected.isEmpty()) {
-                    db = DatabaseBuilder.get(this)
-                    GlobalScope.launch {
-                        val ingSel = IngredientSelection(
-                            0,
-                            ingsel_name.text.toString(),
-                            ingsel_amount.text.toString().toDoubleOrNull(),
-                            unit_spinner.selectedItem.toString(),
-                            true,
-                            recipeId
-                        )
-                        val ingSelId = db.ingredientSelectionDao().insert(ingSel)
-                        val ingArray = ArrayList<Ingredient>(dialogIngSelected)
-                        for (i in ingArray) {
-                            i.ingredientSelectionParentId = ingSelId.toInt()
-                        }
-                        db.ingredientDao().insertAll(ingArray)
-                        runOnUiThread{
-                            super.onBackPressed()
-                        }
-                    }
-                } else {
+        if(ingsel_name.text.toString().trim().isEmpty() && ingsel_amount.text.toString().trim().isEmpty() && dialogIngSelected.isEmpty()){
+            super.onBackPressed()
+        } else {
 
-                    if(ingsel_name.text.toString().trim().isEmpty()){
-                        val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
-                        ingsel_name.setError("Udfyld navn")
-                        ingsel_name.startAnimation(vibrate)
-                    }
-                    if(ingsel_amount.text.toString().trim().isEmpty()){
-                        val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
-                        ingsel_amount.setError("Udfyld mængde")
-                        ingsel_amount.startAnimation(vibrate)
-                    }
-                    if(dialogIngSelected.isEmpty()){
-                        val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
-                        tv_info2.setError("Vælg mindst én vare")
-                        tv_info2.requestFocus()
-                        tv_info2.startAnimation(vibrate)
+            val backPressDialog = AlertDialog.Builder(this)
+                .setTitle("Gem ingrediensgruppe?")
+                .setPositiveButton("Gem") { dialog, which ->
+                    if (!ingsel_name.text.toString().trim()
+                            .isEmpty() && !ingsel_amount.text.toString().trim()
+                            .isEmpty() && !dialogIngSelected.isEmpty()
+                    ) {
+                        db = DatabaseBuilder.get(this)
+                        GlobalScope.launch {
+                            val ingSel = IngredientSelection(
+                                0,
+                                ingsel_name.text.toString(),
+                                ingsel_amount.text.toString().toDoubleOrNull(),
+                                unit_spinner.selectedItem.toString(),
+                                true,
+                                recipeId
+                            )
+                            val ingSelId = db.ingredientSelectionDao().insert(ingSel)
+                            val ingArray = ArrayList<Ingredient>(dialogIngSelected)
+                            for (i in ingArray) {
+                                i.ingredientSelectionParentId = ingSelId.toInt()
+                            }
+                            db.ingredientDao().insertAll(ingArray)
+                            runOnUiThread {
+                                super.onBackPressed()
+                            }
+                        }
+                    } else {
+
+                        if (ingsel_name.text.toString().trim().isEmpty()) {
+                            val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
+                            ingsel_name.setError("Udfyld navn")
+                            ingsel_name.startAnimation(vibrate)
+                        }
+                        if (ingsel_amount.text.toString().trim().isEmpty()) {
+                            val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
+                            ingsel_amount.setError("Udfyld mængde")
+                            ingsel_amount.startAnimation(vibrate)
+                        }
+                        if (dialogIngSelected.isEmpty()) {
+                            val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
+                            tv_info2.setError("Vælg mindst én vare")
+                            tv_info2.requestFocus()
+                            tv_info2.startAnimation(vibrate)
+                        }
+
                     }
 
                 }
+                .setNegativeButton("Kassér") { dialog, which ->
+                    super.onBackPressed()
+                }
+                .setNeutralButton("Annuller") { dialog, which -> }
+                .show()
 
-            }
-            .setNegativeButton("Kassér") { dialog, which ->
-                super.onBackPressed()
-            }
-            .setNeutralButton("Annuller") { dialog, which -> }
-            .show()
+            val window = backPressDialog!!.window
+            val attr = window!!.attributes
 
-        val window = backPressDialog!!.window
-        val attr = window!!.attributes
-
-        attr.gravity = Gravity.BOTTOM
-        window.attributes = attr
+            attr.gravity = Gravity.BOTTOM
+            window.attributes = attr
+        }
     }
 
     override fun onDialogIngredientSelect(pos: Int) {
