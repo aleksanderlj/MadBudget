@@ -25,6 +25,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
     private lateinit var recipeList: ArrayList<RecipeWithIngredientSelections>
     private lateinit var context: Context
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
@@ -206,10 +207,17 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         super.onResume()
         GlobalScope.launch {
             recipeList = ArrayList(db.recipeDao().getAll())
+            //db.clearAllTables()
             calculatePrices()
             runOnUiThread{
+                if (recipe_list.adapter != null)
+                    recipe_list.adapter = RecipeAdapter(recipeList, context as RecipeActivity)
+                else{
+                    (recipe_list.adapter as RecipeAdapter).updateResource(recipeList)
+                    (recipe_list.adapter as RecipeAdapter).notifyDataSetChanged()
+                }
                 searchOnChange(recipeList)
-                recipe_list.adapter = RecipeAdapter(recipeList, context as RecipeActivity)
+
                 recipe_list.layoutManager = LinearLayoutManager(context)
                 recipe_list.setHasFixedSize(true)
             }
@@ -237,5 +245,8 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
             }
         })
         itemTouchHelper.attachToRecyclerView(recipe_list)
+    }
+    private fun animateElement(){
+
     }
 }
