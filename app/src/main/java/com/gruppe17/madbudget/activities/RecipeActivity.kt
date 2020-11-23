@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
@@ -63,9 +64,22 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         newAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_create_recipe, null))
             .setPositiveButton("OK") { dialog, which ->
-                val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
-                recipeActivity.putExtra("ClickedRecipe", -1)
-                startActivity(recipeActivity)
+                db = DatabaseBuilder.get(this)
+                GlobalScope.launch {
+                    val newRecipe = Recipe()
+                    // TODO setError if empty?
+                    newRecipe.name = newAlertDialog.et_new_recipe_name.text.toString()
+                    newRecipe.timeToMake = newAlertDialog.et_new_recipe_time.text.toString()
+                    val recipeId = db.recipeDao().insert(newRecipe).toInt()
+                    val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+                    recipeActivity.putExtra("ClickedRecipe", recipeId)
+
+                    runOnUiThread{
+                        startActivity(recipeActivity)
+                    }
+                }
+
+
             }
             .setNegativeButton("Annuller") { dialog, which -> }
             .show()

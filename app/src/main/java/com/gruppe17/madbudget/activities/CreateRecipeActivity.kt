@@ -26,7 +26,6 @@ import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
 import kotlinx.android.synthetic.main.activity_create_recipe.navigation
 import kotlinx.android.synthetic.main.activity_recipes.*
-import kotlinx.android.synthetic.main.dialog_ing_sel.*
 import kotlinx.android.synthetic.main.dialog_view_ingredient.*
 import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
