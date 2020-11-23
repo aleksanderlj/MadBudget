@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1.0"
+    android:id="@+id/constraintLayout">
+
+    <EditText
+        android:id="@+id/ingsel_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Navn"
+        android:inputType="textCapSentences"
+        app:layout_constraintEnd_toEndOf="@+id/tv_info1"
+        app:layout_constraintStart_toStartOf="@+id/tv_info1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info1"
+        tools:layout_conversion_absoluteHeight="45dp"
+        tools:layout_conversion_absoluteWidth="210dp" />
+
+    <EditText
+        android:id="@+id/ingsel_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:hint="Mængde"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/unit_spinner"
+        app:layout_constraintStart_toStartOf="@+id/ingsel_name"
+        app:layout_constraintTop_toBottomOf="@+id/ingsel_name"
+        tools:layout_conversion_absoluteHeight="45dp"
+        tools:layout_conversion_absoluteWidth="363dp" />
+
+    <Spinner
+        android:id="@+id/unit_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ingsel_amount"
+        app:layout_constraintEnd_toEndOf="@+id/ingsel_name"
+        app:layout_constraintTop_toTopOf="@+id/ingsel_amount"
+        tools:layout_conversion_absoluteHeight="45dp"
+        tools:layout_conversion_absoluteWidth="48dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/inglist_selected"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_ingsel_search"
+        app:layout_constraintEnd_toEndOf="@+id/tv_info1"
+        app:layout_constraintStart_toStartOf="@+id/tv_info1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info2"
+        tools:layout_conversion_absoluteHeight="200dp"
+        tools:layout_conversion_absoluteWidth="411dp" />
+
+    <TextView
+        android:id="@+id/tv_info2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="Valgte varer"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/ingsel_amount"
+        app:layout_constraintTop_toBottomOf="@+id/ingsel_amount" />
+
+    <TextView
+        android:id="@+id/tv_info1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Indtast et navn til din ingrediensgruppe, og tilføj de varer du ønsker at sammenligne priser for"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_ingsel_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Søg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inglist_selected"
+        app:layout_constraintStart_toStartOf="@+id/inglist_selected" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

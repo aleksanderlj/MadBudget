@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromXDelta="0"
+    android:toXDelta="10"
+    android:duration="1000"
+    android:interpolator="@anim/cycle_5" />
+
+<!--https://stackoverflow.com/questions/53275469/how-to-set-vibrate-animation-and-device-vibration-to-edittext -->
