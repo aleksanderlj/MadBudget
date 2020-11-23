@@ -5,18 +5,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.platform.app.InstrumentationRegistry
-import com.gruppe17.madbudget.activities.RecipeActivity
+import com.gruppe17.madbudget.activities.MainActivity
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -26,11 +23,12 @@ class FeatureTest {
     private lateinit var db: AppDatabase
 
     @get:Rule
-    var activityRule: ActivityScenarioRule<RecipeActivity>
-            = ActivityScenarioRule(RecipeActivity::class.java)
+    var activityRule: ActivityScenarioRule<MainActivity>
+            = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun addRecipe(){
+        onView(withId(R.id.recipes)).perform(click())
         var recipeCount: Int = -1
         var newRecipeCount: Int = -1
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -44,5 +42,12 @@ class FeatureTest {
         onView(withText("Ja")).perform(click())
         newRecipeCount = db.recipeDao().getAll().count()
         Assert.assertEquals("It worked!", recipeCount,newRecipeCount - 1)
+    }
+
+    @Test
+    fun mapFunctionality(){
+        onView(withId(R.id.map_button)).perform(click())
+        onView(withId(R.id.radius_slider_bar)).perform(swipeRight())
+        //onView(withId(R.id.radius_slider_bar)).check(value())
     }
 }
