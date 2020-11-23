@@ -3,6 +3,7 @@ package com.gruppe17.madbudget.activities
 import SwipeHelper
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,7 +24,6 @@ import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapt
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
-import kotlinx.android.synthetic.main.dialog_ing_sel.*
 import kotlinx.android.synthetic.main.dialog_view_ingredient.*
 import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
@@ -32,8 +32,7 @@ import kotlinx.coroutines.launch
 
 class CreateRecipeActivity : AppCompatActivity(),
     IngredientSelectionAdapter.OnIngredientSelectionClickListener,
-    IngredientSelectionAdapter.OnIngredientCheckBoxClickListener,
-    CreateIngredientSelectionDialogAdapter.OnDialogIngredientClickListener
+    IngredientSelectionAdapter.OnIngredientCheckBoxClickListener
 {
 
     private var ingredientSelectionList: ArrayList<IngredientSelectionWithIngredients> = ArrayList()
@@ -88,117 +87,10 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         add_ingredient_button.setOnClickListener {
             hasChanged = true
-            initAlertDialog2()
+            val i = Intent(this, CreateIngSelActivity::class.java)
+            i.putExtra("ClickedRecipe", recipeId)
+            startActivity(i)
         }
-
-    }
-
-    private fun saveIngredientSelection() {
-
-        db = DatabaseBuilder.get(this)
-        GlobalScope.launch {
-            if(recipeId == -1){
-                recipeId = db.recipeDao().insert(Recipe()).toInt()
-            }
-
-            val ingSel = IngredientSelection(
-                0,
-                mAlertDialog!!.ingsel_name.text.toString(),
-                mAlertDialog!!.ingsel_amount.text.toString().toDoubleOrNull(),
-                mAlertDialog!!.unit_spinner.selectedItem.toString(),
-                true,
-                recipeId
-            )
-            val ingSelId = db.ingredientSelectionDao().insert(ingSel)
-            val ingArray = ArrayList<Ingredient>(dialogIngSelected)
-            for(i in ingArray){
-                i.ingredientSelectionParentId = ingSelId.toInt()
-            }
-            db.ingredientDao().insertAll(ingArray)
-            ingredientSelectionList.clear()
-            ingredientSelectionList.addAll(db.ingredientSelectionDao().getAllByRecipeId(recipeId))
-            runOnUiThread {
-                ingredient_selection_list.adapter?.notifyDataSetChanged()
-            }
-        }
-    }
-
-    private fun initAlertDialog2() {
-        var newAlertDialog = AlertDialog.Builder(this)
-            .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel, null))
-            .setTitle("Tilføj ingrediensgruppe")
-            .setPositiveButton("OK") { dialog, which ->
-                if (dialogIngSelected.isEmpty()) {
-                    Toast.makeText(this, "Ingen ingredienser valgt", Toast.LENGTH_LONG).show()
-                } else {
-                    saveIngredientSelection()
-                }
-            }
-            .setNegativeButton("Annuller") { dialog, which -> }
-            .create()
-
-        mAlertDialog = newAlertDialog
-
-        newAlertDialog.show()
-
-        newAlertDialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = false
-
-        newAlertDialog.window!!.setLayout(this.resources.displayMetrics.widthPixels-10, this.resources.displayMetrics.heightPixels-10)
-        newAlertDialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-
-
-        dialogIngNotSelected = Utility.getTestIngredientList()
-        dialogIngSelected = ArrayList<Ingredient>()
-
-        newAlertDialog.inglist_notselected.setHasFixedSize(true)
-        newAlertDialog.inglist_notselected.layoutManager = LinearLayoutManager(this)
-        newAlertDialog.inglist_notselected.adapter = CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, this, true)
-
-        newAlertDialog.inglist_selected.setHasFixedSize(true)
-        newAlertDialog.inglist_selected.layoutManager = LinearLayoutManager(this)
-        newAlertDialog.inglist_selected.adapter = CreateIngredientSelectionDialogAdapter(dialogIngSelected, this, false)
-
-
-
-        newAlertDialog.ingsel_search.addTextChangedListener(object: TextWatcher {
-            override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                var adapter = newAlertDialog.inglist_notselected.adapter as CreateIngredientSelectionDialogAdapter
-                adapter.filter.filter(s.toString())
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-
-        })
-
-        val spinnerList = ArrayList<String>()
-        spinnerList.add("G")
-        spinnerList.add("ML")
-        spinnerList.add("STK")
-        var spinnerAdapter = object : ArrayAdapter<String>(this,
-            R.layout.item_unit_spinner,
-            R.id.item_spinner_text, spinnerList){
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                var view = super.getView(position, convertView, parent)
-                view.item_spinner_text.text = spinnerList[position]
-                return view
-            }
-        }
-
-        newAlertDialog.unit_spinner.adapter = spinnerAdapter
-
-        newAlertDialog.ingsel_name.addTextChangedListener(ChangeWatcher())
-        newAlertDialog.ingsel_amount.addTextChangedListener(ChangeWatcher())
-        newAlertDialog.unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                hasChanged = true
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-
 
     }
 
@@ -275,33 +167,9 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
     }
 
-    override fun onDialogIngredientSelect(pos: Int) {
-        hasChanged = true
-        val item = dialogIngNotSelected.removeAt(pos)
-        dialogIngSelected.add(0, item)
-
-        val notSelectedAdapter = mAlertDialog!!.inglist_notselected.adapter!! as CreateIngredientSelectionDialogAdapter
-        val selectedAdapter = mAlertDialog!!.inglist_selected.adapter!! as CreateIngredientSelectionDialogAdapter
-
-        notSelectedAdapter.notifyItemRemoved(item)
-        selectedAdapter.notifyItemAdded(item)
-    }
-
-    override fun onDialogIngredientDeselect(pos: Int) {
-        hasChanged = true
-        val item = dialogIngSelected.removeAt(pos)
-        dialogIngNotSelected.add(0, item)
-
-        val selectedAdapter = mAlertDialog!!.inglist_selected.adapter!! as CreateIngredientSelectionDialogAdapter
-        val notSelectedAdapter = mAlertDialog!!.inglist_notselected.adapter!! as CreateIngredientSelectionDialogAdapter
-
-        selectedAdapter.notifyItemRemoved(item)
-        notSelectedAdapter.notifyItemAdded(item)
-    }
-
     override fun onBackPressed() {
         if(hasChanged) {
-            mAlertDialog = AlertDialog.Builder(this)
+            val backPressDialog = AlertDialog.Builder(this)
                 .setTitle("Gem ændringer?")
                 .setPositiveButton("Ja") { dialog, which ->
 
@@ -311,7 +179,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                             recipeId = db.recipeDao().insert(Recipe()).toInt()
                         }
 
-                        var newRec = Recipe(
+                        val newRec = Recipe(
                             recipeId,
                             recipe_title.text.toString(),
                             recipe_list_time.text.toString(),
@@ -326,7 +194,6 @@ class CreateRecipeActivity : AppCompatActivity(),
 
                 }
                 .setNegativeButton("Nej") { dialog, which ->
-                    //recipeBak TODO
                     db = DatabaseBuilder.get(this)
                     GlobalScope.launch {
                         if(recipeBak == null){
@@ -346,7 +213,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 .setNeutralButton("Annuller") { dialog, which -> }
                 .show()
 
-            val window = mAlertDialog!!.window
+            val window = backPressDialog!!.window
             val attr = window!!.attributes
 
             attr.gravity = Gravity.BOTTOM
@@ -356,106 +223,7 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
     }
 
-    /*
-    override fun onDestroy() {
-        if(ingredientSelectionList.isEmpty()){
-            val i = Intent()
-            i.putExtra("RecipeID", recipeId)
-            JobIntentService.enqueueWork(this, DBDeleteService::class.java, 1, i)
-        }
-        super.onDestroy()
-    }
 
-     */
-
-    /*
-    private fun initAlertDialog() {
-
-        mAlertDialog = AlertDialog.Builder(this)
-            .setView(LayoutInflater.from(this).inflate(R.layout.select_ingerdient_dialog, null))
-            .setTitle("Tilføj Ingrediens...")
-            .setPositiveButton("OK") { _, _ ->
-                if (ingredientList.isEmpty())
-                    Toast.makeText(this, "Ingen ingredienser valgt", Toast.LENGTH_LONG).show()
-                else {
-                    saveIngredientSelection()
-                    mAlertDialog.dismiss()
-                    ingredient_selection_list.adapter?.notifyDataSetChanged()
-                }
-            }
-            .setNegativeButton("Cancel") { _, _ -> }
-            .show()
-
-        multiSelectSpinnerWithSearch = mAlertDialog.multiItemSelectionSpinner
-    }
-
-    private fun initSpinner() {
-
-        multiSelectSpinnerWithSearch.isSearchEnabled = true
-        multiSelectSpinnerWithSearch.setClearText("Luk og Ryd")
-        multiSelectSpinnerWithSearch.hintText = "Vælg Ingrediens"
-
-        mAlertDialog.multiItemSelectionSpinner.isEnabled = false
-
-        mAlertDialog.spinner_ingredient_selection_name.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && mAlertDialog.spinner_ingredient_selection_name.text.toString()
-                    .isNotEmpty()
-            ) {
-                mAlertDialog.multiItemSelectionSpinner.isEnabled = true
-                saveIngredientList(mAlertDialog.spinner_ingredient_selection_name.text.toString())
-            }
-        }
-    }
-
-    private fun saveIngredientList(searchInput: String) {
-
-        multiSelectSpinnerWithSearch.setItems(searchForIngredients(searchInput)) {
-            for (i in it.indices) {
-                if (it[i].isSelected) {
-                    val ingredient = Ingredient()
-                    ingredient.ingredientName = it[i].name
-                    ingredient.hasBeenClicked = true
-                    ingredient.amount = 0.0
-                    ingredient.ingredientType = "test"
-                    ingredient.ingredientPrice = it[i].price
-
-                    ingredientList.add(ingredient)
-                }
-            }
-        }
-    }
-
-    private fun searchForIngredients(searchInput: String): MutableList<KeyPairBoolData> {
-
-        val listArray1: MutableList<KeyPairBoolData> = ArrayList()
-
-        val dummyJsonBoolData: ArrayList<JsonProduct> = ArrayList()
-        val dummyData: JsonSuggestions = JsonSuggestions(dummyJsonBoolData)
-
-        dummyJsonBoolData.add(JsonProduct("test", "", "", "", "", "", 20.5))
-
-        for ((counter, i) in dummyData.suggestions.withIndex()) {
-            val h = KeyPairBoolData()
-            h.id = counter + 1.toLong()
-            h.name = i.title
-            h.price = i.price
-            listArray1.add(h)
-        }
-
-        /* SallingCommunicator.getProductSuggestions(this,searchInput) { response ->
-             val json = Klaxon().parse<JsonSuggestions>(response.toString())!!
-             for ((counter, i) in json.suggestions.withIndex()) {
-                 val h = KeyPairBoolData()
-                 h.id = counter + 1.toLong()
-                 h.name = i.title
-                 h.price = i.price
-                 listArray1.add(h)
-             }
-         }*/
-
-        return listArray1
-    }
-     */
     inner class ChangeWatcher: TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -463,14 +231,22 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             hasChanged = true
-
-            if(mAlertDialog != null){
-                mAlertDialog!!.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = !mAlertDialog!!.ingsel_amount.text.isBlank() && !mAlertDialog!!.ingsel_name.text.isBlank()
-            }
         }
 
         override fun afterTextChanged(p0: Editable?) {
 
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        db = DatabaseBuilder.get(this)
+        GlobalScope.launch {
+            ingredientSelectionList = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
+            runOnUiThread{
+                setupRecyclerView()
+            }
         }
 
     }
