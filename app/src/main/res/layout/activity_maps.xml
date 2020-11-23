@@ -11,22 +11,25 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        map:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        map:layout_constraintBottom_toTopOf="@id/navigation"
         map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="1.0"
         map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintTop_toBottomOf="@+id/toolbar2"
         tools:context=".activities.MapsActivity" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.0"
-        map:layout_constraintStart_toStartOf="@+id/map"
-        map:menu="@menu/bottom_navigation_menu" />
+        app:itemBackground="@color/colorWhite"
+        app:itemIconTint="@color/bnv_tab_item_foreground"
+        app:itemTextColor="@color/bnv_tab_item_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/radius_slider_bar"
@@ -36,9 +39,33 @@
         android:layout_marginBottom="40dp"
         android:valueFrom="200"
         android:valueTo="4000"
-        map:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        map:layout_constraintBottom_toTopOf="@+id/navigation"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/activity_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kort"
+        android:textColor="@color/colorWhite"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/toolbar2"
+        app:layout_constraintTop_toTopOf="@+id/toolbar2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

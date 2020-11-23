@@ -1,11 +1,13 @@
 package com.gruppe17.madbudget.activities
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -19,6 +21,8 @@ import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.Store
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.activity_maps.navigation
+import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
@@ -37,6 +41,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         db = DatabaseBuilder.get(this)
+
+        initNavigationMenu()
 
         GlobalScope.launch {
             db.storeDAO().deleteAllExisting()
@@ -213,4 +219,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             selectedStores.clear()
         }
     }
+
+    private fun initNavigationMenu(){
+        navigation.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.page_1 ->{
+                    val recipesActivity = Intent(this, RecipeActivity::class.java)
+                    startActivity(recipesActivity);
+                    true
+                }
+                R.id.page_2 ->{
+                    true
+                }
+                R.id.page_3 -> {
+                    Toast.makeText(this,"Ikke implementeret", Toast.LENGTH_LONG).show()
+                    true
+                }
+                R.id.page_4 -> {
+                    Toast.makeText(this,"Ikke implementeret", Toast.LENGTH_LONG).show()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
 }

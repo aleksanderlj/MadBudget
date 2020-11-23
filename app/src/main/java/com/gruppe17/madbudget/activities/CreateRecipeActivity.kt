@@ -3,6 +3,7 @@ package com.gruppe17.madbudget.activities
 import SwipeHelper
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,8 @@ import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapt
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
+import kotlinx.android.synthetic.main.activity_create_recipe.navigation
+import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.android.synthetic.main.dialog_ing_sel.*
 import kotlinx.android.synthetic.main.dialog_view_ingredient.*
 import kotlinx.android.synthetic.main.item_unit_spinner.view.*
@@ -53,6 +56,8 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         db = DatabaseBuilder.get(this)
 
+        initNavigationMenu()
+
         recipeId = intent.getIntExtra("ClickedRecipe",-1)
 
         // check if coming from existing recipe
@@ -78,13 +83,14 @@ class CreateRecipeActivity : AppCompatActivity(),
             ingredientSelectionList = ArrayList()
             recipeBak = null
 
+            recipe_title.setText(intent.getStringExtra("recipeName"))
+            recipe_list_time.text = intent.getStringExtra("recipeTime")
+
             recipe_list_price.addTextChangedListener(ChangeWatcher())
             recipe_list_time.addTextChangedListener(ChangeWatcher())
             recipe_title.addTextChangedListener(ChangeWatcher())
             runOnUiThread{ setupRecyclerView() }
         }
-
-        toolbar.title = "Opskrift"
 
         add_ingredient_button.setOnClickListener {
             hasChanged = true
@@ -353,6 +359,30 @@ class CreateRecipeActivity : AppCompatActivity(),
             window.attributes = attr
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun initNavigationMenu(){
+        navigation.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.page_1 ->{
+                    true
+                }
+                R.id.page_2 ->{
+                    val mapsActivity = Intent(this, MapsActivity::class.java)
+                    startActivity(mapsActivity)
+                    true
+                }
+                R.id.page_3 -> {
+                    Toast.makeText(this,"Ikke implementeret",Toast.LENGTH_LONG).show()
+                    true
+                }
+                R.id.page_4 -> {
+                    Toast.makeText(this,"Ikke implementeret",Toast.LENGTH_LONG).show()
+                    true
+                }
+                else -> false
+            }
         }
     }
 

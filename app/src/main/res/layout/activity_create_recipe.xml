@@ -8,30 +8,46 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:itemBackground="@color/colorWhite"
+        app:itemIconTint="@color/bnv_tab_item_foreground"
+        app:itemTextColor="@color/bnv_tab_item_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="#ffffff" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/activity_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opskrift"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,8 +56,8 @@
     <View
         android:id="@+id/divider3"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="3dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -52,22 +68,22 @@
         android:id="@+id/recipe_list_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
         android:id="@+id/recipe_list_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
-        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
@@ -75,8 +91,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Ingredienser"
-        android:textSize="24sp"
+        android:text="Ingrediensgrupper"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#000000"
+        android:textSize="28sp"
         app:layout_constraintStart_toStartOf="@+id/ingredient_selection_list"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
@@ -111,12 +130,41 @@
         android:id="@+id/recipe_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:background="@null"
         android:ems="10"
         android:hint="Opskrift titel"
+        android:textStyle="bold"
         android:inputType="textCapSentences"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/blackTextColor"
+        android:textColorHighlight="#000000"
+        android:textColorHint="#C4C4C4"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recipe_list_time"
+        app:layout_constraintStart_toEndOf="@+id/recipe_list_price"
+        app:layout_constraintTop_toTopOf="@+id/recipe_list_time"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/access_time_24px" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="110dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recipe_list_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recipe_list_price"
+        app:srcCompat="@drawable/shopping_cart_24px_outlined" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
