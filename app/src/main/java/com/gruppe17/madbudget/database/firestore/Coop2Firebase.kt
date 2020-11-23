@@ -20,11 +20,11 @@ class Coop2Firebase {
                 var brugsen = false
 
                 // This is an intended limit because of the firebase
-                for (i in allStores?.stores!!){
-                    if (!kvickly && i.retailGroup == "Kvickly"){
+                for (i in allStores?.Data!!){
+                    if (!kvickly && i.R == "Kvickly"){
                         stores.add(i)
                         kvickly = true
-                    } else if (!brugsen && i.retailGroup == "SuperBrugsen"){
+                    } else if (!brugsen && i.R == "SuperBrugsen"){
                         stores.add(i)
                         brugsen = true
                     } else if (brugsen && kvickly){

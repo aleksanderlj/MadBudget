@@ -4,23 +4,23 @@ import com.beust.klaxon.Json
 
 class CoopStore(
     @Json(name = "K")
-    val kardex: Int,
+    val K: Int, // Kardex
     @Json(name = "R")
-    val retailGroup: String,
+    val R: String, // retailGroup
     @Json(name = "N")
-    val name: String,  // Useless
+    val N: String,  // Name (useless)
     @Json(name = "A")
-    val address: String,
+    val A: String, //address
     @Json(name = "Z")
-    val zipcode: Int,
+    val Z: Int, //zipcode
     @Json(name = "C")
-    val city: String,
+    val C: String, //city
     @Json(name = "S")
-    val storeId: Int,
+    val S: Int, //storeId
     @Json(name = "L")
-    val location: CoopLocation,
+    val L: CoopLocation, //location
     @Json(name = "O")
-    val openingHours: List<CoopOpeningHour>
+    val O: List<CoopOpeningHour> //openingHours
 )
 
 class CoopLocation (

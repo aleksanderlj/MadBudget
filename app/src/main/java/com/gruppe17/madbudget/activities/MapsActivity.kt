@@ -121,12 +121,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
         radius_slider_bar.value = initialCircleSize.toFloat()
 
-        for( i in Utility.getTestCoopStoreList().stores){
-            val storeName: Int = setStoreIcon(i.retailGroup)
+        for( i in Utility.getTestCoopStoreList().Data){
+            val storeName: Int = setStoreIcon(i.R)
             val marker: Marker = mMap.addMarker(
                 MarkerOptions()
-                    .title(i.retailGroup)
-                    .position(LatLng(i.location.coordinates[1],i.location.coordinates[0]))
+                    .title(i.R)
+                    .position(LatLng(i.L.coordinates[1],i.L.coordinates[0]))
                     .alpha(0.2f)
                     .icon(BitmapDescriptorFactory.fromResource(storeName))
             )
@@ -135,8 +135,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 if (it != null){
                     lastLocation = it
                     val results: FloatArray = FloatArray(3)
-                    Location.distanceBetween(lastLocation.latitude,lastLocation.longitude,i.location.coordinates[1],i.location.coordinates[0], results)
-                    marker.tag = Store(0,i.name,i.kardex,i.address,i.storeId,false ,results[0])
+                    Location.distanceBetween(lastLocation.latitude,lastLocation.longitude,i.L.coordinates[1],i.L.coordinates[0], results)
+                    marker.tag = Store(0,i.N,i.K,i.A,i.S,false ,results[0])
                     markers.add(marker)
                 }
             }
