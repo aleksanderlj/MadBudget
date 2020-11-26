@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,7 +24,9 @@ import com.gruppe17.madbudget.recyclerviews.RecipeAdapter
 import com.gruppe17.madbudget.rest.coop.model.CoopLocation
 import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
 import com.gruppe17.madbudget.rest.coop.model.CoopStore
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_recipes.*
+import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.activity_testyboi.view.*
 import kotlinx.android.synthetic.main.dialog_create_recipe.*
 import kotlinx.coroutines.GlobalScope
@@ -44,6 +47,9 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         context = this
 
         initNavigationMenu()
+
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
 
         //TODO - Call database here get recipes and their ingredients!!!
 
@@ -243,11 +249,16 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 }
                 else -> false
             }
+            true
         }
     }
 
     override fun onResume() {
         super.onResume()
+
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
+
         GlobalScope.launch {
             recipeList = ArrayList(db.recipeDao().getAll())
             calculatePrices()

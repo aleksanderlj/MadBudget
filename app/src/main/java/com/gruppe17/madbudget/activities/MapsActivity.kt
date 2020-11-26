@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -43,6 +44,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         db = DatabaseBuilder.get(this)
 
         initNavigationMenu()
+
+        val menu: Menu = navigation.menu
+        menu.getItem(1).isChecked = true
 
         GlobalScope.launch {
             db.storeDAO().deleteAllExisting()
@@ -240,7 +244,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 }
                 else -> false
             }
+            true
         }
     }
-
 }
