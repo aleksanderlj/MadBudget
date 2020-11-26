@@ -224,8 +224,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         navigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.page_1 ->{
-                    val recipesActivity = Intent(this, RecipeActivity::class.java)
-                    startActivity(recipesActivity);
+                    finish()
                     true
                 }
                 R.id.page_2 ->{
