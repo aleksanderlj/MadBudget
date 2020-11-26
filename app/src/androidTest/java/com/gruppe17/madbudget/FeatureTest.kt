@@ -5,12 +5,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.material.slider.Slider
 import com.gruppe17.madbudget.activities.MainActivity
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
@@ -48,6 +48,7 @@ class FeatureTest {
     fun mapFunctionality(){
         onView(withId(R.id.map_button)).perform(click())
         onView(withId(R.id.radius_slider_bar)).perform(swipeRight())
-        //onView(withId(R.id.radius_slider_bar)).check(value())
+        val sliderValue = (onView(withId(R.id.radius_slider_bar)) as Slider).value
+        Assert.assertEquals("Hello", 4000, sliderValue)
     }
 }
