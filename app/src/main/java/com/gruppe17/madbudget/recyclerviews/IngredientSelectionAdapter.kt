@@ -34,15 +34,18 @@ class IngredientSelectionAdapter(
 
         if (currentItem.ingredients.isNotEmpty()) {
             var smallestPrice = Double.MAX_VALUE
+            var smallestPriceProduct: Ingredient? = null
 
             for (curIng in currentItem.ingredients) {
-                val ingPrice =
-                    Ingredient.calcIngredientPrice(currentItem.ingredientSelection, curIng)
-                if (ingPrice < smallestPrice)
+                val ingPrice = Ingredient.calcIngredientPrice(currentItem.ingredientSelection, curIng)
+                if (ingPrice < smallestPrice) {
                     smallestPrice = ingPrice
+                    smallestPriceProduct = curIng
+                }
             }
 
             holder.ingredientPrice.text = "%.2f kr".format(smallestPrice)
+            holder.productName.text = smallestPriceProduct!!.name
 
         }
 
@@ -74,6 +77,7 @@ class IngredientSelectionAdapter(
         var ingredientAmount: TextView = itemView.ingredient_amount
         var ingredientPicture: ImageView = itemView.ingredient_store_image
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
+        var productName: TextView = itemView.ingsel_productname
 
 
         init {

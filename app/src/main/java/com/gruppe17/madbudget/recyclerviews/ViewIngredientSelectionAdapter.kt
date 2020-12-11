@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
+import com.gruppe17.madbudget.models.IngredientSelectionWithIngredients
 import kotlinx.android.synthetic.main.item_dialog_view_ingredient.view.*
 
 
-class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient>, var context: Context) : RecyclerView.Adapter<ViewIngredientSelectionAdapter.IngredientViewHolder>() {
+class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient>, var ingSel: IngredientSelectionWithIngredients, var context: Context) : RecyclerView.Adapter<ViewIngredientSelectionAdapter.IngredientViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
@@ -22,9 +23,9 @@ class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
+        val price = Ingredient.calcIngredientPrice(ingSel.ingredientSelection, currentItem)
         holder.ingredientName.text = currentItem.name
-        //holder.ingredientPrice.text = currentItem.ingredientPrice.toString()
-
+        holder.ingredientPrice.text = "%.2fkr".format(price)
     }
 
     override fun getItemCount(): Int {
