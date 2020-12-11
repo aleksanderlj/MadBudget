@@ -123,11 +123,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             if (it != null){
                 lastLocation = it
                 val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0.toFloat()))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0.toFloat()))
             }
         }
 
-        val initialCircleSize = 700.00
+        val initialCircleSize = 1000.00
         innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
         radius_slider_bar.value = initialCircleSize.toFloat()
 
