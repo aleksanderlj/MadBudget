@@ -283,14 +283,15 @@ class CreateRecipeActivity : AppCompatActivity(),
         super.onResume()
         db = DatabaseBuilder.get(this)
         GlobalScope.launch {
-            ingredientSelectionList = db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>
+            Log.i("bund",recipeId.toString());
+            ingredientSelectionList.clear()
+            ingredientSelectionList.addAll(db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>)
             runOnUiThread{
-                setupRecyclerView()
+                Log.i("bund",ingredientSelectionList.toString())
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
             }
         }
-
     }
-
 }
 
 
