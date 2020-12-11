@@ -28,7 +28,7 @@ class IngredientSelectionAdapter(
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
-                R.drawable.ghetto
+                R.drawable.brugsen
             )
         )
 

@@ -23,7 +23,7 @@ class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.ingredientName.text = currentItem.name
-        //holder.ingredientPrice.text = currentItem.ingredientPrice.toString()
+        holder.ingredientPrice.text = currentItem.price.toString();
 
     }
 
