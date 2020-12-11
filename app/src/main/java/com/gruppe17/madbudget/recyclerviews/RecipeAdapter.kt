@@ -3,8 +3,10 @@ package com.gruppe17.madbudget.recyclerviews
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.RecipeWithIngredientSelections
@@ -30,7 +32,7 @@ class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>,
         }
         holder.storeAddress.text = "Kollegiebakken 7"
         holder.storeClosingTimes.text = "07:00 - 21:00"
-
+        holder.recipeItem.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.item_animation)
     }
 
     override fun getItemCount(): Int {
@@ -49,5 +51,6 @@ class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>,
         val storeAddress: TextView = itemView.store_address
         val storeClosingTimes: TextView = itemView.store_closing_times
         val storeIcon: ImageView = itemView.store_icon
+        val recipeItem: CardView = itemView.recipe_card
     }
 }

@@ -214,6 +214,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 recipe_list.adapter = RecipeAdapter(recipeList, context as RecipeActivity)
                 recipe_list.layoutManager = LinearLayoutManager(context)
                 recipe_list.setHasFixedSize(true)
+                //recipe_list.scheduleLayoutAnimation()
             }
         }
 
@@ -267,6 +268,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 recipe_list.adapter = RecipeAdapter(recipeList, context as RecipeActivity)
                 recipe_list.layoutManager = LinearLayoutManager(context)
                 recipe_list.setHasFixedSize(true)
+                //recipe_list.scheduleLayoutAnimation()
             }
         }
     }
