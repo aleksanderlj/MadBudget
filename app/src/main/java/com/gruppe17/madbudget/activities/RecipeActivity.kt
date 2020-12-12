@@ -94,6 +94,8 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 tmpRecipeList.add(curRecipe.recipe)
 
                 for (curIngSel in ingredientSelectionList) {
+
+
                     if (curRecipe.recipe.id == curIngSel.ingredientSelection.recipeParentId && curIngSel.ingredientSelection.isSelected) {
                         smallestPrice = Double.MAX_VALUE
                         for (curIng in curIngSel.ingredients) {
