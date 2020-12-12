@@ -1,16 +1,15 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="700">
+    android:duration="400">
     <!-- This animation was inspired by https://stackoverflow.com/questions/26724964/how-to-animate-recyclerview-items-when-they-appear -->
     <translate
-        android:fromYDelta="0"
-        android:toYDelta="0"
+        android:fromXDelta="100%"
+        android:toXDelta="0%"
         android:interpolator="@android:anim/decelerate_interpolator"
         />
 
     <alpha
         android:fromAlpha="0"
         android:toAlpha="1"
-        android:interpolator="@android:anim/decelerate_interpolator"
         />
 
     <scale
