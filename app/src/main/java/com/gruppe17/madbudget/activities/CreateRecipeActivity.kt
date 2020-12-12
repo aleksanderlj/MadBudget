@@ -54,6 +54,9 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         db = DatabaseBuilder.get(this)
 
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
+
         initNavigationMenu()
 
         recipeId = intent.getIntExtra("ClickedRecipe",-1)
@@ -282,6 +285,8 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         db = DatabaseBuilder.get(this)
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
         GlobalScope.launch {
             Log.i("bund",recipeId.toString());
             ingredientSelectionList.clear()
