@@ -94,6 +94,8 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 tmpRecipeList.add(curRecipe.recipe)
 
                 for (curIngSel in ingredientSelectionList) {
+
+
                     if (curRecipe.recipe.id == curIngSel.ingredientSelection.recipeParentId && curIngSel.ingredientSelection.isSelected) {
                         smallestPrice = Double.MAX_VALUE
                         for (curIng in curIngSel.ingredients) {
@@ -229,6 +231,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 R.id.page_2 ->{
                     val mapsActivity = Intent(this, MapsActivity::class.java)
                     startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                     true
                 }
                 R.id.page_3 -> {
