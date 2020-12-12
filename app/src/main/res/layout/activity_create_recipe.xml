@@ -135,7 +135,9 @@
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/add_24px"
+        app:tint="@color/colorWhite"
+        app:backgroundTint="@color/colorPrimary"/>
 
     <EditText
         android:id="@+id/recipe_title"
