@@ -125,8 +125,29 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         GlobalScope.launch {
             db.ingredientSelectionDao().update(ingredientSelectionList[position].ingredientSelection)
-            runOnUiThread { ingredient_selection_list.adapter?.notifyDataSetChanged() }
+            runOnUiThread { ingredient_selection_list.adapter?.notifyDataSetChanged()
+            calculatePrice()}
         }
+    }
+
+    private fun calculatePrice(){
+
+        var recipePrice: Double = 0.0
+
+        for (i in ingredientSelectionList){
+            var smallestPrice = Double.MAX_VALUE
+            if (i.ingredientSelection.isSelected){
+                for (j in i.ingredients){
+                    val ingPrice = Ingredient.calcIngredientPrice(i.ingredientSelection, j)
+                    if (ingPrice != null) {
+                        if (ingPrice < smallestPrice)
+                            smallestPrice = ingPrice
+                    }
+                }
+                recipePrice += smallestPrice
+            }
+        }
+        recipe_list_price.setText("%.2f kr,-".format(recipePrice))
     }
 
     private fun setupRecyclerView(){
@@ -171,6 +192,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 ingredientSelectionList.removeAt(position)
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
                 Log.i("bund",ingredientSelectionList.toString())
+                calculatePrice()
             }
         }
     }
@@ -255,18 +277,6 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
     }
 
-    /*
-    override fun onDestroy() {
-        if(ingredientSelectionList.isEmpty()){
-            val i = Intent()
-            i.putExtra("RecipeID", recipeId)
-            JobIntentService.enqueueWork(this, DBDeleteService::class.java, 1, i)
-        }
-        super.onDestroy()
-    }
-
-     */
-
     inner class ChangeWatcher: TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -293,6 +303,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             ingredientSelectionList.addAll(db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>)
             runOnUiThread{
                 Log.i("bund",ingredientSelectionList.toString())
+                calculatePrice()
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
             }
         }
