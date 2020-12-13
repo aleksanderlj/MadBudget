@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -43,6 +44,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         db = DatabaseBuilder.get(this)
 
         initNavigationMenu()
+
+        val menu: Menu = navigation.menu
+        menu.getItem(1).isChecked = true
 
         GlobalScope.launch {
             db.storeDAO().deleteAllExisting()
@@ -119,11 +123,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             if (it != null){
                 lastLocation = it
                 val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0.toFloat()))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0.toFloat()))
             }
         }
 
-        val initialCircleSize = 700.00
+        val initialCircleSize = 1000.00
         innerCircle = mMap.addCircle(CircleOptions().center(LatLng(0.0,0.0)).radius(initialCircleSize).strokeColor(Color.GRAY))
         radius_slider_bar.value = initialCircleSize.toFloat()
 
@@ -224,8 +228,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         navigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.page_1 ->{
-                    val recipesActivity = Intent(this, RecipeActivity::class.java)
-                    startActivity(recipesActivity);
+                    finish()
                     true
                 }
                 R.id.page_2 ->{
@@ -241,7 +244,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 }
                 else -> false
             }
+            true
         }
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
+    }
 }

@@ -7,24 +7,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.*
 import com.gruppe17.madbudget.recyclerviews.CellClickListener
 import com.gruppe17.madbudget.recyclerviews.RecipeAdapter
-import com.gruppe17.madbudget.rest.coop.model.CoopLocation
-import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
-import com.gruppe17.madbudget.rest.coop.model.CoopStore
 import kotlinx.android.synthetic.main.activity_recipes.*
-import kotlinx.android.synthetic.main.activity_testyboi.view.*
+import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_create_recipe.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,15 +41,14 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
 
         initNavigationMenu()
 
-        //TODO - Call database here get recipes and their ingredients!!!
-
-        // iniDummyRecipes()
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
 
         new_recipe_button.setOnClickListener {
             initAlertDialog()
         }
 
-
+        recipeList = ArrayList()
 
         setupRecyclerView()
 
@@ -78,16 +73,14 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                         startActivity(recipeActivity)
                     }
                 }
-
-
             }
             .setNegativeButton("Annuller") { dialog, which -> }
             .show()
     }
 
     private fun calculatePrices() {
-
-        var ingredientSelectionList: ArrayList<IngredientSelectionWithIngredients> = ArrayList()
+        var ingredientSelectionList: ArrayList<IngredientSelectionWithIngredients>
+        val tmpRecipeList = mutableListOf<Recipe>()
 
         GlobalScope.launch {
 
@@ -96,10 +89,10 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
             var smallestPrice: Double
             var recipePrice: Double
 
-            for (curRecipe in recipeList) {
-
-
+            for ((index, curRecipe) in recipeList.withIndex()) {
                 recipePrice = 0.0
+                tmpRecipeList.add(curRecipe.recipe)
+
                 for (curIngSel in ingredientSelectionList) {
 
 
@@ -116,13 +109,21 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                         }
                         recipePrice += smallestPrice
                     }
-                    curRecipe.recipe.price = recipePrice
+                    tmpRecipeList[index].price = recipePrice
                 }
-                db.recipeDao().update(curRecipe.recipe)
+
+                if (curRecipe.ingredientSelections?.isEmpty()!!)
+                    tmpRecipeList[index].price = 0.0;
+
+            }
+            db.recipeDao().updateAll(tmpRecipeList)
+            tmpRecipeList.clear()
+
+            runOnUiThread{
+                recipe_list.adapter?.notifyDataSetChanged()
             }
         }
     }
-
 
     private fun deleteButton(position: Int): SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
@@ -198,7 +199,6 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         })
     }
 
-
     private fun setupRecyclerView() {
         GlobalScope.launch {
             recipeList = ArrayList(db.recipeDao().getAll())
@@ -231,6 +231,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 R.id.page_2 ->{
                     val mapsActivity = Intent(this, MapsActivity::class.java)
                     startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                     true
                 }
                 R.id.page_3 -> {
@@ -243,55 +244,23 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                 }
                 else -> false
             }
+            true
         }
     }
 
     override fun onResume() {
         super.onResume()
+
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
+
         GlobalScope.launch {
-            recipeList = ArrayList(db.recipeDao().getAll())
+            recipeList.clear()
+            recipeList.addAll(ArrayList(db.recipeDao().getAll()))
             calculatePrices()
             runOnUiThread {
                 searchOnChange(recipeList)
-                recipe_list.adapter = RecipeAdapter(recipeList, context as RecipeActivity)
-                recipe_list.layoutManager = LinearLayoutManager(context)
-                recipe_list.setHasFixedSize(true)
             }
         }
     }
 }
-
-/*
-private fun iniDummyRecipes(){
- val recipeList: ArrayList<Recipe> = ArrayList()
- val ingredientList: ArrayList<Ingredient> = ArrayList()
- val ingredientSelectionList: ArrayList<IngredientSelection> = ArrayList()
-
- recipeList.add(Recipe(0, "SpaghetBolo", 5, "30m", null, null))
-
- GlobalScope.launch {
-     val id = db.recipeDao().insert(recipeList[0])
-
-     ingredientList.add(Ingredient(0, "ing1", 2.7, "G", null, "Fisk", false, 1.0,-1))
-     ingredientList.add(Ingredient(0, "ing2", 2.7, "G", null, "Fisk", false, 1.0,-1))
-     ingredientList.add(Ingredient(0, "ing3", 2.7, "G", null, "Fisk", false, 1.0,-1))
-
-
-     ingredientSelectionList.add(IngredientSelection(0,"Hakkede Tomater","2","STK",true,id.toInt()))
-     ingredientSelectionList.add(IngredientSelection(0,"Hakket oksekød","500","G",true,id.toInt()))
-     ingredientSelectionList.add(IngredientSelection(0,"Pasta","400","G",true,id.toInt()))
-
-     for ((counter, i) in ingredientSelectionList.withIndex()) {
-
-         val ingId = db.ingredientSelectionDao().insert(ingredientSelectionList[counter])
-
-         for (j in ingredientList)
-                 j.ingredientSelectionParentId = ingId.toInt()
-
-         db.ingredientDao().insertAll(ingredientList)
-
-     }
- }
-}
-
-*/
