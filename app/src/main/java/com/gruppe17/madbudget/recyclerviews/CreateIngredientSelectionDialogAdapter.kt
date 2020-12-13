@@ -32,8 +32,20 @@ class CreateIngredientSelectionDialogAdapter(
     }
 
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
+        val priceDouble = dataset[position].price!!
+        val indexOfDecimal = priceDouble.toString().indexOf(".")
+        val priceInt = priceDouble.toInt()
+        var priceDecimal = priceDouble.toString().substring(indexOfDecimal)
+        if(priceDecimal.length == 2){
+            priceDecimal += "0"
+        } else if(priceDecimal.length > 3) {
+            priceDecimal = priceDecimal.substring(0, 2)
+        }
+
         holder.itemView.ing_name.text = dataset[position].name
-        holder.itemView.ing_price.text = "%.2fkr".format(dataset[position].price)
+        holder.itemView.ing_price.text = priceInt.toString()
+        holder.itemView.ing_price_decimal.text = priceDecimal
+
         holder.itemView.ing_selected_amount.text = dataset[position].selectedAmount.toString()
     }
 
