@@ -1,24 +1,15 @@
 package com.gruppe17.madbudget.activities
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
-import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.Ingredient
@@ -45,6 +36,7 @@ class CreateIngSelActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ingsel)
 
+
         val fs = Firebase.firestore
         val collection = fs.collection("Assortments").document("1885").collection("Products")
 
@@ -52,7 +44,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         //dialogIngNotSelected = Utility.getTestIngredientList()
         dialogIngSelected = ArrayList<Ingredient>()
-        btn_ingsel_save.isEnabled = false
+
 
         inglist_selected.setHasFixedSize(true)
         inglist_selected.layoutManager = LinearLayoutManager(this)
@@ -91,12 +83,6 @@ class CreateIngSelActivity : AppCompatActivity(),
 
          */
 
-        btn_ingsel_search.setOnClickListener {
-            //initSearchDialog()
-            val i = Intent(this, SearchIngredientActivity::class.java)
-            //i.putExtra("ClickedRecipe", recipeId)
-            startActivityForResult(i, 1)
-        }
 
     }
 
@@ -159,14 +145,14 @@ class CreateIngSelActivity : AppCompatActivity(),
 
 
     override fun onBackPressed() {
-        if(ingsel_name.text.toString().trim().isEmpty() && ingsel_amount.text.toString().trim().isEmpty() && dialogIngSelected.isEmpty()){
+        if(search_bar.text.toString().trim().isEmpty() && dialogIngSelected.isEmpty()){
             super.onBackPressed()
         } else {
 
             val backPressDialog = AlertDialog.Builder(this)
                 .setTitle("Gem ingrediensgruppe?")
                 .setPositiveButton("Gem") { dialog, which ->
-                    if (!ingsel_name.text.toString().trim().isEmpty() &&
+                    if (!search_bar.text.toString().trim().isEmpty() &&
                         !dialogIngSelected.isEmpty()
                     ) {
 
@@ -175,7 +161,7 @@ class CreateIngSelActivity : AppCompatActivity(),
                             GlobalScope.launch {
                                 val ingSel = IngredientSelection(
                                     0,
-                                    ingsel_name.text.toString(),
+                                    search_bar.text.toString(),
                                     null,
                                     null,
                                     true,
@@ -201,7 +187,7 @@ class CreateIngSelActivity : AppCompatActivity(),
                             GlobalScope.launch {
                                 val ingSel = IngredientSelection(
                                     ingSelId,
-                                    ingsel_name.text.toString(),
+                                    search_bar.text.toString(),
                                     null,
                                     null,
                                     true,
@@ -230,10 +216,10 @@ class CreateIngSelActivity : AppCompatActivity(),
 
                     } else {
 
-                        if (ingsel_name.text.toString().trim().isEmpty()) {
+                        if (search_bar.text.toString().trim().isEmpty()) {
                             val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
-                            ingsel_name.setError("Udfyld navn")
-                            ingsel_name.startAnimation(vibrate)
+                            search_bar.setError("Udfyld navn")
+                            search_bar.startAnimation(vibrate)
                         }
                         if (dialogIngSelected.isEmpty()) {
                             val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
