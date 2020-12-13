@@ -14,6 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
@@ -43,7 +45,10 @@ class CreateIngSelActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ingsel)
 
-        //TODO force name and amount
+        val fs = Firebase.firestore
+        val collection = fs.collection("Assortments").document("1885").collection("Products")
+
+        collection.limit(100)
 
         recipeId = intent.getIntExtra("ClickedRecipe", -1)
 

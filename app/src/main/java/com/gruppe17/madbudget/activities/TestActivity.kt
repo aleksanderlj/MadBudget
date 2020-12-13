@@ -3,9 +3,19 @@ package com.gruppe17.madbudget.activities
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
+import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.DatabaseBuilder
+import com.gruppe17.madbudget.database.firestore.Coop2Firebase
+import com.gruppe17.madbudget.models.Store
+import com.gruppe17.madbudget.rest.coop.CoopCommunicator
+import com.gruppe17.madbudget.rest.coop.RegexFilter
+import com.gruppe17.madbudget.rest.coop.model.CoopLocation
+import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
 import com.gruppe17.madbudget.rest.coop.model.CoopProduct
+import com.gruppe17.madbudget.rest.coop.model.CoopStore
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -22,6 +32,76 @@ class TestActivity : AppCompatActivity() {
             val db = DatabaseBuilder.get(this)
 
 
+            val testStore = CoopStore(1885, "Dagli'Brugsen", "Dagli'Brugsen Skyttegården", "Vigerslevvej 125", 2500, "Valby", 688, CoopLocation(listOf(12.4834814, 55.6618347)), listOf(
+                CoopOpeningHour("08.00 - 20.00", "torsdag", 8.0, 20.0, "2020-11-12T08:00:00", "2020-11-12T20:00:00")))
+
+            val ts = Store(0,testStore.N,testStore.K,testStore.A,testStore.S,false , 5.0f)
+            Coop2Firebase.insertStoreAssortment(this, ts)
+
+            /*
+            val input = "[{" +
+                    "  \"Ean\": \"2019160000001\"," +
+                    "  \"Navn\": \"FLÆSKESTEG 1,2-2,4 KG\"," +
+                    "  \"Navn2\": \"MED SVÆR\"," +
+                    "  \"Pris\": 49.90," +
+                    "  \"VareHierakiId\": 3021" +
+                    "}, {" +
+                    "  \"Ean\": \"2036830000000\"," +
+                    "  \"Navn\": \"MÖRT GRYDESTEG\"," +
+                    "  \"Navn2\": \"800-1600G\"," +
+                    "  \"Pris\": 79.90," +
+                    "  \"VareHierakiId\": 3021" +
+                    "}]"
+
+
+
+            val assortments = Utility.parseArray<CoopProduct>(input)!!
+
+            val fs = Firebase.firestore
+            val col = fs.collection("test")
+            col.document(assortments[0].Ean).set(assortments[0])
+
+
+            col.document(assortments[0].Ean).get().addOnSuccessListener { document ->
+                if(document == null){
+                    Log.i("FSTESTSuccess", "No such doc")
+                } else {
+                    val obj = document.toObject(CoopProduct::class.java)
+                    Log.i("FSTESTSuccess", obj.toString())
+                    Log.i("FSTESTSuccess", document.data.toString())
+                }
+            }.addOnFailureListener{ response ->
+                Log.i("FSTESTFailure", response.toString())
+            }.addOnCompleteListener{ task ->
+                Log.i("FSTESTComplete", "Complete")
+                val obj = task.result.toObject(CoopProduct::class.java)
+                Log.i("FSTESTComplete", obj.toString())
+                Log.i("FSTESTComplete", task.result.data.toString())
+            }
+
+            Log.i("FSTEST", "DONE")
+
+
+             */
+
+            /*
+            CoopCommunicator.getAssortment(this, "1290") { response ->
+                Log.i("Assortment", response.toString())
+
+                val assortments = Utility.parseArray<CoopProduct>(response.toString())
+
+                assortments!!
+
+                for(i in assortments){
+                    RegexFilter.convertCoopIngredient(i)
+                }
+                Log.i("jsontest", assortments[0].Navn)
+
+            }
+
+             */
+
+            /*
             val input = "[{" +
                     "  \"Ean\": \"2019160000001\"," +
                     "  \"Navn\": \"FLÆSKESTEG 1,2-2,4 KG\"," +
@@ -46,6 +126,9 @@ class TestActivity : AppCompatActivity() {
 
             assortments!!
             Log.i("JSONTEST", assortments[0].Navn)
+
+             */
+
             /*
             CoopCommunicator.getAssortment(this, "1290") { response ->
                 Log.i("Assortment", response.toString())
@@ -60,7 +143,7 @@ class TestActivity : AppCompatActivity() {
                 val assortments = coopProductAdapter.fromJson(response.toString())
 
                 assortments!!
-                Log.i("JSONTEST", assortments[0].name1)
+                Log.i("JSONTEST", assortments[0].Navn)
 
             }
 

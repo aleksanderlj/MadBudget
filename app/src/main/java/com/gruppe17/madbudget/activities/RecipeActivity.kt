@@ -53,6 +53,10 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
             initAlertDialog()
         }
 
+        hehewee.setOnClickListener{
+            val i = Intent(context, TestActivity::class.java)
+            startActivity(i)
+        }
 
 
         setupRecyclerView()
