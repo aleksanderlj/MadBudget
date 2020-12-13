@@ -24,8 +24,8 @@ import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapt
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
-import kotlinx.android.synthetic.main.activity_create_recipe.navigation
 import kotlinx.android.synthetic.main.activity_recipes.*
+import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_view_ingredient.*
 import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
@@ -70,6 +70,8 @@ class CreateRecipeActivity : AppCompatActivity(),
                 recipeBak = db.recipeDao().getById(recipeId)
 
                 runOnUiThread{
+
+
                     recipe_title.setText(recipeBak!!.recipe.name)
                     recipe_list_time.setText(recipeBak!!.recipe.timeToMake)
                     recipe_list_price.setText("%.2f kr,-".format(recipeBak!!.recipe.price))

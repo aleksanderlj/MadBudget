@@ -23,14 +23,9 @@ import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelection
-import com.gruppe17.madbudget.models.Recipe
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
-import com.gruppe17.madbudget.rest.coop.RegexFilter
-import com.gruppe17.madbudget.rest.coop.model.CoopProduct
 import kotlinx.android.synthetic.main.activity_create_ingsel.*
-import kotlinx.android.synthetic.main.activity_create_recipe.*
 import kotlinx.android.synthetic.main.dialog_ing_sel_search.*
-import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -57,6 +52,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         //dialogIngNotSelected = Utility.getTestIngredientList()
         dialogIngSelected = ArrayList<Ingredient>()
+        btn_ingsel_save.isEnabled = false
 
         inglist_selected.setHasFixedSize(true)
         inglist_selected.layoutManager = LinearLayoutManager(this)

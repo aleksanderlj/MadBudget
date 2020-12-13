@@ -7,87 +7,102 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp">
-
-        <CheckBox
-            android:id="@+id/ingredient_checkbox"
-            android:layout_width="28dp"
-            android:layout_height="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </CheckBox>
-
-        <TextView
-            android:id="@+id/ingredient_namead"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"
-            android:text="Hakkede tomater"
-            android:textColor="@color/blackTextColor"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/ingredient_amount"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/ingredient_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5 dåser"
-            android:textColor="@color/blackTextColor"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/ingsel_productname"
-            app:layout_constraintTop_toTopOf="@+id/ingredient_namead" />
-
-        <TextView
-            android:id="@+id/ingredient_pricead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="240 kr"
-            android:textColor="@color/blackTextColor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ingredient_store_image"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/ingredient_store_image"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/shopping_cart_24px_outlined"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/brugsen" />
+        android:layout_height="wrap_content">
 
         <View
             android:id="@+id/divider2"
-            android:layout_width="396dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ingredient_namead"
+            app:layout_constraintStart_toEndOf="@+id/ingredient_checkbox"
+            app:layout_constraintTop_toTopOf="@+id/ingredientgroup_name"
+            app:srcCompat="@drawable/fab_counter_bg" />
+
         <TextView
-            android:id="@+id/ingsel_productname"
+            android:id="@+id/ingredient_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            app:layout_constraintEnd_toEndOf="@+id/imageView9"
+            app:layout_constraintStart_toStartOf="@+id/imageView9"
+            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+        <CheckBox
+            android:id="@+id/ingredient_checkbox"
+            android:layout_width="28dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/ingredientgroup_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="TextView"
-            android:textColor="@color/blackTextColor"
-            app:layout_constraintEnd_toStartOf="@+id/ingredient_pricead"
-            app:layout_constraintStart_toEndOf="@+id/ingredient_checkbox"
-            app:layout_constraintTop_toBottomOf="@+id/ingredient_namead" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            app:layout_constraintStart_toEndOf="@+id/imageView9"
+            app:layout_constraintTop_toTopOf="@+id/ingredient_checkbox" />
+
+        <TextView
+            android:id="@+id/ingredient_namead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text=""
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ingredient_checkbox"
+            app:layout_constraintStart_toEndOf="@+id/imageView9" />
+
+        <TextView
+            android:id="@+id/ingredient_group_price_crowns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_black"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            app:layout_constraintEnd_toStartOf="@+id/ingredient_group_price_ears"
+            app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+        <TextView
+            android:id="@+id/ingredient_group_price_ears"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/roboto_black"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ingredient_group_price_crowns"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
