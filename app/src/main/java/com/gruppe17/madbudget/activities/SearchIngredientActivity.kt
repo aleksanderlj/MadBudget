@@ -1,10 +1,13 @@
 package com.gruppe17.madbudget.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
@@ -58,6 +61,12 @@ class SearchIngredientActivity : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {}
 
         })
+
+        ing_search_box.requestFocus()
+        //val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //imm.showSoftInput(ing_search_box, InputMethodManager.SHOW_IMPLICIT)
+        //window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        btn_back.setOnClickListener{finish()}
 
     }
 

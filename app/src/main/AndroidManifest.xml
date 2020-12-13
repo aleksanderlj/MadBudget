@@ -51,7 +51,8 @@
         <activity android:name="com.gruppe17.madbudget.activities.CreateRecipeActivity" />
         <activity android:name="com.gruppe17.madbudget.activities.TestActivity" />
         <activity android:name="com.gruppe17.madbudget.activities.CreateIngSelActivity" />
-        <activity android:name="com.gruppe17.madbudget.activities.SearchIngredientActivity" />
+        <activity android:name="com.gruppe17.madbudget.activities.SearchIngredientActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysVisible"/>
         <service
             android:name=".database.DBDeleteService"
             android:exported="false"/>
