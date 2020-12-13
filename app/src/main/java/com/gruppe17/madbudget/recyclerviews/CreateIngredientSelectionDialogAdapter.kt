@@ -113,4 +113,10 @@ class CreateIngredientSelectionDialogAdapter(
         notifyDataSetChanged()
     }
 
+    fun notifyDataSetChanged(dataset: ArrayList<Ingredient>){
+        datasetFull.clear()
+        datasetFull.addAll(dataset)
+        notifyDataSetChanged()
+    }
+
 }

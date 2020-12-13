@@ -20,6 +20,7 @@ import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
+import com.gruppe17.madbudget.database.firestore.Coop2Firebase
 import com.gruppe17.madbudget.models.Store
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_maps.navigation
@@ -37,6 +38,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var selectedStores: ArrayList<Store>
     private lateinit var db: AppDatabase
+    private val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

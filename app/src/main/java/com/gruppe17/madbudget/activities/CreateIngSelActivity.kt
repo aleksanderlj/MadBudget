@@ -14,6 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
@@ -22,6 +24,8 @@ import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelection
 import com.gruppe17.madbudget.models.Recipe
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
+import com.gruppe17.madbudget.rest.coop.RegexFilter
+import com.gruppe17.madbudget.rest.coop.model.CoopProduct
 import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_create_recipe.*
 import kotlinx.android.synthetic.main.dialog_ing_sel_search.*
@@ -43,11 +47,12 @@ class CreateIngSelActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ingsel)
 
-        //TODO force name and amount
+        val fs = Firebase.firestore
+        val collection = fs.collection("Assortments").document("1885").collection("Products")
 
         recipeId = intent.getIntExtra("ClickedRecipe", -1)
 
-        dialogIngNotSelected = Utility.getTestIngredientList()
+        //dialogIngNotSelected = Utility.getTestIngredientList()
         dialogIngSelected = ArrayList<Ingredient>()
 
         inglist_selected.setHasFixedSize(true)
@@ -57,6 +62,14 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         ingSelSearchAdapter =
             CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, this, true)
+
+        collection.limit(10).get().addOnSuccessListener { response ->
+            for(doc in response){
+                val i = RegexFilter.convertCoopIngredient(doc.toObject(CoopProduct::class.java))
+                dialogIngNotSelected.add(i)
+            }
+            ingSelSearchAdapter.notifyDataSetChanged(dialogIngNotSelected)
+        }
 
         val spinnerList = ArrayList<String>()
         spinnerList.add("G")

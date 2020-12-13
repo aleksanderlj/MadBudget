@@ -114,7 +114,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
             .show()
 
-        mAlertDialog.ingredient_list.adapter = ViewIngredientSelectionAdapter(ingredientsToShow, applicationContext)
+        mAlertDialog.ingredient_list.adapter = ViewIngredientSelectionAdapter(ingredientsToShow, ingredientSelectionList[position], applicationContext)
         mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(applicationContext)
         mAlertDialog.ingredient_list.setHasFixedSize(true)
     }
