@@ -138,7 +138,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             var smallestPrice = Double.MAX_VALUE
             if (i.ingredientSelection.isSelected){
                 for (j in i.ingredients){
-                    val ingPrice = Ingredient.calcIngredientPrice(i.ingredientSelection, j)
+                    val ingPrice = j.calculatePrice()
                     if (ingPrice != null) {
                         if (ingPrice < smallestPrice)
                             smallestPrice = ingPrice

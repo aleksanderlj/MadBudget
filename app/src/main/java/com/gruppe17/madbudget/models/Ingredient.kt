@@ -25,6 +25,10 @@ data class Ingredient(
         return "Ingredient(ingredientId=$id, ingredientName=$name, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$type, hasBeenClicked=$hasBeenClicked, ingredientPrice=$price, ingredientSelectionParentId=$ingredientSelectionParentId)"
     }
 
+    fun calculatePrice(): Double{
+        return price!! * selectedAmount
+    }
+
     companion object{
         fun calcIngredientPrice(ingSel: IngredientSelection, ing: Ingredient): Double{
             val amount = ingSel.amount

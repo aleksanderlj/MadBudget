@@ -37,7 +37,7 @@ class IngredientSelectionAdapter(
             var smallestPriceProduct: Ingredient? = null
 
             for (curIng in currentItem.ingredients) {
-                val ingPrice = Ingredient.calcIngredientPrice(currentItem.ingredientSelection, curIng)
+                val ingPrice = curIng.calculatePrice()
                 if (ingPrice < smallestPrice) {
                     smallestPrice = ingPrice
                     smallestPriceProduct = curIng

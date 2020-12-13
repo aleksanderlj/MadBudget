@@ -129,10 +129,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                         smallestPrice = Double.MAX_VALUE
                         for (curIng in curIngSel.ingredients) {
 
-                            val ingPrice = Ingredient.calcIngredientPrice(
-                                curIngSel.ingredientSelection,
-                                curIng
-                            )
+                            val ingPrice = curIng.calculatePrice()
                             if (ingPrice < smallestPrice)
                                 smallestPrice = ingPrice
                         }
