@@ -151,6 +151,7 @@ object Utility {
         return CoopStoreList(1, 1, 1000, 73, stores, 1, "")
     }
 
+    /*
     fun getTestIngredientList(): ArrayList<Ingredient> {
         val l = ArrayList<Ingredient>()
         l.add(
@@ -904,4 +905,6 @@ object Utility {
         )
         return l
     }
+    
+     */
 }

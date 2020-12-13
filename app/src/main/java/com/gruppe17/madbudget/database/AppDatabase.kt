@@ -11,7 +11,7 @@ import com.gruppe17.madbudget.models.IngredientSelection
 import com.gruppe17.madbudget.models.Recipe
 import com.gruppe17.madbudget.models.Store
 
-@Database(entities = [Ingredient::class, Recipe::class, IngredientSelection::class, Store::class], version = 10, exportSchema = false)
+@Database(entities = [Ingredient::class, Recipe::class, IngredientSelection::class, Store::class], version = 11, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ingredientDao(): IngredientDAO
     abstract fun recipeDao(): RecipeDAO

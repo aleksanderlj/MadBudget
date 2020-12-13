@@ -27,7 +27,7 @@ class RegexFilter {
             var price = coopIng.Pris
             var parentId = 0
 
-            return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId)
+            return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId, 0)
         }
 
         fun parseIngredientFields(field1: String, field2: String): IngredientAmount {

@@ -2,6 +2,7 @@ package com.gruppe17.madbudget.activities
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -58,10 +59,10 @@ class CreateIngSelActivity : AppCompatActivity(),
         inglist_selected.setHasFixedSize(true)
         inglist_selected.layoutManager = LinearLayoutManager(this)
         inglist_selected.adapter =
-            CreateIngredientSelectionDialogAdapter(dialogIngSelected, this, false)
+            CreateIngredientSelectionDialogAdapter(dialogIngSelected, false)
 
         ingSelSearchAdapter =
-            CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, this, true)
+            CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, true)
 
         collection.limit(10).get().addOnSuccessListener { response ->
             for(doc in response){
@@ -90,7 +91,9 @@ class CreateIngSelActivity : AppCompatActivity(),
         unit_spinner.adapter = spinnerAdapter
 
         btn_ingsel_search.setOnClickListener {
-            initSearchDialog()
+            //initSearchDialog()
+            val i = Intent(this, SearchIngredientActivity::class.java)
+            startActivity(i)
         }
 
     }

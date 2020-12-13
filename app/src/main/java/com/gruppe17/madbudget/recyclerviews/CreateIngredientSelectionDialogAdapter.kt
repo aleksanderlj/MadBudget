@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.item_dialog_ing_sel.view.*
+import kotlinx.android.synthetic.main.item_ingredient_search.view.*
 
 class CreateIngredientSelectionDialogAdapter(
     val dataset: ArrayList<Ingredient>,
-    val onDialogIngredientClickListener: OnDialogIngredientClickListener,
     val notSelected: Boolean
 ) :
     RecyclerView.Adapter<CreateIngredientSelectionDialogAdapter.IngSelDialogViewHolder>(),
@@ -27,13 +27,13 @@ class CreateIngredientSelectionDialogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngSelDialogViewHolder {
         val item = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_dialog_ing_sel, parent, false) as View
-        return IngSelDialogViewHolder(item, onDialogIngredientClickListener, notSelected)
+            .inflate(R.layout.item_ingredient_search, parent, false) as View
+        return IngSelDialogViewHolder(item, notSelected, dataset)
     }
 
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
-        holder.itemView.ing_name_dialog.text = dataset[position].name
-        holder.itemView.ing_price_dialog.text = "%.2fkr".format(dataset[position].price)
+        holder.itemView.ing_name.text = dataset[position].name
+        holder.itemView.ing_price.text = "%.2fkr".format(dataset[position].price)
     }
 
     override fun getItemCount(): Int {
@@ -42,22 +42,35 @@ class CreateIngredientSelectionDialogAdapter(
 
     class IngSelDialogViewHolder(
         itemView: View,
-        onDialogIngredientClickListener: OnDialogIngredientClickListener,
-        selector: Boolean
+        selector: Boolean,
+        dataset: ArrayList<Ingredient>
     ) : RecyclerView.ViewHolder(itemView) {
 
+
         init {
+            /*
             if (selector) {
                 itemView.setOnClickListener {
-                    onDialogIngredientClickListener.onDialogIngredientSelect(
-                        adapterPosition
-                    )
+                    onDialogIngredientClickListener.onDialogIngredientSelect(adapterPosition)
                 }
             } else {
                 itemView.setOnClickListener {
-                    onDialogIngredientClickListener.onDialogIngredientDeselect(
-                        adapterPosition
-                    )
+                    onDialogIngredientClickListener.onDialogIngredientDeselect(adapterPosition)
+                }
+            }
+
+             */
+
+            itemView.ing_add.setOnClickListener{
+                dataset[adapterPosition].selectedAmount++
+                itemView.ing_selected_amount.text = dataset[adapterPosition].selectedAmount.toString()
+            }
+
+            itemView.ing_subtract.setOnClickListener{
+                if(dataset[adapterPosition].selectedAmount > 0) {
+                    dataset[adapterPosition].selectedAmount--
+                    itemView.ing_selected_amount.text =
+                        dataset[adapterPosition].selectedAmount.toString()
                 }
             }
 

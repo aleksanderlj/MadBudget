@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,6 +25,7 @@ import com.gruppe17.madbudget.recyclerviews.RecipeAdapter
 import com.gruppe17.madbudget.rest.coop.model.CoopLocation
 import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
 import com.gruppe17.madbudget.rest.coop.model.CoopStore
+import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_create_recipe.*
@@ -69,18 +71,35 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         newAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_create_recipe, null))
             .setPositiveButton("OK") { dialog, which ->
-                db = DatabaseBuilder.get(this)
-                GlobalScope.launch {
-                    val newRecipe = Recipe()
-                    // TODO setError if empty?
-                    newRecipe.name = newAlertDialog.et_new_recipe_name.text.toString()
-                    newRecipe.timeToMake = newAlertDialog.et_new_recipe_time.text.toString()
-                    val recipeId = db.recipeDao().insert(newRecipe).toInt()
-                    val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
-                    recipeActivity.putExtra("ClickedRecipe", recipeId)
+                if(
+                    newAlertDialog.et_new_recipe_name.text.toString().trim().isEmpty() ||
+                    newAlertDialog.et_new_recipe_time.text.toString().trim().isEmpty()
+                ){
+                    if (newAlertDialog.et_new_recipe_name.text.toString().trim().isEmpty()) {
+                        val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
+                        newAlertDialog.et_new_recipe_name.setError("Udfyld navn")
+                        newAlertDialog.et_new_recipe_name.startAnimation(vibrate)
+                    }
+                    if (newAlertDialog.et_new_recipe_time.text.toString().trim().isEmpty()) {
+                        val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
+                        newAlertDialog.et_new_recipe_time.setError("Udfyld tid")
+                        newAlertDialog.et_new_recipe_time.startAnimation(vibrate)
+                    }
 
-                    runOnUiThread{
-                        startActivity(recipeActivity)
+                } else {
+                    db = DatabaseBuilder.get(this)
+                    GlobalScope.launch {
+                        val newRecipe = Recipe()
+                        // TODO setError if empty?
+                        newRecipe.name = newAlertDialog.et_new_recipe_name.text.toString()
+                        newRecipe.timeToMake = newAlertDialog.et_new_recipe_time.text.toString()
+                        val recipeId = db.recipeDao().insert(newRecipe).toInt()
+                        val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+                        recipeActivity.putExtra("ClickedRecipe", recipeId)
+
+                        runOnUiThread {
+                            startActivity(recipeActivity)
+                        }
                     }
                 }
             }
