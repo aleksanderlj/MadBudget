@@ -27,6 +27,7 @@
             android:layout_marginTop="8dp"
             android:maxLines="1"
             android:text="Hakkede tomater"
+            android:textColor="@color/blackTextColor"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/ingredient_amount"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5 dåser"
+            android:textColor="@color/blackTextColor"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/ingsel_productname"
             app:layout_constraintTop_toTopOf="@+id/ingredient_namead" />
@@ -46,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="240 kr"
+            android:textColor="@color/blackTextColor"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ingredient_store_image"
@@ -76,14 +79,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/blackTextColor"
             app:layout_constraintEnd_toStartOf="@+id/ingredient_pricead"
             app:layout_constraintStart_toEndOf="@+id/ingredient_checkbox"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/ingredient_namead" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

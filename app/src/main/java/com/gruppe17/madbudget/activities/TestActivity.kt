@@ -32,11 +32,14 @@ class TestActivity : AppCompatActivity() {
             val db = DatabaseBuilder.get(this)
 
 
+            /*
             val testStore = CoopStore(1885, "Dagli'Brugsen", "Dagli'Brugsen Skyttegården", "Vigerslevvej 125", 2500, "Valby", 688, CoopLocation(listOf(12.4834814, 55.6618347)), listOf(
                 CoopOpeningHour("08.00 - 20.00", "torsdag", 8.0, 20.0, "2020-11-12T08:00:00", "2020-11-12T20:00:00")))
 
             val ts = Store(0,testStore.N,testStore.K,testStore.A,testStore.S,false , 5.0f)
             Coop2Firebase.insertStoreAssortment(this, ts)
+
+             */
 
             /*
             val input = "[{" +

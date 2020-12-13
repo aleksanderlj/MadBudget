@@ -24,6 +24,8 @@ import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelection
 import com.gruppe17.madbudget.models.Recipe
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
+import com.gruppe17.madbudget.rest.coop.RegexFilter
+import com.gruppe17.madbudget.rest.coop.model.CoopProduct
 import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_create_recipe.*
 import kotlinx.android.synthetic.main.dialog_ing_sel_search.*
@@ -48,11 +50,9 @@ class CreateIngSelActivity : AppCompatActivity(),
         val fs = Firebase.firestore
         val collection = fs.collection("Assortments").document("1885").collection("Products")
 
-        collection.limit(100)
-
         recipeId = intent.getIntExtra("ClickedRecipe", -1)
 
-        dialogIngNotSelected = Utility.getTestIngredientList()
+        //dialogIngNotSelected = Utility.getTestIngredientList()
         dialogIngSelected = ArrayList<Ingredient>()
 
         inglist_selected.setHasFixedSize(true)
@@ -62,6 +62,14 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         ingSelSearchAdapter =
             CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, this, true)
+
+        collection.limit(10).get().addOnSuccessListener { response ->
+            for(doc in response){
+                val i = RegexFilter.convertCoopIngredient(doc.toObject(CoopProduct::class.java))
+                dialogIngNotSelected.add(i)
+            }
+            ingSelSearchAdapter.notifyDataSetChanged(dialogIngNotSelected)
+        }
 
         val spinnerList = ArrayList<String>()
         spinnerList.add("G")
