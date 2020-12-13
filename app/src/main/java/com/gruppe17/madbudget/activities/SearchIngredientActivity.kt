@@ -1,5 +1,7 @@
 package com.gruppe17.madbudget.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -67,30 +69,20 @@ class SearchIngredientActivity : AppCompatActivity() {
             }
         }
 
-        /*
         val db = DatabaseBuilder.get(this)
         GlobalScope.launch {
-            val ingSel = IngredientSelection(
-                0,
-                ingsel_name.text.toString(),
-                ingsel_amount.text.toString().toDoubleOrNull(),
-                unit_spinner.selectedItem.toString(),
-                true,
-                recipeId
-            )
+            val ingSel = IngredientSelection()
             val ingSelId = db.ingredientSelectionDao().insert(ingSel)
-            val ingArray = ArrayList<Ingredient>(dialogIngSelected)
-            for (i in ingArray) {
+            for (i in savedList) {
                 i.ingredientSelectionParentId = ingSelId.toInt()
             }
-            db.ingredientDao().insertAll(ingArray)
+            db.ingredientDao().insertAll(savedList)
             runOnUiThread {
-                super.onBackPressed()
+                val i = Intent()
+                i.putExtra("IngSelId", ingSelId.toInt())
+                setResult(Activity.RESULT_OK, i)
+                super.finish()
             }
         }
-
-         */
-
-        super.finish()
     }
 }

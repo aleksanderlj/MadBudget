@@ -42,7 +42,9 @@ class CreateIngSelActivity : AppCompatActivity(),
     private var mAlertDialog: AlertDialog? = null
     private lateinit var db: AppDatabase
     private var recipeId = -1
+    private var ingSelId = -1
     private lateinit var ingSelSearchAdapter: CreateIngredientSelectionDialogAdapter
+    private lateinit var ingListAdapter: CreateIngredientSelectionDialogAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +60,10 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         inglist_selected.setHasFixedSize(true)
         inglist_selected.layoutManager = LinearLayoutManager(this)
-        inglist_selected.adapter =
-            CreateIngredientSelectionDialogAdapter(dialogIngSelected, false)
+        ingListAdapter = CreateIngredientSelectionDialogAdapter(dialogIngSelected, false)
+        inglist_selected.adapter = ingListAdapter
 
+        /*
         ingSelSearchAdapter =
             CreateIngredientSelectionDialogAdapter(dialogIngNotSelected, true)
 
@@ -90,15 +93,36 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         unit_spinner.adapter = spinnerAdapter
 
+         */
+
         btn_ingsel_search.setOnClickListener {
             //initSearchDialog()
             val i = Intent(this, SearchIngredientActivity::class.java)
-            startActivity(i)
+            //i.putExtra("ClickedRecipe", recipeId)
+            startActivityForResult(i, 1)
         }
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1){
 
+            ingSelId = data!!.getIntExtra("IngSelId", -1)
+            db = DatabaseBuilder.get(this)
+
+            GlobalScope.launch {
+                dialogIngSelected.clear()
+                dialogIngSelected.addAll(db.ingredientDao().getAllByIngredientSelectionId(ingSelId))
+                runOnUiThread {
+                    ingListAdapter.notifyDataSetChanged()
+                }
+            }
+
+        }
+    }
+
+    /*
     private fun initSearchDialog() {
         var newAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_ing_sel_search, null))
@@ -135,10 +159,8 @@ class CreateIngSelActivity : AppCompatActivity(),
 
     }
 
-    private fun saveIngredientSelection() {
+     */
 
-
-    }
 
     override fun onBackPressed() {
         if(ingsel_name.text.toString().trim().isEmpty() && ingsel_amount.text.toString().trim().isEmpty() && dialogIngSelected.isEmpty()){
@@ -148,41 +170,74 @@ class CreateIngSelActivity : AppCompatActivity(),
             val backPressDialog = AlertDialog.Builder(this)
                 .setTitle("Gem ingrediensgruppe?")
                 .setPositiveButton("Gem") { dialog, which ->
-                    if (!ingsel_name.text.toString().trim()
-                            .isEmpty() && !ingsel_amount.text.toString().trim()
-                            .isEmpty() && !dialogIngSelected.isEmpty()
+                    if (!ingsel_name.text.toString().trim().isEmpty() &&
+                        !dialogIngSelected.isEmpty()
                     ) {
-                        db = DatabaseBuilder.get(this)
-                        GlobalScope.launch {
-                            val ingSel = IngredientSelection(
-                                0,
-                                ingsel_name.text.toString(),
-                                ingsel_amount.text.toString().toDoubleOrNull(),
-                                unit_spinner.selectedItem.toString(),
-                                true,
-                                recipeId
-                            )
-                            val ingSelId = db.ingredientSelectionDao().insert(ingSel)
-                            val ingArray = ArrayList<Ingredient>(dialogIngSelected)
-                            for (i in ingArray) {
-                                i.ingredientSelectionParentId = ingSelId.toInt()
+
+                        if(ingSelId == -1){
+                            db = DatabaseBuilder.get(this)
+                            GlobalScope.launch {
+                                val ingSel = IngredientSelection(
+                                    0,
+                                    ingsel_name.text.toString(),
+                                    null,
+                                    null,
+                                    true,
+                                    recipeId
+                                )
+                                val ingSelId = db.ingredientSelectionDao().insert(ingSel)
+                                val removables = ArrayList<Ingredient>()
+                                for (i in dialogIngSelected) {
+                                    i.ingredientSelectionParentId = ingSelId.toInt()
+                                    if(i.selectedAmount <= 0) {
+                                        removables.add(i)
+                                    }
+                                }
+                                dialogIngSelected.removeAll(removables)
+                                db.ingredientDao().insertAll(dialogIngSelected)
+                                db.ingredientDao().deleteAll(removables)
+                                runOnUiThread {
+                                    super.onBackPressed()
+                                }
                             }
-                            db.ingredientDao().insertAll(ingArray)
-                            runOnUiThread {
-                                super.onBackPressed()
+                        } else {
+                            db = DatabaseBuilder.get(this)
+                            GlobalScope.launch {
+                                val ingSel = IngredientSelection(
+                                    ingSelId,
+                                    ingsel_name.text.toString(),
+                                    null,
+                                    null,
+                                    true,
+                                    recipeId
+                                )
+                                db.ingredientSelectionDao().update(ingSel)
+
+                                val removables = ArrayList<Ingredient>()
+                                for (i in dialogIngSelected) {
+                                    i.ingredientSelectionParentId = ingSelId
+                                    if(i.selectedAmount <= 0) {
+                                        removables.add(i)
+                                    }
+                                }
+
+                                dialogIngSelected.removeAll(removables)
+
+                                db.ingredientDao().updateAll(dialogIngSelected)
+                                db.ingredientDao().deleteAll(removables)
+                                runOnUiThread {
+                                    super.onBackPressed()
+                                }
                             }
                         }
+
+
                     } else {
 
                         if (ingsel_name.text.toString().trim().isEmpty()) {
                             val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
                             ingsel_name.setError("Udfyld navn")
                             ingsel_name.startAnimation(vibrate)
-                        }
-                        if (ingsel_amount.text.toString().trim().isEmpty()) {
-                            val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)
-                            ingsel_amount.setError("Udfyld mængde")
-                            ingsel_amount.startAnimation(vibrate)
                         }
                         if (dialogIngSelected.isEmpty()) {
                             val vibrate = AnimationUtils.loadAnimation(this, R.anim.vibrate)

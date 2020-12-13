@@ -34,6 +34,7 @@ class CreateIngredientSelectionDialogAdapter(
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
         holder.itemView.ing_name.text = dataset[position].name
         holder.itemView.ing_price.text = "%.2fkr".format(dataset[position].price)
+        holder.itemView.ing_selected_amount.text = dataset[position].selectedAmount.toString()
     }
 
     override fun getItemCount(): Int {
