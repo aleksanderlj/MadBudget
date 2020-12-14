@@ -14,19 +14,19 @@ class UnitTests {
         val ingredientSelection1: IngredientSelection = IngredientSelection(
             0, "Ris", 100.0, "G", true, 0)
         val ingredientSelection2: IngredientSelection = IngredientSelection(
-            0, "Mælk" , 200.0, "ML", true, 0)
+            0, "Mælk" , 2000.0, "ML", true, 0)
         val ingredientSelectionWithIngredientsList:
                 ArrayList<IngredientSelectionWithIngredients> = ArrayList()
         val ingredients1: ArrayList<Ingredient> = ArrayList()
         val ingredients2: ArrayList<Ingredient> = ArrayList()
         ingredients1.add(Ingredient(0, "Ris", 100.0, "G", null,
-            "", false, 200.00, 0))
+            "", false, 200.00, 0, 1))
         ingredients1.add(Ingredient(0, "Ris", 100.0, "G", null,
-            "", false, 100.00, 0))
+            "", false, 100.00, 0, 1))
         ingredients2.add(Ingredient(0, "Mælk", 1000.0, "ML", null,
-            "", false, 50.00, 0))
+            "", false, 50.00, 0, 2))
         ingredients2.add(Ingredient(0, "Mælk", 1000.0, "ML", null,
-            "", false, 70.00, 0))
+            "", false, 70.00, 0, 2))
         val ingredientSelectionWithIngredients1: IngredientSelectionWithIngredients =
             IngredientSelectionWithIngredients(ingredientSelection1, ingredients1)
         val ingredientSelectionWithIngredients2: IngredientSelectionWithIngredients =
@@ -36,7 +36,7 @@ class UnitTests {
 
         // We expecte the price to be 110 kr since you would pay 100 kr for the rice, and 50 kr for the milk,
         // However the milk contains 5 times as much milk as needed, therefore: 100 kr + 50/5 kr = 110 kr.
-        Assert.assertEquals("Calculate the price for these ingredients", 110.00,
+        Assert.assertEquals("Calculate the price for these ingredients", 200.00,
             calculatePrices(ingredientSelectionWithIngredientsList), 0.01)
     }
 
@@ -52,7 +52,7 @@ class UnitTests {
                 smallestPrice = Double.MAX_VALUE
                 for (curIng in curIngSel.ingredients) {
 
-                    val ingPrice = Ingredient.calcIngredientPrice(curIngSel.ingredientSelection, curIng)
+                    val ingPrice = curIng.calculatePrice()
                     if (ingPrice < smallestPrice)
                         smallestPrice = ingPrice
                 }
