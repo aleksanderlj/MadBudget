@@ -16,12 +16,17 @@ data class Ingredient(
     @ColumnInfo(name = "ingredient_type") var type: String?,
     @ColumnInfo(name = "has_been_clicked") var hasBeenClicked: Boolean = false,
     @ColumnInfo(name = "ingredient_price") var price: Double?,
-    @ColumnInfo(name = "ingredient_selection_parent_id") var ingredientSelectionParentId: Int
+    @ColumnInfo(name = "ingredient_selection_parent_id") var ingredientSelectionParentId: Int,
+    @ColumnInfo(name = "ingredient_selected_amount") var selectedAmount: Int
 ): Serializable {
-    constructor(): this(0, "", null, null, null, null,false, null,0)
+    constructor(): this(0, "", null, null, null, null,false, null,0, 0)
 
     override fun toString(): String {
         return "Ingredient(ingredientId=$id, ingredientName=$name, amount=$amount, unit=$unit, pieces=$pieces, ingredientType=$type, hasBeenClicked=$hasBeenClicked, ingredientPrice=$price, ingredientSelectionParentId=$ingredientSelectionParentId)"
+    }
+
+    fun calculatePrice(): Double{
+        return price!! * selectedAmount
     }
 
     companion object{

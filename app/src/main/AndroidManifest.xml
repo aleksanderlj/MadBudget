@@ -33,6 +33,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name="com.gruppe17.madbudget.activities.MapsActivity"
@@ -48,6 +51,8 @@
         <activity android:name="com.gruppe17.madbudget.activities.CreateRecipeActivity" />
         <activity android:name="com.gruppe17.madbudget.activities.TestActivity" />
         <activity android:name="com.gruppe17.madbudget.activities.CreateIngSelActivity" />
+        <activity android:name="com.gruppe17.madbudget.activities.SearchIngredientActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysVisible"/>
         <service
             android:name=".database.DBDeleteService"
             android:exported="false"/>

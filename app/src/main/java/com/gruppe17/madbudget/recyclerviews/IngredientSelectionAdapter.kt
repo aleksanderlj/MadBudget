@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
@@ -24,29 +23,41 @@ class IngredientSelectionAdapter(
         val currentItem = myDataset[position]
 
         holder.ingredientName.text = currentItem.ingredientSelection.name
-        holder.ingredientAmount.text = "${currentItem.ingredientSelection.amount.toString()} ${currentItem.ingredientSelection.unit}"
+       /* holder.ingredientAmount.text = "${currentItem.ingredientSelection.amount.toString()} ${currentItem.ingredientSelection.unit}"
         holder.ingredientPicture.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
                 R.drawable.brugsen
             )
-        )
+        )*/
 
         if (currentItem.ingredients.isNotEmpty()) {
             var smallestPrice = Double.MAX_VALUE
+            var smallestPriceProduct: Ingredient? = null
 
             for (curIng in currentItem.ingredients) {
-                val ingPrice =
-                    Ingredient.calcIngredientPrice(currentItem.ingredientSelection, curIng)
-                if (ingPrice < smallestPrice)
+                val ingPrice = curIng.calculatePrice()
+                if (ingPrice < smallestPrice) {
                     smallestPrice = ingPrice
+                    smallestPriceProduct = curIng
+                }
             }
 
-            holder.ingredientPrice.text = "%.2f kr".format(smallestPrice)
+            holder.ingredientPriceCrowns.text = "%.0f".format(smallestPrice)
+            val doubleAsString = smallestPrice.toString()
+            val indexofDecimal = doubleAsString.indexOf(".")
 
+            if (doubleAsString.substring(indexofDecimal).length == 2)
+                holder.ingredientPriceEars.text = doubleAsString.substring(indexofDecimal).plus("0")
+            else
+                holder.ingredientPriceEars.text = doubleAsString.substring(indexofDecimal)
+
+            holder.productName.text = smallestPriceProduct!!.name
+            holder.ingredientCounter.text = smallestPriceProduct.selectedAmount.toString()
         }
 
         holder.ingredientCheckBox.isChecked = myDataset[position].ingredientSelection.isSelected
+
 
     }
 
@@ -69,11 +80,12 @@ class IngredientSelectionAdapter(
         ingredientSelectionClickListener: OnIngredientSelectionClickListener,
         ingredientCheckBoxClickListener: OnIngredientCheckBoxClickListener
     ) : RecyclerView.ViewHolder(itemView) {
-        var ingredientName: TextView = itemView.ingredient_namead
-        var ingredientPrice: TextView = itemView.ingredient_pricead
-        var ingredientAmount: TextView = itemView.ingredient_amount
-        var ingredientPicture: ImageView = itemView.ingredient_store_image
+        var ingredientName: TextView = itemView.ingredientgroup_name
+        var ingredientPriceCrowns: TextView = itemView.ingredient_group_price_crowns
+        var ingredientPriceEars: TextView = itemView.ingredient_group_price_ears
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
+        var ingredientCounter: TextView = itemView.ingredient_counter
+        var productName: TextView = itemView.ingredient_namead
 
 
         init {

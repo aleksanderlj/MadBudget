@@ -2,7 +2,6 @@ package com.gruppe17.madbudget
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
@@ -63,7 +62,7 @@ class FeatureTest {
 
         Thread.sleep(1000)
         onView(withId(R.id.add_ingredient_button)).perform(click())
-        onView(withId(R.id.ingsel_name)).perform(replaceText("inTest"))
+        onView(withId(R.id.search_bar)).perform(replaceText("inTest"))
         onView(withId(R.id.ingsel_amount)).perform(replaceText("300"))
         Thread.sleep(1000)
         onView(withId(R.id.unit_spinner)).perform(click())

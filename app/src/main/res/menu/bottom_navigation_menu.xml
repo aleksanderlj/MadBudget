@@ -3,7 +3,7 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:icon="@drawable/shopping_cart_24px_outlined"
+        android:icon="@drawable/shopping_cart_24px"
         android:title="Indkøb"/>
     <item
         android:id="@+id/page_2"
@@ -14,13 +14,14 @@
     <item
         android:id="@+id/page_3"
         android:enabled="true"
-        android:icon="@drawable/local_offer_24px_outlined"
-        android:title="Tilbud"/>
+        android:icon="@drawable/local_offer_24px"
+        android:title="Tilbud"
+        />
 
     <item
         android:id="@+id/page_4"
         android:enabled="true"
-        android:icon="@drawable/favorite_24px_outlined"
+        android:icon="@drawable/favorite_24px"
         android:title="Favoritter"/>
 
 </menu>

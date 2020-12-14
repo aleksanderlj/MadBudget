@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <TextView
+            android:id="@+id/ing_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/roboto_light"
+            android:maxLines="2"
+            android:text="TextView"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/ing_price"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/ing_selected_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="0"
+            android:textColor="@color/colorWhite"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ing_subtract_symbol"
+            android:layout_width="22dp"
+            android:layout_height="28dp"
+            android:elevation="10dp"
+            app:tint="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ing_subtract"
+            app:layout_constraintStart_toStartOf="@+id/ing_subtract"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectangle" />
+
+        <ImageView
+            android:id="@+id/ing_add_symbol"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:elevation="10dp"
+            app:tint="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/ing_add"
+            app:layout_constraintEnd_toEndOf="@+id/ing_add"
+            app:layout_constraintStart_toStartOf="@+id/ing_add"
+            app:layout_constraintTop_toTopOf="@+id/ing_add"
+            app:srcCompat="@drawable/add_24px" />
+
+        <TextView
+            android:id="@+id/ing_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="45"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ing_price_decimal"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:tint="#70CF43"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/circle" />
+
+        <ImageView
+            android:id="@+id/ing_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:tint="#2C98F0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/circle" />
+
+        <ImageView
+            android:id="@+id/ing_subtract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:tint="#944040"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ing_add"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/circle" />
+
+        <TextView
+            android:id="@+id/ing_price_decimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text=".95"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ing_price"
+            app:layout_constraintEnd_toStartOf="@+id/ing_subtract" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -3,11 +3,12 @@ package com.gruppe17.madbudget
 import android.util.Log
 import com.beust.klaxon.Klaxon
 import com.gruppe17.madbudget.database.AppDatabase
-import com.gruppe17.madbudget.rest.coop.model.CoopLocation
-import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
-import com.gruppe17.madbudget.rest.coop.model.CoopStore
-import com.gruppe17.madbudget.rest.coop.model.CoopStoreList
 import com.gruppe17.madbudget.models.Ingredient
+import com.gruppe17.madbudget.rest.coop.model.*
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.lang.Exception
 import kotlin.math.min
 
@@ -20,6 +21,27 @@ object Utility {
         }
     }
 
+    inline fun <reified T> parse(msg: String): T? {
+        val moshi = Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
+        val coopProductAdapter: JsonAdapter<T> = moshi.adapter(T::class.java)
+        return coopProductAdapter.fromJson(msg)
+    }
+
+    inline fun <reified T> parseArray(msg: String): List<T>? {
+        val moshi = Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
+        val listCoopProductType = Types.newParameterizedType(List::class.java, T::class.java)
+        val coopProductAdapter: JsonAdapter<List<T>> = moshi.adapter(listCoopProductType)
+
+        return coopProductAdapter.fromJson(msg)
+    }
+
+    /*
     inline fun <reified T> parse(msg: String): T? {
         return try {
             Klaxon().parse<T>(msg)
@@ -35,6 +57,8 @@ object Utility {
             null
         }
     }
+
+     */
 
     fun deleteRecipe(id: Int, db: AppDatabase){
         val ingSel = db.ingredientSelectionDao().getAllByRecipeId(id)
@@ -127,6 +151,7 @@ object Utility {
         return CoopStoreList(1, 1, 1000, 73, stores, 1, "")
     }
 
+    /*
     fun getTestIngredientList(): ArrayList<Ingredient> {
         val l = ArrayList<Ingredient>()
         l.add(
@@ -880,4 +905,6 @@ object Utility {
         )
         return l
     }
+    
+     */
 }

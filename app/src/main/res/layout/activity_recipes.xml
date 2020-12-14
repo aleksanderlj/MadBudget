@@ -12,7 +12,7 @@
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemBackground="@color/colorWhite"
+        app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/bnv_tab_item_foreground"
         app:itemTextColor="@color/bnv_tab_item_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -84,4 +84,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/toolbar2"
         app:layout_constraintTop_toTopOf="@+id/toolbar2" />
+
+    <Button
+        android:id="@+id/hehewee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hehe wee"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

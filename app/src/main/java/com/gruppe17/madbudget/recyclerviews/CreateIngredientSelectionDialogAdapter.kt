@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.item_dialog_ing_sel.view.*
+import kotlinx.android.synthetic.main.item_ingredient_search.view.*
 
 class CreateIngredientSelectionDialogAdapter(
     val dataset: ArrayList<Ingredient>,
-    val onDialogIngredientClickListener: OnDialogIngredientClickListener,
     val notSelected: Boolean
 ) :
     RecyclerView.Adapter<CreateIngredientSelectionDialogAdapter.IngSelDialogViewHolder>(),
@@ -27,13 +27,26 @@ class CreateIngredientSelectionDialogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngSelDialogViewHolder {
         val item = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_dialog_ing_sel, parent, false) as View
-        return IngSelDialogViewHolder(item, onDialogIngredientClickListener, notSelected)
+            .inflate(R.layout.item_ingredient_search, parent, false) as View
+        return IngSelDialogViewHolder(item, notSelected, dataset)
     }
 
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
-        holder.itemView.ing_name_dialog.text = dataset[position].name
-        holder.itemView.ing_price_dialog.text = "%.2fkr".format(dataset[position].price)
+        val priceDouble = dataset[position].price!!
+        val indexOfDecimal = priceDouble.toString().indexOf(".")
+        val priceInt = priceDouble.toInt()
+        var priceDecimal = priceDouble.toString().substring(indexOfDecimal)
+        if(priceDecimal.length == 2){
+            priceDecimal += "0"
+        } else if(priceDecimal.length > 3) {
+            priceDecimal = priceDecimal.substring(0, 2)
+        }
+
+        holder.itemView.ing_name.text = dataset[position].name
+        holder.itemView.ing_price.text = priceInt.toString()
+        holder.itemView.ing_price_decimal.text = priceDecimal
+
+        holder.itemView.ing_selected_amount.text = dataset[position].selectedAmount.toString()
     }
 
     override fun getItemCount(): Int {
@@ -42,22 +55,35 @@ class CreateIngredientSelectionDialogAdapter(
 
     class IngSelDialogViewHolder(
         itemView: View,
-        onDialogIngredientClickListener: OnDialogIngredientClickListener,
-        selector: Boolean
+        selector: Boolean,
+        dataset: ArrayList<Ingredient>
     ) : RecyclerView.ViewHolder(itemView) {
 
+
         init {
+            /*
             if (selector) {
                 itemView.setOnClickListener {
-                    onDialogIngredientClickListener.onDialogIngredientSelect(
-                        adapterPosition
-                    )
+                    onDialogIngredientClickListener.onDialogIngredientSelect(adapterPosition)
                 }
             } else {
                 itemView.setOnClickListener {
-                    onDialogIngredientClickListener.onDialogIngredientDeselect(
-                        adapterPosition
-                    )
+                    onDialogIngredientClickListener.onDialogIngredientDeselect(adapterPosition)
+                }
+            }
+
+             */
+
+            itemView.ing_add.setOnClickListener{
+                dataset[adapterPosition].selectedAmount++
+                itemView.ing_selected_amount.text = dataset[adapterPosition].selectedAmount.toString()
+            }
+
+            itemView.ing_subtract.setOnClickListener{
+                if(dataset[adapterPosition].selectedAmount > 0) {
+                    dataset[adapterPosition].selectedAmount--
+                    itemView.ing_selected_amount.text =
+                        dataset[adapterPosition].selectedAmount.toString()
                 }
             }
 
@@ -110,6 +136,12 @@ class CreateIngredientSelectionDialogAdapter(
 
     fun notifyItemAdded(item: Ingredient){
         datasetFull.add(item)
+        notifyDataSetChanged()
+    }
+
+    fun notifyDataSetChanged(dataset: ArrayList<Ingredient>){
+        datasetFull.clear()
+        datasetFull.addAll(dataset)
         notifyDataSetChanged()
     }
 

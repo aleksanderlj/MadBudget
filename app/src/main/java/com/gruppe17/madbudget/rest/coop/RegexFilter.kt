@@ -1,18 +1,20 @@
 package com.gruppe17.madbudget.rest.coop
 
+import android.util.Log
 import com.gruppe17.madbudget.rest.coop.model.CoopProduct
 import com.gruppe17.madbudget.models.Ingredient
 
 class RegexFilter {
     //TODO Lav IngredientAmount felter til var og brug setters ya dang ol dumbo
     companion object {
-        val amountRegex = Regex("(([0-9]+)([,.])?([0-9]+)?(-))?([0-9]+)([,.])?([0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
+        val amountRegex =
+            Regex("(([0-9]+)([,.])?([0-9]+)?(-))?([0-9]+)([,.])?([0-9]+)? ?(?<unit>KG|GRAM|G|CL|ML|LITER|L)([^A-ZÆØÅ]|$)")
         val stkXRegex = Regex("([0-9]+) ?(X|STK)")
         val caMaxMinRegex = Regex("(MIN|CA|MAX)[ .]+([0-9]+) ?(KG|GRAM|G|CL|ML|LITER|L)")
         val halfRegex = Regex("(1/2) ?(LITER|L|KG)")
 
         // TODO lav dette til en constructor i ingredient
-        fun convertCoopIngredient(coopIng: CoopProduct): Ingredient{
+        fun convertCoopIngredient(coopIng: CoopProduct): Ingredient {
             var ingAmount = parseIngredientFields(coopIng.Navn, coopIng.Navn2)
 
             var id = 0
@@ -25,7 +27,7 @@ class RegexFilter {
             var price = coopIng.Pris
             var parentId = 0
 
-            return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId)
+            return Ingredient(id, name, amount, unit, pieces, type, hasBeenClicked, price, parentId, 0)
         }
 
         fun parseIngredientFields(field1: String, field2: String): IngredientAmount {
@@ -35,13 +37,13 @@ class RegexFilter {
             //Log.i("BIGGO1", "$field1 | $ing1")
             //Log.i("BIGGO2", "$field2 | $ing2")
 
-            if(ing2.totalAmount == null && ing1.totalAmount != null){
+            if (ing2.totalAmount == null && ing1.totalAmount != null) {
                 ing2 = IngredientAmount(ing1.totalAmount, ing2.unit, ing2.pieces)
             }
-            if(ing2.unit == null && ing1.unit != null){
+            if (ing2.unit == null && ing1.unit != null) {
                 ing2 = IngredientAmount(ing2.totalAmount, ing1.unit, ing2.pieces)
             }
-            if(ing2.pieces == null && ing1.pieces != null){
+            if (ing2.pieces == null && ing1.pieces != null) {
                 ing2 = IngredientAmount(ing2.totalAmount, ing2.unit, ing1.pieces)
             }
 
@@ -72,40 +74,52 @@ class RegexFilter {
             var ingredientAmount = IngredientAmount(null, null, null)
 
             if (halfRegex.containsMatchIn(input)) {
-                println("Half")
+                //println("Half")
                 ingredientAmount = getHalfAmount(input)
-            } else if(caMaxMinRegex.containsMatchIn(input)) {
-                println("Ca Min Max")
+            } else if (caMaxMinRegex.containsMatchIn(input)) {
+                //println("Ca Min Max")
                 ingredientAmount = getCaMinMaxAmount(input)
             } else if (amountRegex.containsMatchIn(input)) {
-                println("Default amount")
+                //println("Default amount")
                 ingredientAmount = getDefaultAmount(input)
             }
 
-            if(stkXRegex.containsMatchIn(input)) {
-                println("Pieces")
+            if (stkXRegex.containsMatchIn(input)) {
+                //println("Pieces")
                 ingredientAmount = applyPieces(input, ingredientAmount)
             }
 
             ingredientAmount = convertUnits(ingredientAmount)
 
-            println("Amount=${ingredientAmount.totalAmount}, Unit=${ingredientAmount.unit}, Pieces=${ingredientAmount.pieces}")
+            //println("Amount=${ingredientAmount.totalAmount}, Unit=${ingredientAmount.unit}, Pieces=${ingredientAmount.pieces}")
 
             return ingredientAmount
         }
 
         fun convertUnits(ingredientAmount: IngredientAmount): IngredientAmount {
             var newObject = ingredientAmount
-            if(ingredientAmount.unit != null && ingredientAmount.totalAmount != null){
-                when(ingredientAmount.unit){
+            if (ingredientAmount.unit != null && ingredientAmount.totalAmount != null) {
+                when (ingredientAmount.unit) {
                     "KG" -> {
-                        newObject = IngredientAmount(ingredientAmount.totalAmount*1000, "G", ingredientAmount.pieces)
+                        newObject = IngredientAmount(
+                            ingredientAmount.totalAmount * 1000,
+                            "G",
+                            ingredientAmount.pieces
+                        )
                     }
                     "CL" -> {
-                        newObject = IngredientAmount(ingredientAmount.totalAmount*10, "ML", ingredientAmount.pieces)
+                        newObject = IngredientAmount(
+                            ingredientAmount.totalAmount * 10,
+                            "ML",
+                            ingredientAmount.pieces
+                        )
                     }
                     "LITER", "L" -> {
-                        newObject = IngredientAmount(ingredientAmount.totalAmount*1000, "ML", ingredientAmount.pieces)
+                        newObject = IngredientAmount(
+                            ingredientAmount.totalAmount * 1000,
+                            "ML",
+                            ingredientAmount.pieces
+                        )
                     }
                 }
             }
@@ -117,8 +131,8 @@ class RegexFilter {
 
             var number: Double? = null
             var unit: String? = null
-            for (s in match){
-                if(s.groups[1]!!.value == "CA"){
+            for (s in match) {
+                if (s.groups[1]!!.value == "CA") {
                     number = s.groups[2]!!.value.toDouble()
                     unit = s.groups[3]!!.value
                     break
@@ -136,7 +150,7 @@ class RegexFilter {
             val pieces = match!!.groups[1]!!.value.toInt()
 
             var newAmount = ingredientAmount.totalAmount
-            if(match.groups[2]!!.value == "X"){
+            if (newAmount != null && match.groups[2]!!.value == "X") {
                 newAmount = pieces * ingredientAmount.totalAmount!!
             }
 
@@ -178,7 +192,7 @@ class RegexFilter {
         val totalAmount: Double?,
         val unit: String?,
         val pieces: Int?
-    ){
+    ) {
         override fun toString(): String {
             return "Amount=${this.totalAmount}, Unit=${this.unit}, Pieces=${this.pieces}"
         }

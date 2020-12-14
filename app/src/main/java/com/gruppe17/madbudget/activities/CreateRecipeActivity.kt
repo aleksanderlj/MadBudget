@@ -24,8 +24,8 @@ import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapt
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
-import kotlinx.android.synthetic.main.activity_create_recipe.navigation
 import kotlinx.android.synthetic.main.activity_recipes.*
+import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_view_ingredient.*
 import kotlinx.android.synthetic.main.item_unit_spinner.view.*
 import kotlinx.coroutines.GlobalScope
@@ -54,6 +54,9 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         db = DatabaseBuilder.get(this)
 
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
+
         initNavigationMenu()
 
         recipeId = intent.getIntExtra("ClickedRecipe",-1)
@@ -67,13 +70,17 @@ class CreateRecipeActivity : AppCompatActivity(),
                 recipeBak = db.recipeDao().getById(recipeId)
 
                 runOnUiThread{
+
+
                     recipe_title.setText(recipeBak!!.recipe.name)
-                    recipe_list_time.setText(recipeBak!!.recipe.timeToMake)
-                    recipe_list_price.setText("%.2f kr".format(recipeBak!!.recipe.price))
+                    recipe_list_time.text = recipeBak!!.recipe.timeToMake
+                    recipe_list_price.setText("%.2f".format(recipeBak!!.recipe.price))
+                    updateSelectedCounter()
 
                     recipe_list_price.addTextChangedListener(ChangeWatcher())
                     recipe_list_time.addTextChangedListener(ChangeWatcher())
                     recipe_title.addTextChangedListener(ChangeWatcher())
+
                     setupRecyclerView()
                 }
             }
@@ -83,6 +90,7 @@ class CreateRecipeActivity : AppCompatActivity(),
 
             recipe_title.setText(intent.getStringExtra("recipeName"))
             recipe_list_time.text = intent.getStringExtra("recipeTime")
+            updateSelectedCounter()
 
             recipe_list_price.addTextChangedListener(ChangeWatcher())
             recipe_list_time.addTextChangedListener(ChangeWatcher())
@@ -111,7 +119,7 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
             .show()
 
-        mAlertDialog.ingredient_list.adapter = ViewIngredientSelectionAdapter(ingredientsToShow, applicationContext)
+        mAlertDialog.ingredient_list.adapter = ViewIngredientSelectionAdapter(ingredientsToShow, ingredientSelectionList[position], applicationContext)
         mAlertDialog.ingredient_list.layoutManager = LinearLayoutManager(applicationContext)
         mAlertDialog.ingredient_list.setHasFixedSize(true)
     }
@@ -122,8 +130,44 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         GlobalScope.launch {
             db.ingredientSelectionDao().update(ingredientSelectionList[position].ingredientSelection)
-            runOnUiThread { ingredient_selection_list.adapter?.notifyDataSetChanged() }
+            runOnUiThread {
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
+                calculatePrice()
+                updateSelectedCounter()
+            }
         }
+    }
+
+    fun updateSelectedCounter(){
+        var counter = 0
+
+        for (i in ingredientSelectionList){
+            if(i.ingredientSelection.isSelected){
+                counter++
+            }
+        }
+
+        numb_of_ingredients.text = counter.toString()
+    }
+
+    private fun calculatePrice(){
+
+        var recipePrice: Double = 0.0
+
+        for (i in ingredientSelectionList){
+            var smallestPrice = Double.MAX_VALUE
+            if (i.ingredientSelection.isSelected){
+                for (j in i.ingredients){
+                    val ingPrice = j.calculatePrice()
+                    if (ingPrice != null) {
+                        if (ingPrice < smallestPrice)
+                            smallestPrice = ingPrice
+                    }
+                }
+                recipePrice += smallestPrice
+            }
+        }
+        recipe_list_price.setText("%.2f".format(recipePrice))
     }
 
     private fun setupRecyclerView(){
@@ -168,6 +212,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 ingredientSelectionList.removeAt(position)
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
                 Log.i("bund",ingredientSelectionList.toString())
+                calculatePrice()
             }
         }
     }
@@ -253,18 +298,6 @@ class CreateRecipeActivity : AppCompatActivity(),
         }
     }
 
-    /*
-    override fun onDestroy() {
-        if(ingredientSelectionList.isEmpty()){
-            val i = Intent()
-            i.putExtra("RecipeID", recipeId)
-            JobIntentService.enqueueWork(this, DBDeleteService::class.java, 1, i)
-        }
-        super.onDestroy()
-    }
-
-     */
-
     inner class ChangeWatcher: TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -283,12 +316,15 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         db = DatabaseBuilder.get(this)
+        val menu: Menu = navigation.menu
+        menu.getItem(0).isChecked = true
         GlobalScope.launch {
             Log.i("bund",recipeId.toString());
             ingredientSelectionList.clear()
             ingredientSelectionList.addAll(db.ingredientSelectionDao().getAllByRecipeId(recipeId) as ArrayList<IngredientSelectionWithIngredients>)
             runOnUiThread{
                 Log.i("bund",ingredientSelectionList.toString())
+                calculatePrice()
                 ingredient_selection_list.adapter?.notifyDataSetChanged()
             }
         }
