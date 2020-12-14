@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
+import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelection
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
 import com.gruppe17.madbudget.rest.coop.RegexFilter
 import com.gruppe17.madbudget.rest.coop.model.CoopProduct
+import io.grpc.okhttp.internal.Util
 import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_create_ingsel.inglist_selected
 import kotlinx.android.synthetic.main.activity_search_ingredients.*
@@ -41,6 +43,7 @@ class SearchIngredientActivity : AppCompatActivity() {
         ing_search_list.adapter = listAdapter
 
 
+        /*
         val fs = Firebase.firestore
         val collection = fs.collection("Assortments").document("1885").collection("Products")
 
@@ -51,6 +54,17 @@ class SearchIngredientActivity : AppCompatActivity() {
             }
             listAdapter.notifyDataSetChanged(ingredientList)
         }
+
+         */
+
+        // We load test data to not overload the firestore
+        val s = Utility.readFileAsString(R.raw.assortment, this)
+        val cp = Utility.parseArray<CoopProduct>(s)!!
+        for (i in cp){
+            val n = RegexFilter.convertCoopIngredient(i)
+            ingredientList.add(n)
+        }
+        listAdapter.notifyDataSetChanged()
 
         ing_search_box.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

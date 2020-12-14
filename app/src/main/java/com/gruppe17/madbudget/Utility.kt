@@ -1,5 +1,6 @@
 package com.gruppe17.madbudget
 
+import android.content.Context
 import android.util.Log
 import com.beust.klaxon.Klaxon
 import com.gruppe17.madbudget.database.AppDatabase
@@ -9,6 +10,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.io.File
 import java.lang.Exception
 import kotlin.math.min
 
@@ -39,6 +41,12 @@ object Utility {
         val coopProductAdapter: JsonAdapter<List<T>> = moshi.adapter(listCoopProductType)
 
         return coopProductAdapter.fromJson(msg)
+    }
+
+    fun readFileAsString(fileId : Int, context: Context) : String{
+        val input = context.resources.openRawResource(fileId)
+        val s = input.bufferedReader().use { it.readText() }
+        return s
     }
 
     /*

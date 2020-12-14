@@ -329,6 +329,15 @@ class CreateRecipeActivity : AppCompatActivity(),
             }
         }
     }
+
+
+    fun startRevealActivity(v : View){
+        val x = (v.x + v.width / 2)
+        val y = (v.y + v.height / 2)
+
+        val i = Intent(this, CreateIngSelActivity::class.java)
+
+    }
 }
 
 
