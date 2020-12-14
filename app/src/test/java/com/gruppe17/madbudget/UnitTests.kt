@@ -34,8 +34,7 @@ class UnitTests {
         ingredientSelectionWithIngredientsList.add(ingredientSelectionWithIngredients1)
         ingredientSelectionWithIngredientsList.add(ingredientSelectionWithIngredients2)
 
-        // We expecte the price to be 110 kr since you would pay 100 kr for the rice, and 50 kr for the milk,
-        // However the milk contains 5 times as much milk as needed, therefore: 100 kr + 50/5 kr = 110 kr.
+        // We expect the price to be 200 kr since you would pay 100 kr for the rice, and 50 kr for the milk time 2.
         Assert.assertEquals("Calculate the price for these ingredients", 200.00,
             calculatePrices(ingredientSelectionWithIngredientsList), 0.01)
     }
