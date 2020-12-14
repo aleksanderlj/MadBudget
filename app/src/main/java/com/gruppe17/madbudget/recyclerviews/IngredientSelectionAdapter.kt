@@ -10,6 +10,8 @@ import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
 import com.gruppe17.madbudget.models.IngredientSelectionWithIngredients
 import kotlinx.android.synthetic.main.item_ingredient_in_recipe.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class IngredientSelectionAdapter(
@@ -52,7 +54,7 @@ class IngredientSelectionAdapter(
             else
                 holder.ingredientPriceEars.text = doubleAsString.substring(indexofDecimal)
 
-            holder.productName.text = smallestPriceProduct!!.name
+            holder.productName.text = smallestPriceProduct!!.name!!.toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
             holder.ingredientCounter.text = smallestPriceProduct.selectedAmount.toString()
         }
 

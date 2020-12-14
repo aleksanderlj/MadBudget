@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
+import com.gruppe17.madbudget.RevealAnimation
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.Ingredient
@@ -31,10 +33,13 @@ class CreateIngSelActivity : AppCompatActivity(),
     private var ingSelId = -1
     private lateinit var ingSelSearchAdapter: CreateIngredientSelectionDialogAdapter
     private lateinit var ingListAdapter: CreateIngredientSelectionDialogAdapter
+    private lateinit var mRevealAnimation: RevealAnimation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ingsel)
+        mRevealAnimation = RevealAnimation(constraintLayout, intent, this)
+        initNavigationMenu()
 
 
         val fs = Firebase.firestore
@@ -54,6 +59,7 @@ class CreateIngSelActivity : AppCompatActivity(),
         secondsearch_bar.setOnClickListener{
             val i = Intent(this, SearchIngredientActivity::class.java)
             startActivityForResult(i, 1)
+            overridePendingTransition(R.anim.fadein, R.anim.fadeout)
         }
 
         /*
@@ -151,7 +157,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         if(search_bar.text.toString().trim().isEmpty() && dialogIngSelected.isEmpty()){
-            super.onBackPressed()
+            mRevealAnimation.unRevealActivity()
         } else {
 
             val backPressDialog = AlertDialog.Builder(this)
@@ -184,7 +190,7 @@ class CreateIngSelActivity : AppCompatActivity(),
                                 db.ingredientDao().insertAll(dialogIngSelected)
                                 db.ingredientDao().deleteAll(removables)
                                 runOnUiThread {
-                                    super.onBackPressed()
+                                    mRevealAnimation.unRevealActivity()
                                 }
                             }
                         } else {
@@ -213,7 +219,7 @@ class CreateIngSelActivity : AppCompatActivity(),
                                 db.ingredientDao().updateAll(dialogIngSelected)
                                 db.ingredientDao().deleteAll(removables)
                                 runOnUiThread {
-                                    super.onBackPressed()
+                                    mRevealAnimation.unRevealActivity()
                                 }
                             }
                         }
@@ -237,7 +243,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
                 }
                 .setNegativeButton("Kassér") { dialog, which ->
-                    super.onBackPressed()
+                    mRevealAnimation.unRevealActivity()
                 }
                 .setNeutralButton("Annuller") { dialog, which -> }
                 .show()
@@ -274,5 +280,35 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         selectedAdapter.notifyItemRemoved(item)
         notSelectedAdapter.notifyItemAdded(item)
+    }
+
+    private fun initNavigationMenu(){
+        navigation.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.page_1 -> {
+                    true
+                }
+                R.id.page_2 -> {
+                    val mapsActivity = Intent(this, MapsActivity::class.java)
+                    startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+                    true
+                }
+                R.id.page_3 -> {
+                    Toast.makeText(this, "Ikke implementeret", Toast.LENGTH_LONG).show()
+                    true
+                }
+                R.id.page_4 -> {
+                    Toast.makeText(this, "Ikke implementeret", Toast.LENGTH_LONG).show()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigation.menu.getItem(0).isChecked = true
     }
 }

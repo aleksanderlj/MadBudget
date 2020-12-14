@@ -10,6 +10,8 @@ import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.models.Ingredient
 import kotlinx.android.synthetic.main.item_dialog_ing_sel.view.*
 import kotlinx.android.synthetic.main.item_ingredient_search.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CreateIngredientSelectionDialogAdapter(
     val dataset: ArrayList<Ingredient>,
@@ -42,7 +44,7 @@ class CreateIngredientSelectionDialogAdapter(
             priceDecimal = priceDecimal.substring(0, 2)
         }
 
-        holder.itemView.ing_name.text = dataset[position].name
+        holder.itemView.ing_name.text = dataset[position].name!!.toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
         holder.itemView.ing_price.text = priceInt.toString()
         holder.itemView.ing_price_decimal.text = priceDecimal
 

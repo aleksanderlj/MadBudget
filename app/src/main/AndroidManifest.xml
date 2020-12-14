@@ -39,20 +39,33 @@
 
         <activity
             android:name="com.gruppe17.madbudget.activities.MapsActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.gruppe17.madbudget.activities.MainActivity"/>
-        <activity android:name="com.gruppe17.madbudget.activities.RecipeActivity">
+        <activity android:name="com.gruppe17.madbudget.activities.RecipeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gruppe17.madbudget.activities.CreateRecipeActivity" />
-        <activity android:name="com.gruppe17.madbudget.activities.TestActivity" />
-        <activity android:name="com.gruppe17.madbudget.activities.CreateIngSelActivity" />
+        <activity android:name="com.gruppe17.madbudget.activities.CreateRecipeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.gruppe17.madbudget.activities.TestActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.gruppe17.madbudget.activities.CreateIngSelActivity"
+            android:theme="@style/AppTheme.Transparent"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.gruppe17.madbudget.activities.SearchIngredientActivity"
-            android:windowSoftInputMode="adjustPan|stateAlwaysVisible"/>
+            android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".database.DBDeleteService"
             android:exported="false"/>

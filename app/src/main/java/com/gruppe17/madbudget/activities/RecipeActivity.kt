@@ -1,32 +1,28 @@
 package com.gruppe17.madbudget.activities
 
 import SwipeHelper
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.*
 import com.gruppe17.madbudget.recyclerviews.CellClickListener
 import com.gruppe17.madbudget.recyclerviews.RecipeAdapter
-import com.gruppe17.madbudget.rest.coop.model.CoopLocation
-import com.gruppe17.madbudget.rest.coop.model.CoopOpeningHour
-import com.gruppe17.madbudget.rest.coop.model.CoopStore
-import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_create_recipe.*
@@ -184,10 +180,13 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         }
     }
 
-    override fun onCellClickListener(clickedRecipe: RecipeWithIngredientSelections) {
+    override fun onCellClickListener(clickedRecipe: RecipeWithIngredientSelections, sharedView: TextView) {
         val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
         recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipe.id)
-        startActivity(recipeActivity)
+        val sharedId = clickedRecipe.recipe.id
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, sharedView, "recipe$sharedId")
+        recipeActivity.putExtra("sharedId", sharedId)
+        startActivity(recipeActivity, options.toBundle())
     }
 
     private fun searchOnChange(recipeList: List<RecipeWithIngredientSelections>) {

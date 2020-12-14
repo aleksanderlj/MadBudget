@@ -1,17 +1,13 @@
 package com.gruppe17.madbudget.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.DatabaseBuilder
@@ -20,11 +16,9 @@ import com.gruppe17.madbudget.models.IngredientSelection
 import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
 import com.gruppe17.madbudget.rest.coop.RegexFilter
 import com.gruppe17.madbudget.rest.coop.model.CoopProduct
-import io.grpc.okhttp.internal.Util
 import kotlinx.android.synthetic.main.activity_create_ingsel.*
-import kotlinx.android.synthetic.main.activity_create_ingsel.inglist_selected
 import kotlinx.android.synthetic.main.activity_search_ingredients.*
-import kotlinx.android.synthetic.main.dialog_ing_sel_search.*
+import kotlinx.android.synthetic.main.activity_search_ingredients.navigation
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -36,6 +30,7 @@ class SearchIngredientActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_ingredients)
+        initNavigationMenu()
 
         ing_search_list.setHasFixedSize(true)
         ing_search_list.layoutManager = LinearLayoutManager(this)
@@ -64,7 +59,7 @@ class SearchIngredientActivity : AppCompatActivity() {
             val n = RegexFilter.convertCoopIngredient(i)
             ingredientList.add(n)
         }
-        listAdapter.notifyDataSetChanged()
+        listAdapter.notifyDataSetChanged(ingredientList)
 
         ing_search_box.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -105,7 +100,38 @@ class SearchIngredientActivity : AppCompatActivity() {
                 i.putExtra("IngSelId", ingSelId.toInt())
                 setResult(Activity.RESULT_OK, i)
                 super.finish()
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout)
             }
         }
+    }
+
+    private fun initNavigationMenu(){
+        navigation.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.page_1 ->{
+                    true
+                }
+                R.id.page_2 ->{
+                    val mapsActivity = Intent(this, MapsActivity::class.java)
+                    startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+                    true
+                }
+                R.id.page_3 -> {
+                    Toast.makeText(this,"Ikke implementeret",Toast.LENGTH_LONG).show()
+                    true
+                }
+                R.id.page_4 -> {
+                    Toast.makeText(this,"Ikke implementeret",Toast.LENGTH_LONG).show()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigation.menu.getItem(0).isChecked = true
     }
 }

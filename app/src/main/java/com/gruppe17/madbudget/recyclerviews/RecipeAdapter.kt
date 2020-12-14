@@ -24,11 +24,12 @@ class RecipeAdapter(private var myDataset: List<RecipeWithIngredientSelections>,
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
         val currentItem = myDataset[position]
         holder.name.text = currentItem.recipe.name
+        holder.name.transitionName = "recipe${currentItem.recipe.id}"
         holder.price.text = "%.2f kr,-".format(currentItem.recipe.price)
         holder.showedDistance.text = "2km"
         holder.walkingDude.setImageResource(R.drawable.walking_dude)
         holder.itemView.setOnClickListener{
-            cellClickListener.onCellClickListener(currentItem)
+            cellClickListener.onCellClickListener(currentItem, holder.name)
         }
         holder.storeAddress.text = "Kollegiebakken 7"
         holder.storeClosingTimes.text = "07:00 - 21:00"

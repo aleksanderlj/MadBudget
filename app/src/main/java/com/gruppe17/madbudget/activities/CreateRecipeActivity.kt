@@ -2,15 +2,12 @@ package com.gruppe17.madbudget.activities
 
 import SwipeHelper
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,7 +17,6 @@ import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
 import com.gruppe17.madbudget.models.*
-import com.gruppe17.madbudget.recyclerviews.CreateIngredientSelectionDialogAdapter
 import com.gruppe17.madbudget.recyclerviews.ViewIngredientSelectionAdapter
 import com.gruppe17.madbudget.recyclerviews.IngredientSelectionAdapter
 import kotlinx.android.synthetic.main.activity_create_recipe.*
@@ -51,6 +47,14 @@ class CreateRecipeActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_recipe)
+
+        supportPostponeEnterTransition()
+        val sharedId = intent.getIntExtra("sharedId", -1)
+        if(sharedId != -1){
+            recipe_title.transitionName = "recipe$sharedId"
+        }
+        supportStartPostponedEnterTransition()
+
 
         db = DatabaseBuilder.get(this)
 
@@ -100,9 +104,12 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         add_ingredient_button.setOnClickListener {
             hasChanged = true
+            /*
             val i = Intent(this, CreateIngSelActivity::class.java)
             i.putExtra("ClickedRecipe", recipeId)
             startActivity(i)
+             */
+            startRevealActivity(it)
         }
 
     }
@@ -282,6 +289,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 R.id.page_2 ->{
                     val mapsActivity = Intent(this, MapsActivity::class.java)
                     startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                     true
                 }
                 R.id.page_3 -> {
@@ -314,6 +322,7 @@ class CreateRecipeActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        updateSelectedCounter()
         db = DatabaseBuilder.get(this)
         val menu: Menu = navigation.menu
         menu.getItem(0).isChecked = true
@@ -335,7 +344,19 @@ class CreateRecipeActivity : AppCompatActivity(),
         val y = (v.y + v.height / 2)
 
         val i = Intent(this, CreateIngSelActivity::class.java)
+        i.putExtra("X", x.toInt())
+        i.putExtra("Y", y.toInt())
+        i.putExtra("ClickedRecipe", recipeId)
 
+        startActivity(i)
+
+        overridePendingTransition(0, 0)
+
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout)
     }
 }
 

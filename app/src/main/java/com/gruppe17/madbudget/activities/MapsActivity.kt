@@ -1,7 +1,6 @@
 package com.gruppe17.madbudget.activities
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -20,11 +19,9 @@ import com.gruppe17.madbudget.R
 import com.gruppe17.madbudget.Utility
 import com.gruppe17.madbudget.database.AppDatabase
 import com.gruppe17.madbudget.database.DatabaseBuilder
-import com.gruppe17.madbudget.database.firestore.Coop2Firebase
 import com.gruppe17.madbudget.models.Store
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_maps.navigation
-import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList

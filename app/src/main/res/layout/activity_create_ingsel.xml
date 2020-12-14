@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1.0"
-    android:id="@+id/constraintLayout">
+    android:id="@+id/constraintLayout"
+    android:background="@color/colorWhite">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
