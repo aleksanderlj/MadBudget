@@ -53,7 +53,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
         inglist_selected.setHasFixedSize(true)
         inglist_selected.layoutManager = LinearLayoutManager(this)
-        ingListAdapter = CreateIngredientSelectionDialogAdapter(dialogIngSelected, false)
+        ingListAdapter = CreateIngredientSelectionDialogAdapter(dialogIngSelected, false, this)
         inglist_selected.adapter = ingListAdapter
 
         secondsearch_bar.setOnClickListener{

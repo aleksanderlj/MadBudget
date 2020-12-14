@@ -34,7 +34,7 @@ class SearchIngredientActivity : AppCompatActivity() {
 
         ing_search_list.setHasFixedSize(true)
         ing_search_list.layoutManager = LinearLayoutManager(this)
-        listAdapter = CreateIngredientSelectionDialogAdapter(ingredientList, true)
+        listAdapter = CreateIngredientSelectionDialogAdapter(ingredientList, true, this)
         ing_search_list.adapter = listAdapter
 
 

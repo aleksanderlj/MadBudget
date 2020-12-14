@@ -1,8 +1,10 @@
 package com.gruppe17.madbudget.recyclerviews
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +17,8 @@ import kotlin.collections.ArrayList
 
 class CreateIngredientSelectionDialogAdapter(
     val dataset: ArrayList<Ingredient>,
-    val notSelected: Boolean
+    val notSelected: Boolean,
+    val context: Context
 ) :
     RecyclerView.Adapter<CreateIngredientSelectionDialogAdapter.IngSelDialogViewHolder>(),
     Filterable
@@ -30,7 +33,7 @@ class CreateIngredientSelectionDialogAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngSelDialogViewHolder {
         val item = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_ingredient_search, parent, false) as View
-        return IngSelDialogViewHolder(item, notSelected, dataset)
+        return IngSelDialogViewHolder(item, notSelected, dataset, context)
     }
 
     override fun onBindViewHolder(holder: IngSelDialogViewHolder, position: Int) {
@@ -58,7 +61,8 @@ class CreateIngredientSelectionDialogAdapter(
     class IngSelDialogViewHolder(
         itemView: View,
         selector: Boolean,
-        dataset: ArrayList<Ingredient>
+        dataset: ArrayList<Ingredient>,
+        context: Context
     ) : RecyclerView.ViewHolder(itemView) {
 
 
@@ -79,13 +83,16 @@ class CreateIngredientSelectionDialogAdapter(
             itemView.ing_add.setOnClickListener{
                 dataset[adapterPosition].selectedAmount++
                 itemView.ing_selected_amount.text = dataset[adapterPosition].selectedAmount.toString()
+                itemView.green_circle.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse_out))
+                itemView.ing_add.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse_in_small))
             }
 
             itemView.ing_subtract.setOnClickListener{
                 if(dataset[adapterPosition].selectedAmount > 0) {
                     dataset[adapterPosition].selectedAmount--
-                    itemView.ing_selected_amount.text =
-                        dataset[adapterPosition].selectedAmount.toString()
+                    itemView.ing_selected_amount.text = dataset[adapterPosition].selectedAmount.toString()
+                    itemView.green_circle.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse_in))
+                    itemView.ing_subtract.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pulse_in_small))
                 }
             }
 
