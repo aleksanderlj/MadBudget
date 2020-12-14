@@ -45,7 +45,7 @@ class IngredientSelectionAdapter(
                 }
             }
 
-            holder.ingredientPriceCrowns.text = "%.0f".format(smallestPrice)
+            holder.ingredientPriceCrowns.text = smallestPrice.toInt().toString()
             val doubleAsString = smallestPrice.toString()
             val indexofDecimal = doubleAsString.indexOf(".")
 
