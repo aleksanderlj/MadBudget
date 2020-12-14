@@ -51,7 +51,7 @@ class CreateIngSelActivity : AppCompatActivity(),
         ingListAdapter = CreateIngredientSelectionDialogAdapter(dialogIngSelected, false)
         inglist_selected.adapter = ingListAdapter
 
-        textInputRecipeTime.setOnClickListener{
+        secondsearch_bar.setOnClickListener{
             val i = Intent(this, SearchIngredientActivity::class.java)
             startActivityForResult(i, 1)
         }
