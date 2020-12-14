@@ -73,12 +73,14 @@ class CreateRecipeActivity : AppCompatActivity(),
 
 
                     recipe_title.setText(recipeBak!!.recipe.name)
-                    recipe_list_time.setText(recipeBak!!.recipe.timeToMake)
-                    recipe_list_price.setText("%.2f kr,-".format(recipeBak!!.recipe.price))
+                    recipe_list_time.text = recipeBak!!.recipe.timeToMake
+                    recipe_list_price.setText("%.2f".format(recipeBak!!.recipe.price))
+                    updateSelectedCounter()
 
                     recipe_list_price.addTextChangedListener(ChangeWatcher())
                     recipe_list_time.addTextChangedListener(ChangeWatcher())
                     recipe_title.addTextChangedListener(ChangeWatcher())
+
                     setupRecyclerView()
                 }
             }
@@ -88,6 +90,7 @@ class CreateRecipeActivity : AppCompatActivity(),
 
             recipe_title.setText(intent.getStringExtra("recipeName"))
             recipe_list_time.text = intent.getStringExtra("recipeTime")
+            updateSelectedCounter()
 
             recipe_list_price.addTextChangedListener(ChangeWatcher())
             recipe_list_time.addTextChangedListener(ChangeWatcher())
@@ -127,9 +130,24 @@ class CreateRecipeActivity : AppCompatActivity(),
 
         GlobalScope.launch {
             db.ingredientSelectionDao().update(ingredientSelectionList[position].ingredientSelection)
-            runOnUiThread { ingredient_selection_list.adapter?.notifyDataSetChanged()
-            calculatePrice()}
+            runOnUiThread {
+                ingredient_selection_list.adapter?.notifyDataSetChanged()
+                calculatePrice()
+                updateSelectedCounter()
+            }
         }
+    }
+
+    fun updateSelectedCounter(){
+        var counter = 0
+
+        for (i in ingredientSelectionList){
+            if(i.ingredientSelection.isSelected){
+                counter++
+            }
+        }
+
+        numb_of_ingredients.text = counter.toString()
     }
 
     private fun calculatePrice(){
@@ -149,7 +167,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 recipePrice += smallestPrice
             }
         }
-        recipe_list_price.setText("%.2f kr,-".format(recipePrice))
+        recipe_list_price.setText("%.2f".format(recipePrice))
     }
 
     private fun setupRecyclerView(){

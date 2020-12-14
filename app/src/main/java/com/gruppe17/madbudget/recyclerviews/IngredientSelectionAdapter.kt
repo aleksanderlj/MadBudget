@@ -53,10 +53,11 @@ class IngredientSelectionAdapter(
                 holder.ingredientPriceEars.text = doubleAsString.substring(indexofDecimal)
 
             holder.productName.text = smallestPriceProduct!!.name
-
+            holder.ingredientCounter.text = smallestPriceProduct.selectedAmount.toString()
         }
 
         holder.ingredientCheckBox.isChecked = myDataset[position].ingredientSelection.isSelected
+
 
     }
 
@@ -83,6 +84,7 @@ class IngredientSelectionAdapter(
         var ingredientPriceCrowns: TextView = itemView.ingredient_group_price_crowns
         var ingredientPriceEars: TextView = itemView.ingredient_group_price_ears
         var ingredientCheckBox: CheckBox = itemView.ingredient_checkbox
+        var ingredientCounter: TextView = itemView.ingredient_counter
         var productName: TextView = itemView.ingredient_namead
 
 
