@@ -57,11 +57,6 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         }
 
         recipeList = ArrayList()
-        hehewee.setOnClickListener{
-            val i = Intent(context, TestActivity::class.java)
-            startActivity(i)
-        }
-
 
         setupRecyclerView()
 
