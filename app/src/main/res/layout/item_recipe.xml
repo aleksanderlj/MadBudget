@@ -34,16 +34,22 @@
 
             <TextView
                 android:id="@+id/recipe_price"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="200.00 kr.-"
+                android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
+                android:translationZ="6dp"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="@id/recipe_price_marker"
                 app:layout_constraintEnd_toEndOf="@+id/recipe_price_marker"
                 app:layout_constraintStart_toStartOf="@+id/recipe_price_marker"
-                app:layout_constraintTop_toTopOf="@id/recipe_price_marker"
-                android:translationZ="6dp"/>
+                app:layout_constraintTop_toTopOf="@id/recipe_price_marker" />
 
             <TextView
                 android:id="@+id/recipe_showed_distance"
@@ -66,14 +72,14 @@
 
             <ImageView
                 android:id="@+id/recipe_price_marker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="95dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="5dp"
                 android:translationZ="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/chipbg" />
+                app:srcCompat="@drawable/filled_rectangle_rounded_alot" />
 
             <ImageView
                 android:id="@+id/store_icon"
