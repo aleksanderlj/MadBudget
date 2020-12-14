@@ -25,7 +25,7 @@ class ViewIngredientSelectionAdapter(private var myDataset: ArrayList<Ingredient
         val currentItem = myDataset[position]
         val price = currentItem.calculatePrice()
         holder.ingredientName.text = currentItem.name
-        holder.ingredientPrice.text = "%.2fkr".format(price)
+        holder.ingredientPrice.text = "%.2f".format(price)
     }
 
     override fun getItemCount(): Int {

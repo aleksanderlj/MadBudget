@@ -3,6 +3,7 @@ package com.gruppe17.madbudget.activities
 import SwipeHelper
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -70,8 +71,12 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
 
         newAlertDialog = AlertDialog.Builder(this)
             .setView(LayoutInflater.from(this).inflate(R.layout.dialog_create_recipe, null))
-            .setPositiveButton("OK") { dialog, which ->
-                if(
+            .setPositiveButton("OK") { dialog, which -> }
+            .setNegativeButton("Annuller") { dialog, which -> }
+            .show()
+
+        newAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            if(
                     newAlertDialog.et_new_recipe_name.text.toString().trim().isEmpty() ||
                     newAlertDialog.et_new_recipe_time.text.toString().trim().isEmpty()
                 ){
@@ -87,24 +92,24 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
                     }
 
                 } else {
-                    db = DatabaseBuilder.get(this)
-                    GlobalScope.launch {
-                        val newRecipe = Recipe()
-                        // TODO setError if empty?
-                        newRecipe.name = newAlertDialog.et_new_recipe_name.text.toString()
-                        newRecipe.timeToMake = newAlertDialog.et_new_recipe_time.text.toString()
-                        val recipeId = db.recipeDao().insert(newRecipe).toInt()
-                        val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
-                        recipeActivity.putExtra("ClickedRecipe", recipeId)
+                db = DatabaseBuilder.get(this)
+                GlobalScope.launch {
+                    val newRecipe = Recipe()
+                    // TODO setError if empty?
+                    newRecipe.name = newAlertDialog.et_new_recipe_name.text.toString()
+                    newRecipe.timeToMake = newAlertDialog.et_new_recipe_time.text.toString()
+                    val recipeId = db.recipeDao().insert(newRecipe).toInt()
+                    val recipeActivity = Intent(context, CreateRecipeActivity::class.java)
+                    recipeActivity.putExtra("ClickedRecipe", recipeId)
 
-                        runOnUiThread {
-                            startActivity(recipeActivity)
-                        }
+                    runOnUiThread {
+                        newAlertDialog.dismiss()
+                        startActivity(recipeActivity)
                     }
                 }
             }
-            .setNegativeButton("Annuller") { dialog, which -> }
-            .show()
+        }
+
     }
 
     private fun calculatePrices() {

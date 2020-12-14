@@ -40,7 +40,8 @@
             android:id="@+id/et_new_recipe_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Indtast opskriftnavn " />
+            android:hint="Indtast opskriftnavn "
+            android:inputType="textCapSentences" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
