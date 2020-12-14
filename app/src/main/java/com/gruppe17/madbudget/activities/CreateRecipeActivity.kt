@@ -282,6 +282,7 @@ class CreateRecipeActivity : AppCompatActivity(),
                 R.id.page_2 ->{
                     val mapsActivity = Intent(this, MapsActivity::class.java)
                     startActivity(mapsActivity)
+                    overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                     true
                 }
                 R.id.page_3 -> {

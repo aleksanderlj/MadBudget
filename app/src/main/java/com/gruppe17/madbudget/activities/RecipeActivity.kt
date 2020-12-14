@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.GoogleApiAvailabilityLight
@@ -30,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_create_ingsel.*
 import kotlinx.android.synthetic.main.activity_recipes.*
 import kotlinx.android.synthetic.main.activity_recipes.navigation
 import kotlinx.android.synthetic.main.dialog_create_recipe.*
+import kotlinx.android.synthetic.main.item_recipe.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -188,6 +190,7 @@ class RecipeActivity : AppCompatActivity(), CellClickListener {
         val recipeActivity = Intent(this, CreateRecipeActivity::class.java)
         recipeActivity.putExtra("ClickedRecipe", clickedRecipe.recipe.id)
         startActivity(recipeActivity)
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
     }
 
     private fun searchOnChange(recipeList: List<RecipeWithIngredientSelections>) {
