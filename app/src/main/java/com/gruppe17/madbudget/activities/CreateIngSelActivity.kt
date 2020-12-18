@@ -42,8 +42,10 @@ class CreateIngSelActivity : AppCompatActivity(),
         initNavigationMenu()
 
 
+        /*
         val fs = Firebase.firestore
         val collection = fs.collection("Assortments").document("1885").collection("Products")
+         */
 
         recipeId = intent.getIntExtra("ClickedRecipe", -1)
 
@@ -243,6 +245,7 @@ class CreateIngSelActivity : AppCompatActivity(),
 
                 }
                 .setNegativeButton("Kassér") { dialog, which ->
+                    // TODO remove unused IngSel
                     mRevealAnimation.unRevealActivity()
                 }
                 .setNeutralButton("Annuller") { dialog, which -> }

@@ -180,7 +180,7 @@ class CreateRecipeActivity : AppCompatActivity(),
     private fun setupRecyclerView(){
         ingredient_selection_list.layoutManager = LinearLayoutManager(this)
         ingredient_selection_list.setHasFixedSize(true)
-        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList, applicationContext, this@CreateRecipeActivity, this)
+        ingredient_selection_list.adapter = IngredientSelectionAdapter(ingredientSelectionList, this, this@CreateRecipeActivity, this)
 
         val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(ingredient_selection_list){
             override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
