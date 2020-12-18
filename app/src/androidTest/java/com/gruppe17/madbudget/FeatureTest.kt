@@ -74,6 +74,7 @@ class FeatureTest {
         pressBack()
         onView((withText("KASSÉR"))).perform(click())
         pressBack()
+        pressBack()
         onView(withText("JA")).perform(click())
 
         newRecipeCount = db.recipeDao().getAll().count()
